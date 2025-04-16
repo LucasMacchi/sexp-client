@@ -1,0 +1,29 @@
+.logo-big-home {
+    width: 300px;
+}
+  
+.title-Homepage {
+    font-weight: normal;
+    color: #3399ff;
+}
+  
+.logintext {
+    font-weight: normal;
+    color: #3399ff;
+}
+  
+.textfield-login {
+    font-size: x-large;
+    border-color: #3399ff;
+}
+  
+.div-login-input {
+    padding: 20px;
+}
+  
+.btn-small {
+    color: white;
+    background-color: #3399ff;
+    border-color: #3399ff;
+    font-size: large;
+}
