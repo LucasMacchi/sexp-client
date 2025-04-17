@@ -1,0 +1,50 @@
+.table-exp {
+    border:1px solid ;
+    width: 850px;
+}
+
+.table-exp-column-top {
+    border:1px solid ;
+    margin: 0px;
+    padding: 0px;
+}
+.table-exp-column {
+    border:1px solid ;
+    margin: 0px;
+    padding: 3px;
+    background-color: white;
+}
+.div-exp-detail {
+    text-align: left;
+}
+.exp-data-h {
+    font-weight: normal;
+    color: #3399ff;
+    margin: 10px;
+}
+.div-exp-btn {
+    display: flex;
+    justify-content: space-around;
+}
+.btn-exp {
+    color: white;
+    border-color: #3399ff;
+    background-color: #3399ff;
+    width: 75px;
+    height: 40px;
+}
+.textarea-exp {
+    width: 300px;
+    max-width: 300px;
+    height: 120px;
+    resize: none;
+}
+.div-filter {
+    display: flex;
+    align-items: center;
+}
+.filter-title {
+    font-weight: normal;
+    color: #3399ff;
+    margin: 8px;
+}

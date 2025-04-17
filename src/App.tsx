@@ -8,7 +8,6 @@ function App() {
   const [token, setToken] = useState('')
 
   useEffect(() => {
-    console.log('token ',localStorage.getItem('jwToken'))
     setToken(localStorage.getItem('jwToken') || '')
   },[])
   const headerDisplayer = () => {
