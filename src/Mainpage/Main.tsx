@@ -190,7 +190,10 @@ export default function Main () {
                         <h6 className="filter-title">Fecha Fin</h6>
                         <input type="date" value={filter.end} onChange={(e) => handleFilter(e.target.value, 'end')}/>
                     </div>
-                    <button onClick={() => saveFilter()}>guardar</button>
+                    <div>
+                    <h6 className="filter-title">Guardar filtro</h6>
+                        <button onClick={() => saveFilter()} className="filter-btn-save">Guardar</button>
+                    </div>
                 </div>
             )
         }

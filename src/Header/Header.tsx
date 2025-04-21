@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom'
-//import { GlobalContext } from '../../Context/GlobalContext'
 import './Header.css'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
+import { useUserStore } from '../Store/userStore'
 
 export default function Header () {
 
+    const logout = useUserStore(s => s.logout)
     const [drop, setDrop] = useState(false)
-    //const global = useContext(GlobalContext)
     const navigator = useNavigate()
 
 
@@ -17,7 +17,8 @@ export default function Header () {
 
     const logOutHeader = () => {
         if(confirm('¿Seguro que quieres cerrar sesion?')) {
-            //global?.logoutFn()
+            logout()
+            window.location.reload()
         }
         else setDrop(false)
     }
@@ -34,20 +35,11 @@ export default function Header () {
                         <li className='dropdown-li' onClick={() => logOutHeader()}>
                             Cerrar Sesion
                             </li>
-                        <li className='dropdown-li' onClick={() => navigateTo('/pedidos')}>
-                            Pedidos
+                        <li className='dropdown-li' onClick={() => navigateTo('/')}>
+                            Expedientes
                         </li>
                         <li className='dropdown-li' onClick={() => navigateTo('/add')}>
-                            Nuevo Pedido
-                            </li>
-                        <li className='dropdown-li' onClick={() => navigateTo('/informes')}>
-                            Generar Informes
-                            </li>
-                        <li className='dropdown-li' onClick={() => navigateTo('/correo')}>
-                            Correo
-                        </li>
-                        <li className='dropdown-li' onClick={() => navigateTo('/reportes')}>
-                            Buscar Reportes
+                            Nuevo Expediente
                         </li>
                     </ul>
                 )}

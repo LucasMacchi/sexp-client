@@ -25,6 +25,7 @@
 .div-exp-btn {
     display: flex;
     justify-content: space-around;
+    margin-top: 30px;
 }
 .btn-exp {
     color: white;
@@ -47,4 +48,12 @@
     font-weight: normal;
     color: #3399ff;
     margin: 8px;
+}
+.filter-btn-save {
+    color: white;
+    border-color: #3399ff;
+    background-color: #3399ff;
+    width: 65px;
+    height: 25px;
+    margin: 5px;
 }

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { IExpStore } from "../Utils/interface";
+import { IAddExp, IExpStore } from "../Utils/interface";
 import mock from '../expedientes.json'
 import mesesJSON from '../meses.json'
 
@@ -9,7 +9,11 @@ export const useExpStore = create<IExpStore>((set) => ({
     empresas: [],
     estados: [],
     meses: [],
+    async createExpediente (exp: IAddExp) {
+        console.log(exp)
+    },
     expedientesFn() {
-        set({expedientes: mock.expedientes, servicios: mock.servicios, empresas: mock.empresas, estados: mock.estados, meses: mesesJSON.meses})
+        set({expedientes: mock.expedientes, servicios: mock.servicios, 
+            empresas: mock.empresas, estados: mock.estados, meses: mesesJSON.meses})
     }
 }))

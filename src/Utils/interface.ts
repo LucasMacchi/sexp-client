@@ -19,7 +19,8 @@ export interface IExpStore {
     empresas: IEmpresas[],
     estados: IEstados[],
     meses: string[],
-    expedientesFn: () => void
+    expedientesFn: () => void,
+    createExpediente: (exp: IAddExp) => void
 }
 export interface IExpediente {
     exp_id: number,
@@ -29,7 +30,19 @@ export interface IExpediente {
     periodo: string,
     fecha_presentacion: string,
     fecha_ult_mod: string,
-    nro_factura: number,
+    nro_factura: string,
+    empresa_id: number,
+    estado_id: number,
+    importe: number,
+    descripcion: string
+}
+export interface IAddExp {
+    servicio_id: number,
+    numero_exp: string,
+    concepto: string,
+    periodo: string,
+    fecha_presentacion: string,
+    nro_factura: string,
     empresa_id: number,
     estado_id: number,
     importe: number,
