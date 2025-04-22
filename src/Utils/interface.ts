@@ -1,12 +1,12 @@
 export interface IUser {
-    first_name: string,
-    last_name: string,
+    first_name?: string,
+    last_name?: string,
     email: string,
     activated: boolean,
-    admin: boolean
+    admin: boolean,
+    user_id: number
 }
 export interface IUserStore {
-    user: IUser,
     log: boolean,
     login: (email: string) => void,
     logout: () => void,
@@ -20,6 +20,9 @@ export interface IExpStore {
     estados: IEstados[],
     meses: string[],
     expedientesFn: () => void,
+    serviciosFn: () => void,
+    empresasFn: () => void,
+    estadosFn: () => void,
     createExpediente: (exp: IAddExp) => void
 }
 export interface IExpediente {
@@ -46,7 +49,8 @@ export interface IAddExp {
     empresa_id: number,
     estado_id: number,
     importe: number,
-    descripcion: string
+    descripcion: string,
+    user_id: number
 }
 export interface IUserCreate {
     first_name: string,
@@ -59,7 +63,8 @@ export interface IServicio {
 }
 export interface IEmpresas {
     empresa_id: number,
-    nombre: string
+    nombre: string,
+    servicio_id: number
 }
 export interface IEstados {
     estado_id: number,
@@ -67,7 +72,6 @@ export interface IEstados {
 }
 export interface IFilterPref {
     empresa: number,
-    servicio: number,
     estado: number,
     periodo: string,
     start: string,

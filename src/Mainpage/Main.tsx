@@ -7,6 +7,9 @@ import { IExpediente, IFilterPref } from "../Utils/interface"
 export default function Main () {
 
     const navigator = useNavigate()
+    const estadosFn = useExpStore(s => s.estadosFn)
+    const serviciosFn = useExpStore(s => s.serviciosFn)
+    const empresasFn = useExpStore(s => s.empresasFn)
     const expedientes = useExpStore(s => s.expedientes)
     const servicios = useExpStore(s => s.servicios)
     const empresas = useExpStore(s => s.empresas)
@@ -20,7 +23,6 @@ export default function Main () {
     const [modDate, setDate] = useState('')
     const [filter, setFilter] = useState<IFilterPref>({
         empresa: 0,
-        servicio: 0,
         estado: 0,
         periodo: '',
         start: '',
@@ -36,9 +38,10 @@ export default function Main () {
         if(!localStorage.getItem('jwToken')){
             navigator('/login')
         }
-        if(expedientes.length === 0 ||servicios.length === 0 ||empresas.length === 0 ) {
-            expedientesFn()
-        }
+        if(servicios.length === 0) serviciosFn()
+        if(empresas.length === 0) empresasFn()
+        if(estados.length === 0) estadosFn()
+        if(expedientes.length === 0 ) expedientesFn()
     },[])
 
     const saveFilter = () => {
@@ -51,7 +54,6 @@ export default function Main () {
         if(save === 0) {
             setFilter({        
                 empresa: 0,
-                servicio: 0,
                 estado: 0,
                 periodo: '',
                 start: '',
@@ -71,7 +73,6 @@ export default function Main () {
         let arr = expedientes
         if(filter.estado) arr = arr.filter((e) => e.estado_id === filter.estado)
         if(filter.empresa) arr = arr.filter((e) => e.empresa_id === filter.empresa)
-        if(filter.servicio) arr = arr.filter((e) => e.servicio_id === filter.servicio)
         if(filter.start) {
             const date = new Date(filter.start)
             arr = arr.filter((e) => {
@@ -92,7 +93,7 @@ export default function Main () {
     const empresaReturner = (id: number): string => {
         let name = 'NaN'
         empresas.forEach(e => {
-            if(e.empresa_id === id) name = e.nombre
+            if(e.empresa_id === id) name = e.nombre+' - '+servicioReturner(e.servicio_id)
         });
         return name
     }
@@ -165,15 +166,6 @@ export default function Main () {
                         </select>
                     </div>
                     <div>
-                        <h6 className="filter-title">Servicio</h6>
-                        <select value={filter.servicio} onChange={(e) => handleFilter(parseInt(e.target.value),'servicio')}>
-                            <option value={0}>---</option>
-                            {servicios.map((e) => (
-                                <option key={e.servicio_id} value={e.servicio_id}>{servicioReturner(e.servicio_id)}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div>
                         <h6 className="filter-title">Periodo</h6>
                         <select value={filter.periodo} onChange={(e) => handleFilter(parseInt(e.target.value),'servicio')}>
                             <option value={0}>---</option>
@@ -230,7 +222,7 @@ export default function Main () {
                     <h4 className="exp-data-h">{'$'+exp.importe}</h4>
                     <hr color='#3399ff'/>
                     <h4 className="exp-data-h">Empresa y Servicio:</h4>
-                    <h4 className="exp-data-h">{empresaReturner(exp.empresa_id) + ' - '+servicioReturner(exp.servicio_id)}</h4>
+                    <h4 className="exp-data-h">{empresaReturner(exp.empresa_id)}</h4>
                     <hr color='#3399ff'/>
                     <h4 className="exp-data-h">Comentarios:</h4>
                     <textarea className="textarea-exp" 
@@ -252,7 +244,6 @@ export default function Main () {
                         <th className="table-exp-column-top">Periodo</th>
                         <th className="table-exp-column-top">Presentacion</th>
                         <th className="table-exp-column-top">Empresa</th>
-                        <th className="table-exp-column-top">Servicio</th>
                         <th className="table-exp-column-top">Estado</th>
                     </tr>
                     {filterExp().map((e) => (
@@ -269,7 +260,6 @@ export default function Main () {
                             <th className="table-exp-column">{e.periodo}</th>
                             <th className="table-exp-column">{dateReturner(e.fecha_presentacion, false)}</th>
                             <th className="table-exp-column">{empresaReturner(e.empresa_id)}</th>
-                            <th className="table-exp-column">{servicioReturner(e.servicio_id)}</th>
                             <th className="table-exp-column">{estadoReturner(e.estado_id)}</th>
                         </tr>
                     ))}

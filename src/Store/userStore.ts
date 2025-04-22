@@ -1,43 +1,29 @@
 import { create } from "zustand";
-import { IUserStore } from "../Utils/interface";
+import { IUser, IUserStore } from "../Utils/interface";
 import { useNavigate } from "react-router-dom";
-
-const emptyUser = {
-    first_name: '',
-    last_name: '',
-    email: '',
-    activated: false,
-    admin: false,
-}
+const SERVER = import.meta.env.VITE_SERVER
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 export const useUserStore = create<IUserStore>((set) => ({
     log: false,
-    user:{
-        first_name: '',
-        last_name: '',
-        email: '',
-        activated: false,
-        admin: false,
-    },
-    login: async (/*email: string*/) => {
-        console.log('Logeado')
-        const data = {
-            first_name: 'Lucas', 
-            last_name: 'Macchi', 
-            email: 'email@gmail.cm',
-            activated: true,
-            admin: true
+    login: async (email: string) => {
+        try {
+            const token: string = (await axios.post(SERVER+'/user/login', {email:email})).data
+            localStorage.setItem('jwToken', token)
+        } catch (error) {
+            alert('Error a iniciar sesion.')
         }
-        set({user: data})
-        localStorage.setItem('jwToken', 'usuario')
     },
     logout: async () => {
         console.log('Fin Sesion')   
-        set({user: emptyUser})
         localStorage.removeItem('jwToken')
     },
     session: async () => {
-        if(localStorage.getItem('jwToken')){
+        const token = localStorage.getItem('jwToken')
+        if(token){
+            const data: IUser = jwtDecode(token)
+            console.log(data)
             set({log: true})
             useNavigate()('/')
         }

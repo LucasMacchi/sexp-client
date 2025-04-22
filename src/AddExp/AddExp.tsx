@@ -5,11 +5,12 @@ import { IAddExp } from "../Utils/interface"
 import meses from '../meses.json'
 import './addexp.css'
 
-
 export default function AddExp () {
 
     const navigator = useNavigate()
-    const expedientesFn = useExpStore(s => s.expedientesFn)
+    const estadosFn = useExpStore(s => s.estadosFn)
+    const serviciosFn = useExpStore(s => s.serviciosFn)
+    const empresasFn = useExpStore(s => s.empresasFn)
     const createExp = useExpStore(s => s.createExpediente)
     const servicios = useExpStore(s => s.servicios)
     const empresas = useExpStore(s => s.empresas)
@@ -24,13 +25,14 @@ export default function AddExp () {
         empresa_id: 0,
         estado_id: 0,
         importe: 0,
-        descripcion: ''
+        descripcion: '',
+        user_id: 0
     })
 
     const empresaReturner = (id: number): string => {
         let name = 'NaN'
         empresas.forEach(e => {
-            if(e.empresa_id === id) name = e.nombre
+            if(e.empresa_id === id) name = e.nombre+' - '+servicioReturner(e.servicio_id)
         });
         return name
     }
@@ -50,22 +52,32 @@ export default function AddExp () {
         });
         return name
     }
+    const servicioIdReturner = (id: number): number => {
+        let service_id = 0
+        empresas.forEach(e => {
+            if(e.empresa_id === id) service_id = e.servicio_id
+        });
+        return service_id
+    }
 
     useEffect(() => {
         if(!localStorage.getItem('jwToken')){
             navigator('/login')
         }
-        if(servicios.length === 0 ||empresas.length === 0 ) {
-            expedientesFn()
-        }
+        if(servicios.length === 0) serviciosFn()
+        if(empresas.length === 0) empresasFn()
+        if(estados.length === 0) estadosFn()
     },[])
+    useEffect(() => {
+        handleExp(servicioIdReturner(exp.empresa_id),'servicio_id')
+    },[exp.empresa_id])
 
     const handleExp = (value: number | string, prop: string) => {
         setExp({...exp, [prop]:value})
     }
 
     const createExpediente = async () => {
-        if(exp.servicio_id && exp.estado_id && exp.empresa_id && exp.fecha_presentacion && exp.numero_exp && exp.importe
+        if(exp.estado_id && exp.empresa_id && exp.fecha_presentacion && exp.numero_exp && exp.importe
             && exp.concepto) {
                 if(confirm('¿Quieres crear un nuevo expediente?')) {
                     await createExp(exp)
@@ -79,7 +91,8 @@ export default function AddExp () {
                         empresa_id: 0,
                         estado_id: 0,
                         importe: 0,
-                        descripcion: '' 
+                        descripcion: '',
+                        user_id: 0
                     })
                 }
             }
@@ -100,19 +113,10 @@ export default function AddExp () {
             <input className="textfield-small" value={exp.importe} type="number" min={0} step={'0.01'} onChange={(e) => handleExp(parseFloat(e.target.value ), 'importe')}/>
             <div>
             <h3 className="filter-title">Empresa</h3>
-            <select className="textfield-small" value={exp.empresa_id} onChange={(e) => handleExp(parseInt(e.target.value),'empresa_id')}>
+            <select className="textfield-big" value={exp.empresa_id} onChange={(e) => handleExp(parseInt(e.target.value),'empresa_id')}>
                 <option value={0}>---</option>
                 {empresas.map((e) => (
                     <option key={e.empresa_id} value={e.empresa_id}>{empresaReturner(e.empresa_id)}</option>
-                ))}
-            </select>
-            </div>
-            <div>
-            <h3 className="filter-title">Servicio</h3>
-            <select className="textfield-small" value={exp.servicio_id} onChange={(e) => handleExp(parseInt(e.target.value),'servicio_id')}>
-                <option value={0}>---</option>
-                {servicios.map((e) => (
-                    <option key={e.servicio_id} value={e.servicio_id}>{servicioReturner(e.servicio_id)}</option>
                 ))}
             </select>
             </div>
