@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom'
 import './Header.css'
 import { useState } from 'react'
 import { useUserStore } from '../Store/userStore'
+import { IUser } from '../Utils/interface'
+import { jwtDecode } from 'jwt-decode'
 
 export default function Header () {
 
@@ -18,9 +20,35 @@ export default function Header () {
     const logOutHeader = () => {
         if(confirm('¿Seguro que quieres cerrar sesion?')) {
             logout()
+            navigator('/login')
             window.location.reload()
         }
         else setDrop(false)
+    }
+
+    const userBtnsDisplayer = () => {
+        const token = localStorage.getItem('jwToken')
+        const userData:IUser = jwtDecode(token ? token : '')
+        if(userData.admin) {
+            return(
+                <li className='dropdown-li' onClick={() => navigateTo('/users')}>
+                    Admin - Usuarios
+                </li>
+            )
+        }
+
+    }
+    const dataBtnsDisplayer = () => {
+        const token = localStorage.getItem('jwToken')
+        const userData:IUser = jwtDecode(token ? token : '')
+        if(userData.admin) {
+            return(
+                <li className='dropdown-li' onClick={() => navigateTo('/data')}>
+                    Admin - Datos
+                </li>
+            )
+        }
+
     }
 
     return(
@@ -41,6 +69,8 @@ export default function Header () {
                         <li className='dropdown-li' onClick={() => navigateTo('/add')}>
                             Nuevo Expediente
                         </li>
+                        {userBtnsDisplayer()}
+                        {dataBtnsDisplayer()}
                     </ul>
                 )}
             </div>

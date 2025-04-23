@@ -1,8 +1,9 @@
 import { create } from "zustand";
-import { IAddExp, IEmpresas, IEstados, IExpediente, IExpStore, IServicio, IUser } from "../Utils/interface";
+import { IAddExp, IEmpresas, IEstados, IExpediente, IExpStore, IModExp, IServicio, IUser } from "../Utils/interface";
 import mesesJSON from '../meses.json'
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+
 
 const SERVER = import.meta.env.VITE_SERVER
 
@@ -12,6 +13,32 @@ export const useExpStore = create<IExpStore>((set) => ({
     empresas: [],
     estados: [],
     meses: mesesJSON.meses,
+    async createEmpresaFn (empresa: string, service: number) {
+        await axios.post(SERVER+'/data/empresa/'+empresa+'/'+service)
+        alert(`Empresa ${empresa} creada.`)
+        window.location.reload()
+    },
+    async createServiceFn (service: string) {
+        await axios.post(SERVER+'/data/service/'+service)
+        alert(`Servicio ${service} creado.`)
+        window.location.reload()
+    },
+    async createEstadoFn (estado: string) {
+        await axios.post(SERVER+'/data/estado/'+estado)
+        alert(`Estado ${estado} creada.`)
+        window.location.reload()
+    },
+    async modExpediente (data: IModExp, id: number) {
+        try {
+            console.log(data)
+            await axios.patch(SERVER+'/expediente/edit/'+id,data)
+            alert('Expediente modificado.')
+
+
+        } catch (error) {
+            alert('Error al modificar el Expediente.')
+        }
+    },
     async createExpediente (exp: IAddExp) {
         try {
             const token = localStorage.getItem('jwToken')
@@ -26,9 +53,19 @@ export const useExpStore = create<IExpStore>((set) => ({
         }
     },
     async expedientesFn() {
+        const token = localStorage.getItem('jwToken')
+        const userData:IUser = jwtDecode(token ? token : '')
+        const empresas: number[] = userData.credentials.map(c => c.empresa_id)
         const expedientes: IExpediente[] = await (await axios.get(SERVER+'/expediente/all')).data
         console.log(expedientes)
-        set({expedientes: expedientes})
+        if(userData.admin){
+            set({expedientes: expedientes})
+        }
+        else {
+            const allowedExps = expedientes.filter((e) => empresas.includes(e.empresa_id))
+            set({expedientes: allowedExps})
+
+        }
     },
     async serviciosFn() {
         const servicios: IServicio[] = (await axios.get(SERVER+'/data/services')).data

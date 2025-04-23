@@ -4,13 +4,19 @@ export interface IUser {
     email: string,
     activated: boolean,
     admin: boolean,
-    user_id: number
+    user_id: number,
+    credentials: ICredential[]
 }
 export interface IUserStore {
     log: boolean,
+    sysUsers: IUser[],
     login: (email: string) => void,
     logout: () => void,
-    session: () => void
+    session: () => void,
+    getAllUsers: () => void,
+    activateUser: (id: number) => void,
+    deactivateUser: (id:number) => void,
+    modCredential: (userId: number, empresaId?: number) => void,
 }
 
 export interface IExpStore {
@@ -23,7 +29,17 @@ export interface IExpStore {
     serviciosFn: () => void,
     empresasFn: () => void,
     estadosFn: () => void,
-    createExpediente: (exp: IAddExp) => void
+    modExpediente: (data: IModExp,id: number) => void,
+    createExpediente: (exp: IAddExp) => void,
+    createServiceFn: (service: string) => void,
+    createEmpresaFn: (empresa: string, service: number) => void,
+    createEstadoFn: (estado: string) => void,
+
+}
+export interface ICredential {
+    user_empresa_id: number,
+    empresa_id: number,
+    user_id: number
 }
 export interface IExpediente {
     exp_id: number,
@@ -51,6 +67,11 @@ export interface IAddExp {
     importe: number,
     descripcion: string,
     user_id: number
+}
+export interface IModExp {
+    ultima_mod: string,
+    estado_id: number,
+    descripcion: string
 }
 export interface IUserCreate {
     first_name: string,

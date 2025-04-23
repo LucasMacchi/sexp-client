@@ -2,6 +2,13 @@
     border:1px solid ;
     width: 850px;
 }
+@media only screen and (max-width: 1000px) {
+    .table-exp {
+        border:1px solid ;
+        width: 350px;
+        font-size: smaller;
+    }
+  }
 
 .table-exp-column-top {
     border:1px solid ;
@@ -56,4 +63,7 @@
     width: 65px;
     height: 25px;
     margin: 5px;
+}
+.delete-column {
+    display: none;
 }

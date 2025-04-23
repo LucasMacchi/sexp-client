@@ -2,11 +2,12 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useExpStore } from "../Store/expStore"
 import './Main.css'
-import { IExpediente, IFilterPref } from "../Utils/interface"
+import { IExpediente, IFilterPref, IModExp } from "../Utils/interface"
 
 export default function Main () {
 
     const navigator = useNavigate()
+    const modExpFn = useExpStore(s => s.modExpediente)
     const estadosFn = useExpStore(s => s.estadosFn)
     const serviciosFn = useExpStore(s => s.serviciosFn)
     const empresasFn = useExpStore(s => s.empresasFn)
@@ -125,16 +126,28 @@ export default function Main () {
         
     }
 
-    const editExp = () =>   {
-        if(confirm('¿Quiere modificar el expediente?')){
-            console.log('Expediente actualizado.')
+    const editExp = async () =>   {
+        if(confirm('¿Quiere modificar el expediente?') && exp?.exp_id){
+            const data: IModExp = {
+                ultima_mod: modDate ? modDate : '',
+                estado_id: modEstado ? modEstado : 0,
+                descripcion: modComment ? modComment : ''
+            }
+            await modExpFn(data, exp.exp_id)
+            navigator('/')
+            window.location.reload()
         }
+    }
+
+    const deleteColumn = (currentClass: string):string => {
+        if(window.innerWidth < 1000) return 'delete-column'
+        else return currentClass
     }
 
     const filterDisplayer = () => {
         if(!exp_id) {
             return(
-                <div className="div-filter  ">
+                <div className={deleteColumn("div-filter")}>
                     <h5 className="title-Homepage">Filtro:</h5>
                     <div>
                         <h6 className="filter-title">Guardados</h6>
@@ -241,10 +254,10 @@ export default function Main () {
                     <tr>
                         <th className="table-exp-column-top">Nº Exp</th>
                         <th className="table-exp-column-top">Concepto</th>
-                        <th className="table-exp-column-top">Periodo</th>
-                        <th className="table-exp-column-top">Presentacion</th>
+                        <th className={deleteColumn("table-exp-column-top")}>Periodo</th>
+                        <th className={deleteColumn("table-exp-column-top")}>Presentacion</th>
                         <th className="table-exp-column-top">Empresa</th>
-                        <th className="table-exp-column-top">Estado</th>
+                        <th className={deleteColumn("table-exp-column-top")}>Estado</th>
                     </tr>
                     {filterExp().map((e) => (
                         <tr 
@@ -257,10 +270,10 @@ export default function Main () {
                         key={e.exp_id}>
                             <th className="table-exp-column">{e.numero_exp}</th>
                             <th className="table-exp-column">{e.concepto}</th>
-                            <th className="table-exp-column">{e.periodo}</th>
-                            <th className="table-exp-column">{dateReturner(e.fecha_presentacion, false)}</th>
+                            <th className={deleteColumn("table-exp-column")}>{e.periodo}</th>
+                            <th className={deleteColumn("table-exp-column")}>{dateReturner(e.fecha_presentacion, false)}</th>
                             <th className="table-exp-column">{empresaReturner(e.empresa_id)}</th>
-                            <th className="table-exp-column">{estadoReturner(e.estado_id)}</th>
+                            <th className={deleteColumn("table-exp-column")}>{estadoReturner(e.estado_id)}</th>
                         </tr>
                     ))}
                 </tbody>
