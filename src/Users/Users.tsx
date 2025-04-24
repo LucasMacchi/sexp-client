@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useUserStore } from "../Store/userStore"
 import { jwtDecode } from "jwt-decode"
-import { IUser } from "../Utils/interface"
+import { IUser, IUserCreate } from "../Utils/interface"
 import './Users.css'
 import { useExpStore } from "../Store/expStore"
 export default function Users () {
@@ -11,6 +11,7 @@ export default function Users () {
     const modCredentialsFn = useUserStore(s => s.modCredential)
     const activateUserFn = useUserStore(s => s.activateUser)
     const deactivateUserFn = useUserStore(s => s.deactivateUser)
+    const registerFn = useUserStore(s => s.register)
     const getUsers = useUserStore(s => s.getAllUsers)
     const serviciosFn = useExpStore(s => s.serviciosFn)
     const empresasFn = useExpStore(s => s.empresasFn)
@@ -20,6 +21,16 @@ export default function Users () {
     const [userCredentialIndex, setUserCredentialsIndex] = useState(-1)
     const servicios = useExpStore(s => s.servicios)
     const empresas = useExpStore(s => s.empresas)
+    const [registerUser, setRegister] = useState<IUserCreate>({
+        first_name: '',
+        last_name: '',
+        admin: false,
+        email: ''
+    })
+
+    const handleRegister = (value: number | string | boolean, prop: string) => {
+        setRegister({...registerUser, [prop]:value})
+    }
 
     useEffect(() => {
         const token = localStorage.getItem('jwToken')
@@ -68,6 +79,21 @@ export default function Users () {
                 window.location.reload()
             }
         }
+    }
+
+    const registerNewUser = async () => {
+        if(registerUser.email && registerUser.first_name && registerUser.last_name) {
+                if(confirm('¿Quiere registrar a un nuevo usuario?')){
+                    await registerFn(registerUser)
+                    setRegister({
+                        first_name: '',
+                        last_name: '',
+                        admin: false,
+                        email: ''
+                    })
+                }
+        }
+        else alert('Debe completar todos los campos.')
     }
 
     const credentialsShower = () => {
@@ -175,6 +201,29 @@ export default function Users () {
             </select>
             </div>
             {credentialsShower()}
+            <hr color='#3399ff'/>
+            <div>
+                <h3 className="title-Homepage">Registrar Usuario</h3>
+                <div className="input-div-register">
+                    <h5 className="text-body">Nombre</h5>
+                    <input value={registerUser.first_name} type="text" onChange={(e) => handleRegister(e.target.value,'first_name')}/>
+                </div>
+                <div className="input-div-register">
+                    <h5 className="text-body">Apellido</h5>
+                    <input value={registerUser.last_name} type="text" onChange={(e) => handleRegister(e.target.value,'last_name')}/>
+                </div>
+                <div className="input-div-register">
+                <h5 className="text-body">Email</h5>
+                    <input type="text" value={registerUser.email} onChange={(e) => handleRegister(e.target.value,'email')}/>
+                </div>
+                <div className="input-div-register">
+                    <label className="label-form-register">Admin</label>
+                    <input type="checkbox" checked={registerUser.admin} onChange={(e) => handleRegister(e.target.checked,'admin')}/>
+                </div>
+                <div className="input-div-register">
+                    <button className="btn-exp" onClick={() => registerNewUser()} >Registrar</button>
+                </div>
+            </div>
         </div>
     )
 }

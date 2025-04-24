@@ -16,12 +16,16 @@ export default function Main () {
     const empresas = useExpStore(s => s.empresas)
     const estados = useExpStore(s => s.estados)
     const meses = useExpStore(s => s.meses)
+    const [editMode, setEdit] = useState(false)
     const [save, setSave] = useState(0)
     const [modComment, setComment] = useState(``)
     const [exp, setExp] = useState<IExpediente>()
     const [exp_id, setExpId] = useState(0)
     const [modEstado, setEstado] = useState(0)
     const [modDate, setDate] = useState('')
+    const [modImporte, setModImporte] = useState(0)
+    const [modExpNro, setModExpNro] = useState('')
+    const [modNroF, setModNroF] = useState('')
     const [filter, setFilter] = useState<IFilterPref>({
         empresa: 0,
         estado: 0,
@@ -131,7 +135,10 @@ export default function Main () {
             const data: IModExp = {
                 ultima_mod: modDate ? modDate : '',
                 estado_id: modEstado ? modEstado : 0,
-                descripcion: modComment ? modComment : ''
+                descripcion: modComment ? modComment : '',
+                numero_exp: modExpNro ? modExpNro : '',
+                importe: modImporte ? modImporte : 0,
+                nro_factura: modNroF ? modNroF : ''
             }
             await modExpFn(data, exp.exp_id)
             navigator('/')
@@ -208,16 +215,34 @@ export default function Main () {
         if(exp_id && exp) {
             return(
                 <div className="div-exp-detail">
+                    <div className="input-div-register">
+                        <label className="label-form-register">Modo edicion</label>
+                        <input type="checkbox" checked={editMode} onChange={(e) => setEdit(e.target.checked)}/>
+                    </div>
+                    <hr color='#3399ff'/>
+                    <h4 className="exp-data-h">Numero de Expediente:</h4>
+                    {editMode ?
+                        <input className="textfield-small" value={modExpNro} type="text" 
+                        onChange={(e) => setModExpNro(e.target.value)}/>
+                    :
+                    <h4 className="exp-data-h">{exp.numero_exp}</h4>
+                    }
+                    <hr color='#3399ff'/>
                     <h4 className="exp-data-h">Concepto:</h4>
                     <h4 className="exp-data-h">{exp.concepto}</h4>
                     <hr color='#3399ff'/>
-                    <h4 className="exp-data-h">Estado:
+                    <div>
+                    <h4 className="exp-data-h">Estado:</h4>
+                    {editMode ?
                         <select value={modEstado} onChange={(e) => setEstado(parseInt(e.target.value))}>
-                            {estados.map((e) => (
-                                <option key={e.estado_id} value={e.estado_id}>{estadoReturner(e.estado_id)}</option>
-                            ))}
-                        </select>
-                    </h4>
+                        {estados.map((e) => (
+                            <option key={e.estado_id} value={e.estado_id}>{estadoReturner(e.estado_id)}</option>
+                        ))}
+                    </select>
+                    : 
+                    <h4 className="exp-data-h">{estadoReturner(exp.estado_id)}</h4>
+                    }
+                    </div>
                     <hr color='#3399ff'/>
                     <h4 className="exp-data-h">Periodo:</h4>
                     <h4 className="exp-data-h">{exp.periodo}</h4>
@@ -225,14 +250,28 @@ export default function Main () {
                     <h4 className="exp-data-h">Fecha de presentacion:</h4>
                     <h4 className="exp-data-h">{dateReturner(exp.fecha_presentacion, false)}</h4>
                     <hr color='#3399ff'/>
-                    <h4 className="exp-data-h">Ultima Modificacion: {dateReturner(exp.fecha_ult_mod, false)}</h4>
+                    <h4 className="exp-data-h">Ultima Modificacion:</h4>
+                    {editMode ? 
                     <input type="date" value={modDate} onChange={(e) => setDate(e.target.value)}/>
+                    :
+                    <h4 className="exp-data-h">{dateReturner(exp.fecha_ult_mod, false)}</h4>
+                    }
                     <hr color='#3399ff'/>
                     <h4 className="exp-data-h">Numero de factura:</h4>
+                    {editMode ?
+                    <input className="textfield-small" value={modNroF} type="text" 
+                    onChange={(e) => setModNroF(e.target.value)}/>
+                    :
                     <h4 className="exp-data-h">{exp.nro_factura}</h4>
+                    }
                     <hr color='#3399ff'/>
                     <h4 className="exp-data-h">Importe:</h4>
+                    {editMode ?
+                    <input className="textfield-small" value={modImporte} type="number" min={0} step={'0.01'} 
+                    onChange={(e) => setModImporte(parseFloat(e.target.value))}/>
+                    :
                     <h4 className="exp-data-h">{'$'+exp.importe}</h4>
+                    }
                     <hr color='#3399ff'/>
                     <h4 className="exp-data-h">Empresa y Servicio:</h4>
                     <h4 className="exp-data-h">{empresaReturner(exp.empresa_id)}</h4>
@@ -284,7 +323,7 @@ export default function Main () {
     
     return(
         <div>
-            <h1 className="title-Homepage">{exp_id ? 'Expediente '+exp?.numero_exp : 'Expedientes'}</h1>
+            <h1 className="title-Homepage">{'Expedientes'}</h1>
             <hr color='#3399ff'/>
             {filterDisplayer()}
             {detailExp()}

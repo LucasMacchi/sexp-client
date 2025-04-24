@@ -3,6 +3,7 @@ import { IAddExp, IEmpresas, IEstados, IExpediente, IExpStore, IModExp, IServici
 import mesesJSON from '../meses.json'
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import authReturner from "../Utils/authReturner";
 
 
 const SERVER = import.meta.env.VITE_SERVER
@@ -14,24 +15,24 @@ export const useExpStore = create<IExpStore>((set) => ({
     estados: [],
     meses: mesesJSON.meses,
     async createEmpresaFn (empresa: string, service: number) {
-        await axios.post(SERVER+'/data/empresa/'+empresa+'/'+service)
+        await axios.post(SERVER+'/data/empresa/'+empresa+'/'+service,{}, authReturner())
         alert(`Empresa ${empresa} creada.`)
         window.location.reload()
     },
     async createServiceFn (service: string) {
-        await axios.post(SERVER+'/data/service/'+service)
+        await axios.post(SERVER+'/data/service/'+service,{}, authReturner())
         alert(`Servicio ${service} creado.`)
         window.location.reload()
     },
     async createEstadoFn (estado: string) {
-        await axios.post(SERVER+'/data/estado/'+estado)
+        await axios.post(SERVER+'/data/estado/'+estado,{}, authReturner())
         alert(`Estado ${estado} creada.`)
         window.location.reload()
     },
     async modExpediente (data: IModExp, id: number) {
         try {
             console.log(data)
-            await axios.patch(SERVER+'/expediente/edit/'+id,data)
+            await axios.patch(SERVER+'/expediente/edit/'+id,data, authReturner())
             alert('Expediente modificado.')
 
 
@@ -45,7 +46,7 @@ export const useExpStore = create<IExpStore>((set) => ({
             const userData:IUser = jwtDecode(token ? token : '')
             exp.user_id = userData.user_id
             console.log(exp)
-            await axios.post(SERVER+'/expediente/add',exp)
+            await axios.post(SERVER+'/expediente/add',exp, authReturner())
             alert('Expediente Creado')
             window.location.reload()
         } catch (error) {
@@ -56,7 +57,7 @@ export const useExpStore = create<IExpStore>((set) => ({
         const token = localStorage.getItem('jwToken')
         const userData:IUser = jwtDecode(token ? token : '')
         const empresas: number[] = userData.credentials.map(c => c.empresa_id)
-        const expedientes: IExpediente[] = await (await axios.get(SERVER+'/expediente/all')).data
+        const expedientes: IExpediente[] = await (await axios.get(SERVER+'/expediente/all', authReturner())).data
         console.log(expedientes)
         if(userData.admin){
             set({expedientes: expedientes})
@@ -68,15 +69,15 @@ export const useExpStore = create<IExpStore>((set) => ({
         }
     },
     async serviciosFn() {
-        const servicios: IServicio[] = (await axios.get(SERVER+'/data/services')).data
+        const servicios: IServicio[] = (await axios.get(SERVER+'/data/services', authReturner())).data
         set({servicios: servicios})
     },
     async empresasFn () {
-        const empresas: IEmpresas[] = (await axios.get(SERVER+'/data/empresas')).data
+        const empresas: IEmpresas[] = (await axios.get(SERVER+'/data/empresas', authReturner())).data
         set({empresas: empresas})
     },
     async estadosFn () {
-        const estados: IEstados[] = (await axios.get(SERVER+'/data/estados')).data
+        const estados: IEstados[] = (await axios.get(SERVER+'/data/estados', authReturner())).data
         set({estados: estados})
     }
 

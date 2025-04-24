@@ -10,6 +10,7 @@ export interface IUser {
 export interface IUserStore {
     log: boolean,
     sysUsers: IUser[],
+    register: (data: IUserCreate) => void,
     login: (email: string) => void,
     logout: () => void,
     session: () => void,
@@ -71,12 +72,16 @@ export interface IAddExp {
 export interface IModExp {
     ultima_mod: string,
     estado_id: number,
-    descripcion: string
+    descripcion: string,
+    importe: number,
+    numero_exp: string,
+    nro_factura: string
 }
 export interface IUserCreate {
     first_name: string,
     last_name: string,
     email: string,
+    admin: boolean
 }
 export interface IServicio {
     servicio_id: number,

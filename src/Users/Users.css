@@ -6,3 +6,11 @@
 .div-user {
     margin-bottom: 200px;
 }
+.label-form-register {
+    font-weight: normal;
+    color: #3399ff;
+    margin-right: 5px;
+}
+.input-div-register {
+    margin-top: 5px;
+}

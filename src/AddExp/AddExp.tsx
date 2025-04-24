@@ -77,7 +77,7 @@ export default function AddExp () {
     }
 
     const createExpediente = async () => {
-        if(exp.estado_id && exp.empresa_id && exp.fecha_presentacion && exp.numero_exp && exp.importe
+        if(exp.estado_id && exp.empresa_id && exp.fecha_presentacion && exp.numero_exp
             && exp.concepto) {
                 if(confirm('¿Quieres crear un nuevo expediente?')) {
                     await createExp(exp)
@@ -103,16 +103,16 @@ export default function AddExp () {
         <div className="add-div">
             <h1 className="title-Homepage">Nuevo Expediente</h1>
             <hr color='#3399ff'/>
-            <h3 className="filter-title">Concepto</h3>
+            <h3 className="filter-title">Concepto*</h3>
             <input className="textfield-big" value={exp.concepto} type="text" onChange={(e) => handleExp(e.target.value, 'concepto')}/>
-            <h3 className="filter-title">Numero de Expediente</h3>
+            <h3 className="filter-title">Numero de Expediente*</h3>
             <input className="textfield-big" value={exp.numero_exp} type="text" onChange={(e) => handleExp(e.target.value, 'numero_exp')}/>
             <h3 className="filter-title">Numero de Factura</h3>
             <input className="textfield-small" value={exp.nro_factura} min={0} type="text" onChange={(e) => handleExp(e.target.value, 'nro_factura')}/>
             <h3 className="filter-title">Importe</h3>
             <input className="textfield-small" value={exp.importe} type="number" min={0} step={'0.01'} onChange={(e) => handleExp(parseFloat(e.target.value ), 'importe')}/>
             <div>
-            <h3 className="filter-title">Empresa</h3>
+            <h3 className="filter-title">Empresa*</h3>
             <select className="textfield-big" value={exp.empresa_id} onChange={(e) => handleExp(parseInt(e.target.value),'empresa_id')}>
                 <option value={0}>---</option>
                 {empresas.map((e) => (
@@ -121,7 +121,7 @@ export default function AddExp () {
             </select>
             </div>
             <div>
-            <h3 className="filter-title">Estado</h3>
+            <h3 className="filter-title">Estado*</h3>
             <select className="textfield-small" value={exp.estado_id} onChange={(e) => handleExp(parseInt(e.target.value),'estado_id')}>
                 <option value={0}>---</option>
                 {estados.map((e) => (
@@ -130,7 +130,7 @@ export default function AddExp () {
             </select>
             </div>
             <div>
-                <h3 className="filter-title">Periodo</h3>
+                <h3 className="filter-title">Periodo*</h3>
                 <select className="textfield-small" value={exp.periodo} onChange={(e) => handleExp(e.target.value,'periodo')}>
                     <option value={0}>---</option>
                     {meses.meses.map((e) => (   
@@ -139,7 +139,7 @@ export default function AddExp () {
                 </select>
             </div>
             <div>
-                <h3 className="filter-title">Fecha de presentacion</h3>
+                <h3 className="filter-title">Fecha de presentacion*</h3>
                 <input className="textfield-small" type="date" value={exp.fecha_presentacion} onChange={(e) => handleExp(e.target.value,'fecha_presentacion')}/>
             </div>
             <div>
