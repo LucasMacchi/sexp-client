@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode"
 import { IUser, IUserCreate } from "../Utils/interface"
 import './Users.css'
 import { useExpStore } from "../Store/expStore"
+import tokenExpireCheck from "../Utils/tokenExpireCheck"
 export default function Users () {
 
     const navigator = useNavigate()
@@ -36,6 +37,10 @@ export default function Users () {
         const token = localStorage.getItem('jwToken')
         const userData:IUser = jwtDecode(token ? token : '')
         if(!userData.admin) navigator('/')
+        if(tokenExpireCheck()) {
+            localStorage.removeItem('jwToken')
+            window.location.reload()
+        }
         if(sysUsers.length === 0) getUsers()
         if(servicios.length === 0) serviciosFn()
         if(empresas.length === 0) empresasFn()

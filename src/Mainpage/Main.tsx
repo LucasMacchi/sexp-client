@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { useExpStore } from "../Store/expStore"
 import './Main.css'
 import { IExpediente, IFilterPref, IModExp } from "../Utils/interface"
+import tokenExpireCheck from "../Utils/tokenExpireCheck"
 
 export default function Main () {
 
@@ -44,6 +45,10 @@ export default function Main () {
     useEffect(() => {
         if(!localStorage.getItem('jwToken')){
             navigator('/login')
+        }
+        if(tokenExpireCheck()) {
+            localStorage.removeItem('jwToken')
+            window.location.reload()
         }
         if(servicios.length === 0) serviciosFn()
         if(empresas.length === 0) empresasFn()
