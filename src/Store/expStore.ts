@@ -31,11 +31,8 @@ export const useExpStore = create<IExpStore>((set) => ({
     },
     async modExpediente (data: IModExp, id: number) {
         try {
-            console.log(data)
             await axios.patch(SERVER+'/expediente/edit/'+id,data, authReturner())
             alert('Expediente modificado.')
-
-
         } catch (error) {
             alert('Error al modificar el Expediente.')
         }
@@ -45,7 +42,6 @@ export const useExpStore = create<IExpStore>((set) => ({
             const token = localStorage.getItem('jwToken')
             const userData:IUser = jwtDecode(token ? token : '')
             exp.user_id = userData.user_id
-            console.log(exp)
             await axios.post(SERVER+'/expediente/add',exp, authReturner())
             alert('Expediente Creado')
             window.location.reload()
@@ -58,7 +54,6 @@ export const useExpStore = create<IExpStore>((set) => ({
         const userData:IUser = jwtDecode(token ? token : '')
         const empresas: number[] = userData.credentials.map(c => c.empresa_id)
         const expedientes: IExpediente[] = await (await axios.get(SERVER+'/expediente/all', authReturner())).data
-        console.log(expedientes)
         if(userData.admin){
             set({expedientes: expedientes})
         }

@@ -26,6 +26,8 @@ export default function Main () {
     const [modImporte, setModImporte] = useState(0)
     const [modExpNro, setModExpNro] = useState('')
     const [modNroF, setModNroF] = useState('')
+    const [modInvitacion, setModInvitacion] = useState(false)
+    const [modOrdenCompra, setModOrdenCompra] = useState(false)
     const [filter, setFilter] = useState<IFilterPref>({
         empresa: 0,
         estado: 0,
@@ -48,6 +50,19 @@ export default function Main () {
         if(estados.length === 0) estadosFn()
         if(expedientes.length === 0 ) expedientesFn()
     },[])
+
+    useEffect(() => {
+        if(editMode && exp){
+            setModImporte(exp.importe)
+            setModExpNro(exp.numero_exp)
+            setModNroF(exp.nro_factura)
+            setModOrdenCompra(exp.orden_compra)
+            setModInvitacion(exp.invitacion)
+            setDate(dateReturner(exp.fecha_ult_mod, true))
+            setEstado(exp.estado_id)
+            setComment(exp.descripcion)
+        }
+    },[editMode])
 
     const saveFilter = () => {
         const storeName = 'filter'+save
@@ -133,12 +148,14 @@ export default function Main () {
     const editExp = async () =>   {
         if(confirm('¿Quiere modificar el expediente?') && exp?.exp_id){
             const data: IModExp = {
-                ultima_mod: modDate ? modDate : '',
-                estado_id: modEstado ? modEstado : 0,
-                descripcion: modComment ? modComment : '',
-                numero_exp: modExpNro ? modExpNro : '',
-                importe: modImporte ? modImporte : 0,
-                nro_factura: modNroF ? modNroF : ''
+                ultima_mod: modDate !== exp.fecha_ult_mod ? modDate : '',
+                estado_id: modEstado !== exp.estado_id ? modEstado : 0,
+                descripcion: modComment !== exp.descripcion ? modComment : '',
+                numero_exp: modExpNro !== exp.numero_exp ? modExpNro : '',
+                importe: modImporte !== exp.importe ? modImporte : 0,
+                nro_factura: modNroF !== exp.nro_factura ? modNroF : '',
+                invitacion: modInvitacion !== exp.invitacion ? modInvitacion : exp.invitacion,
+                orden_compra: modOrdenCompra !== exp.orden_compra ? modOrdenCompra : exp.orden_compra,
             }
             await modExpFn(data, exp.exp_id)
             navigator('/')
@@ -252,7 +269,7 @@ export default function Main () {
                     <hr color='#3399ff'/>
                     <h4 className="exp-data-h">Ultima Modificacion:</h4>
                     {editMode ? 
-                    <input type="date" value={modDate} onChange={(e) => setDate(e.target.value)}/>
+                    <input type="date" min={exp.fecha_ult_mod ? dateReturner(exp.fecha_ult_mod, true) : dateReturner(exp.fecha_presentacion, true)} value={modDate} onChange={(e) => setDate(e.target.value)}/>
                     :
                     <h4 className="exp-data-h">{dateReturner(exp.fecha_ult_mod, false)}</h4>
                     }
@@ -276,12 +293,38 @@ export default function Main () {
                     <h4 className="exp-data-h">Empresa y Servicio:</h4>
                     <h4 className="exp-data-h">{empresaReturner(exp.empresa_id)}</h4>
                     <hr color='#3399ff'/>
+                    {editMode ? 
+                    <div className="input-div-register">
+                        <label className="label-form-register">Invitacion: </label>
+                        <input type="checkbox" checked={modInvitacion} onChange={(e) => setModInvitacion(e.target.checked)}/>
+                    </div>  
+                    :
+                    <h4 className="exp-data-h">Invitacion: {exp.invitacion ? 'Si' : 'No'}</h4>
+                    }
+                    <hr color='#3399ff'/>
+                    {editMode ? 
+                    <div className="input-div-register">
+                        <label className="label-form-register">Orden de Compra: </label>
+                        <input type="checkbox" checked={modOrdenCompra} onChange={(e) => setModOrdenCompra(e.target.checked)}/>
+                    </div>  
+                    :
+                    <h4 className="exp-data-h">Orden de Compra: {exp.orden_compra ? 'Si' : 'No'}</h4>
+                    }
+                    <hr color='#3399ff'/>
                     <h4 className="exp-data-h">Comentarios:</h4>
+                    <hr color='#3399ff'/>
+                    {editMode ? 
                     <textarea className="textarea-exp" 
                     value={modComment} onChange={(e) => setComment(e.target.value)}/>
+                    :
+                    <p className="description-exp">
+                        {exp.descripcion}
+                    </p>
+                    }
+                    
                     <div className="div-exp-btn">
                         <button className="btn-exp" onClick={() => setExpId(0)}>Salir</button>
-                        <button className="btn-exp" onClick={() => editExp()}>Modificar</button>
+                        <button className={editMode ? "btn-exp" : 'delete-column'} onClick={() => editExp()}>Modificar</button>
                     </div>
                 </div>
             )
@@ -300,12 +343,7 @@ export default function Main () {
                     </tr>
                     {filterExp().map((e) => (
                         <tr 
-                        onClick={() => {setExpId(e.exp_id);
-                        setExp(e);
-                        setEstado(e.estado_id);
-                        setDate(dateReturner(e.fecha_ult_mod || '', true));
-                        setComment(e.descripcion)
-                        }} 
+                        onClick={() => {setExpId(e.exp_id); setExp(e)}} 
                         key={e.exp_id}>
                             <th className="table-exp-column">{e.numero_exp}</th>
                             <th className="table-exp-column">{e.concepto}</th>

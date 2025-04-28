@@ -67,3 +67,12 @@
 .delete-column {
     display: none;
 }
+.description-exp{
+    text-align: left;
+    white-space: pre-wrap;
+    max-width: 340px;
+    text-wrap: wrap;
+    word-wrap: break-word;
+    font-weight: normal;
+    color: #3399ff;
+}
