@@ -33,6 +33,8 @@ export default function Main () {
     const [modNroF, setModNroF] = useState('')
     const [modInvitacion, setModInvitacion] = useState(false)
     const [modOrdenCompra, setModOrdenCompra] = useState(false)
+    const [modUbicacion, setModUbicacion] = useState('')
+    const [modDateFac, setModDateFac] = useState('')
     const [filter, setFilter] = useState<IFilterPref>({
         empresa: 0,
         estado: 0,
@@ -74,6 +76,8 @@ export default function Main () {
             setDate(dateReturner(exp.fecha_ult_mod, true))
             setEstado(exp.estado_id)
             setComment(exp.descripcion)
+            setModUbicacion(exp.ubicacion)
+            setModDateFac(exp.fecha_facturacion ? dateReturner(exp.fecha_facturacion, true) : 'None')
         }
     },[editMode])
 
@@ -170,7 +174,11 @@ export default function Main () {
                 nro_factura: modNroF !== exp.nro_factura ? modNroF : '',
                 invitacion: modInvitacion !== exp.invitacion ? modInvitacion : exp.invitacion,
                 orden_compra: modOrdenCompra !== exp.orden_compra ? modOrdenCompra : exp.orden_compra,
+                ubicacion: modUbicacion !== exp.ubicacion ? modUbicacion : '',
+                fecha_facturacion: modDateFac !== exp.fecha_facturacion ? modDateFac : ''
+
             }
+            
             await modExpFn(data, exp.exp_id)
             navigator('/')
             window.location.reload()
@@ -297,6 +305,13 @@ export default function Main () {
                     <h4 className="exp-data-h">{dateReturner(exp.fecha_ult_mod, false)}</h4>
                     }
                     <hr color='#3399ff'/>
+                    <h4 className="exp-data-h">Fecha Facturacion:</h4>
+                    {editMode ? 
+                    <input type="date" value={modDateFac} onChange={(e) => setModDateFac(e.target.value)}/>
+                    :
+                    <h4 className="exp-data-h">{exp.fecha_facturacion ? dateReturner(exp.fecha_facturacion, false) : 'NaN'}</h4>
+                    }
+                    <hr color='#3399ff'/>
                     <h4 className="exp-data-h">Numero de factura:</h4>
                     {editMode ?
                     <input className="textfield-small" value={modNroF} type="text" 
@@ -320,7 +335,15 @@ export default function Main () {
                     <h4 className="exp-data-h">{exp.tipo}</h4>
                     <hr color='#3399ff'/>
                     <h4 className="exp-data-h">Ubicacion:</h4>
+                    {editMode ?
+                        <select value={modUbicacion} onChange={(e) => setModUbicacion(e.target.value)}>
+                        {ubicaciones.map((e) => (
+                            <option key={e} value={e}>{e}</option>
+                        ))}
+                    </select>
+                    : 
                     <h4 className="exp-data-h">{exp.ubicacion}</h4>
+                    }
                     <hr color='#3399ff'/>
                     {editMode ? 
                     <div className="input-div-register">

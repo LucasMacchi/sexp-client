@@ -62,7 +62,8 @@ export interface IExpediente {
     invitacion: boolean,
     orden_compra: boolean,
     tipo: string,
-    ubicacion: string
+    ubicacion: string,
+    fecha_facturacion: string
 }
 export interface IAddExp {
     servicio_id: number,
@@ -87,7 +88,9 @@ export interface IModExp {
     numero_exp: string,
     nro_factura: string,
     invitacion: boolean,
-    orden_compra: boolean
+    orden_compra: boolean,
+    ubicacion: string,
+    fecha_facturacion: string
 }
 export interface IUserCreate {
     first_name: string,
