@@ -13,7 +13,17 @@ export const useExpStore = create<IExpStore>((set) => ({
     servicios: [],
     empresas: [],
     estados: [],
+    tipos: [],
+    ubicaciones: [],
     meses: mesesJSON.meses,
+    async tiposFn () {
+        const tipos: string[] = (await axios.get(SERVER+'/data/tipos', authReturner())).data
+        set({tipos: tipos})
+    },
+    async ubiFn () {
+        const ubicaciones: string[] = (await axios.get(SERVER+'/data/ubicaciones', authReturner())).data
+        set({ubicaciones: ubicaciones})
+    },
     async createEmpresaFn (empresa: string, service: number) {
         await axios.post(SERVER+'/data/empresa/'+empresa+'/'+service,{}, authReturner())
         alert(`Empresa ${empresa} creada.`)

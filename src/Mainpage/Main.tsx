@@ -8,6 +8,8 @@ import tokenExpireCheck from "../Utils/tokenExpireCheck"
 export default function Main () {
 
     const navigator = useNavigate()
+    const tipoFn = useExpStore(s => s.tiposFn)
+    const ubiFn = useExpStore(s => s.ubiFn)
     const modExpFn = useExpStore(s => s.modExpediente)
     const estadosFn = useExpStore(s => s.estadosFn)
     const serviciosFn = useExpStore(s => s.serviciosFn)
@@ -17,6 +19,8 @@ export default function Main () {
     const empresas = useExpStore(s => s.empresas)
     const estados = useExpStore(s => s.estados)
     const meses = useExpStore(s => s.meses)
+    const tipos = useExpStore(s => s.tipos)
+    const ubicaciones = useExpStore(s => s.ubicaciones)
     const [editMode, setEdit] = useState(false)
     const [save, setSave] = useState(0)
     const [modComment, setComment] = useState(``)
@@ -34,7 +38,8 @@ export default function Main () {
         estado: 0,
         periodo: '',
         start: '',
-        end: ''
+        end: '',
+        ubicacion: ''
     })
     const expedientesFn = useExpStore(s => s.expedientesFn)
 
@@ -54,6 +59,9 @@ export default function Main () {
         if(empresas.length === 0) empresasFn()
         if(estados.length === 0) estadosFn()
         if(expedientes.length === 0 ) expedientesFn()
+        if(tipos.length === 0 ) tipoFn()
+        if(ubicaciones.length === 0 ) ubiFn()
+        
     },[])
 
     useEffect(() => {
@@ -82,7 +90,8 @@ export default function Main () {
                 estado: 0,
                 periodo: '',
                 start: '',
-                end: ''
+                end: '',
+                ubicacion: ''
             })
         }
         else {
@@ -217,6 +226,15 @@ export default function Main () {
                         </select>
                     </div>
                     <div>
+                        <h6 className="filter-title">Ubicaciones</h6>
+                        <select value={filter.ubicacion} onChange={(e) => handleFilter(e.target.value,'ubicacion')}>
+                            <option value={0}>---</option>
+                            {ubicaciones.map((e) => (
+                                <option key={e} value={e}>{e}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
                         <h6 className="filter-title">Fecha inicio</h6>
                         <input type="date" value={filter.start} onChange={(e) => handleFilter(e.target.value, 'start')}/>
                     </div>
@@ -298,6 +316,12 @@ export default function Main () {
                     <h4 className="exp-data-h">Empresa y Servicio:</h4>
                     <h4 className="exp-data-h">{empresaReturner(exp.empresa_id)}</h4>
                     <hr color='#3399ff'/>
+                    <h4 className="exp-data-h">Tipo:</h4>
+                    <h4 className="exp-data-h">{exp.tipo}</h4>
+                    <hr color='#3399ff'/>
+                    <h4 className="exp-data-h">Ubicacion:</h4>
+                    <h4 className="exp-data-h">{exp.ubicacion}</h4>
+                    <hr color='#3399ff'/>
                     {editMode ? 
                     <div className="input-div-register">
                         <label className="label-form-register">Invitacion: </label>
@@ -342,6 +366,8 @@ export default function Main () {
                         <th className="table-exp-column-top">Nº Exp</th>
                         <th className="table-exp-column-top">Concepto</th>
                         <th className={deleteColumn("table-exp-column-top")}>Periodo</th>
+                        <th className={deleteColumn("table-exp-column-top")}>Tipo</th>
+                        <th className={deleteColumn("table-exp-column-top")}>Ubicacion</th>
                         <th className={deleteColumn("table-exp-column-top")}>Presentacion</th>
                         <th className="table-exp-column-top">Empresa</th>
                         <th className={deleteColumn("table-exp-column-top")}>Estado</th>
@@ -353,6 +379,8 @@ export default function Main () {
                             <th className="table-exp-column">{e.numero_exp}</th>
                             <th className="table-exp-column">{e.concepto}</th>
                             <th className={deleteColumn("table-exp-column")}>{e.periodo}</th>
+                            <th className={deleteColumn("table-exp-column")}>{e.tipo}</th>
+                            <th className={deleteColumn("table-exp-column")}>{e.ubicacion}</th>
                             <th className={deleteColumn("table-exp-column")}>{dateReturner(e.fecha_presentacion, false)}</th>
                             <th className="table-exp-column">{empresaReturner(e.empresa_id)}</th>
                             <th className={deleteColumn("table-exp-column")}>{estadoReturner(e.estado_id)}</th>

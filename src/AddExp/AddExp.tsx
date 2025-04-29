@@ -8,10 +8,14 @@ import './addexp.css'
 export default function AddExp () {
 
     const navigator = useNavigate()
+    const tipoFn = useExpStore(s => s.tiposFn)
+    const ubiFn = useExpStore(s => s.ubiFn)
     const estadosFn = useExpStore(s => s.estadosFn)
     const serviciosFn = useExpStore(s => s.serviciosFn)
     const empresasFn = useExpStore(s => s.empresasFn)
     const createExp = useExpStore(s => s.createExpediente)
+    const tipos = useExpStore(s => s.tipos)
+    const ubicaciones = useExpStore(s => s.ubicaciones)
     const servicios = useExpStore(s => s.servicios)
     const empresas = useExpStore(s => s.empresas)
     const estados = useExpStore(s => s.estados)
@@ -26,7 +30,9 @@ export default function AddExp () {
         estado_id: 0,
         importe: 0,
         descripcion: '',
-        user_id: 0
+        user_id: 0,
+        tipo: '',
+        ubicacion: ''
     })
 
     const empresaReturner = (id: number): string => {
@@ -67,6 +73,8 @@ export default function AddExp () {
         if(servicios.length === 0) serviciosFn()
         if(empresas.length === 0) empresasFn()
         if(estados.length === 0) estadosFn()
+        if(tipos.length === 0 ) tipoFn()
+        if(ubicaciones.length === 0 ) ubiFn()
     },[])
     useEffect(() => {
         handleExp(servicioIdReturner(exp.empresa_id),'servicio_id')
@@ -92,7 +100,9 @@ export default function AddExp () {
                         estado_id: 0,
                         importe: 0,
                         descripcion: '',
-                        user_id: 0
+                        user_id: 0,
+                        tipo: '',
+                        ubicacion: ''
                     })
                 }
             }
@@ -141,6 +151,24 @@ export default function AddExp () {
             <div>
                 <h3 className="filter-title">Fecha de presentacion*</h3>
                 <input className="textfield-small" type="date" value={exp.fecha_presentacion} onChange={(e) => handleExp(e.target.value,'fecha_presentacion')}/>
+            </div>
+            <div>
+                <h3 className="filter-title">Tipo*</h3>
+                <select className="textfield-small" value={exp.tipo} onChange={(e) => handleExp(e.target.value,'tipo')}>
+                    <option value={0}>---</option>
+                    {tipos.map((e) => (   
+                        <option key={e} value={e}>{e}</option>
+                    ))}
+                </select>
+            </div>
+            <div>
+                <h3 className="filter-title">Ubicacion*</h3>
+                <select className="textfield-small" value={exp.ubicacion} onChange={(e) => handleExp(e.target.value,'ubicacion')}>
+                    <option value={0}>---</option>
+                    {ubicaciones.map((e) => (   
+                        <option key={e} value={e}>{e}</option>
+                    ))}
+                </select>
             </div>
             <div>
             <h4 className="exp-data-h">Comentarios:</h4>

@@ -26,6 +26,10 @@ export interface IExpStore {
     empresas: IEmpresas[],
     estados: IEstados[],
     meses: string[],
+    tipos: string[],
+    ubicaciones: string[],
+    tiposFn: () => void,
+    ubiFn: () => void,
     expedientesFn: () => void,
     serviciosFn: () => void,
     empresasFn: () => void,
@@ -56,7 +60,9 @@ export interface IExpediente {
     importe: number,
     descripcion: string,
     invitacion: boolean,
-    orden_compra: boolean
+    orden_compra: boolean,
+    tipo: string,
+    ubicacion: string
 }
 export interface IAddExp {
     servicio_id: number,
@@ -69,7 +75,9 @@ export interface IAddExp {
     estado_id: number,
     importe: number,
     descripcion: string,
-    user_id: number
+    user_id: number,
+    tipo: string,
+    ubicacion: string
 }
 export interface IModExp {
     ultima_mod: string,
@@ -105,5 +113,6 @@ export interface IFilterPref {
     estado: number,
     periodo: string,
     start: string,
-    end: string
+    end: string,
+    ubicacion:string
 }
