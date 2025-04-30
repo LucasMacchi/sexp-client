@@ -35,6 +35,7 @@ export default function Main () {
     const [modOrdenCompra, setModOrdenCompra] = useState(false)
     const [modUbicacion, setModUbicacion] = useState('')
     const [modDateFac, setModDateFac] = useState('')
+    const [modTesoreria, setTesoreria] = useState('')
     const [filter, setFilter] = useState<IFilterPref>({
         empresa: 0,
         estado: 0,
@@ -78,6 +79,7 @@ export default function Main () {
             setComment(exp.descripcion)
             setModUbicacion(exp.ubicacion)
             setModDateFac(exp.fecha_facturacion ? dateReturner(exp.fecha_facturacion, true) : 'None')
+            setTesoreria(exp.fecha_tesoreria ? dateReturner(exp.fecha_tesoreria, true) : 'None')
         }
     },[editMode])
 
@@ -175,7 +177,8 @@ export default function Main () {
                 invitacion: modInvitacion !== exp.invitacion ? modInvitacion : exp.invitacion,
                 orden_compra: modOrdenCompra !== exp.orden_compra ? modOrdenCompra : exp.orden_compra,
                 ubicacion: modUbicacion !== exp.ubicacion ? modUbicacion : '',
-                fecha_facturacion: modDateFac !== exp.fecha_facturacion ? modDateFac : ''
+                fecha_facturacion: modDateFac !== exp.fecha_facturacion ? modDateFac : '',
+                fecha_tesoreria: !modTesoreria ? modTesoreria : ''
 
             }
             
@@ -310,6 +313,13 @@ export default function Main () {
                     <input type="date" value={modDateFac} onChange={(e) => setModDateFac(e.target.value)}/>
                     :
                     <h4 className="exp-data-h">{exp.fecha_facturacion ? dateReturner(exp.fecha_facturacion, false) : 'NaN'}</h4>
+                    }
+                    <hr color='#3399ff'/>
+                    <h4 className="exp-data-h">Fecha de Tesoreria:</h4>
+                    {editMode ? 
+                    <input type="date" value={modTesoreria} onChange={(e) => setTesoreria(e.target.value)}/>
+                    :
+                    <h4 className="exp-data-h">{exp.fecha_tesoreria ? dateReturner(exp.fecha_tesoreria, false) : 'NaN'}</h4>
                     }
                     <hr color='#3399ff'/>
                     <h4 className="exp-data-h">Numero de factura:</h4>
