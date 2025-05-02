@@ -178,10 +178,9 @@ export default function Main () {
                 orden_compra: modOrdenCompra !== exp.orden_compra ? modOrdenCompra : exp.orden_compra,
                 ubicacion: modUbicacion !== exp.ubicacion ? modUbicacion : '',
                 fecha_facturacion: modDateFac !== exp.fecha_facturacion ? modDateFac : '',
-                fecha_tesoreria: !modTesoreria ? modTesoreria : ''
+                fecha_tesoreria: modTesoreria !== exp.fecha_tesoreria ? modTesoreria : ''
 
             }
-            
             await modExpFn(data, exp.exp_id)
             navigator('/')
             window.location.reload()
