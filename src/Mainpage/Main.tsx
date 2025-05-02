@@ -78,8 +78,8 @@ export default function Main () {
             setEstado(exp.estado_id)
             setComment(exp.descripcion)
             setModUbicacion(exp.ubicacion)
-            setModDateFac(exp.fecha_facturacion ? dateReturner(exp.fecha_facturacion, true) : 'None')
-            setTesoreria(exp.fecha_tesoreria ? dateReturner(exp.fecha_tesoreria, true) : 'None')
+            setModDateFac(exp.fecha_facturacion ? dateReturner(exp.fecha_facturacion, true) : '')
+            setTesoreria(exp.fecha_tesoreria ? dateReturner(exp.fecha_tesoreria, true) : '')
         }
     },[editMode])
 
@@ -112,6 +112,8 @@ export default function Main () {
     const filterExp = (): IExpediente[] => {
         let arr = expedientes
         if(filter.estado) arr = arr.filter((e) => e.estado_id === filter.estado)
+        if(filter.periodo) arr = arr.filter((e) => e.periodo === filter.periodo)
+        if(filter.ubicacion) arr = arr.filter((e) => e.ubicacion === filter.ubicacion)
         if(filter.empresa) arr = arr.filter((e) => e.empresa_id === filter.empresa)
         if(filter.start) {
             const date = new Date(filter.start)
@@ -228,8 +230,8 @@ export default function Main () {
                     </div>
                     <div>
                         <h6 className="filter-title">Periodo</h6>
-                        <select value={filter.periodo} onChange={(e) => handleFilter(parseInt(e.target.value),'servicio')}>
-                            <option value={0}>---</option>
+                        <select value={filter.periodo} onChange={(e) => handleFilter(e.target.value,'periodo')}>
+                            <option value={''}>---</option>
                             {meses.map((e) => (
                                 <option key={e} value={e}>{e}</option>
                             ))}
