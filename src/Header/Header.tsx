@@ -54,7 +54,7 @@ export default function Header () {
     return(
         <div className='div-header'>
             <div className='div-logo'>
-                <img src="/logo_big.webp" alt="" className='logo-big-home'/>
+                <img src="/final_logo.png" alt="" className='logo-big-home'/>
             </div>
             <div className="dropdown">
                 <button className='btn-menu-header' onClick={() => setDrop(!drop)}>Menu</button>
