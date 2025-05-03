@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { IUser, IUserCreate, IUserStore } from "../Utils/interface";
+import { IEmpresas, IUser, IUserCreate, IUserStore } from "../Utils/interface";
 import { useNavigate } from "react-router-dom";
 const SERVER = import.meta.env.VITE_SERVER
 import { jwtDecode } from "jwt-decode";
@@ -7,6 +7,7 @@ import axios from "axios";
 import authReturner from "../Utils/authReturner";
 
 export const useUserStore = create<IUserStore>((set) => ({
+    empresa: '',
     log: false,
     sysUsers: [],
     register: async (data: IUserCreate) => {
@@ -72,6 +73,9 @@ export const useUserStore = create<IUserStore>((set) => ({
     logout: async () => {
         console.log('Fin Sesion')   
         localStorage.removeItem('jwToken')
+    },
+    empresaFn: (empresa: string) => {
+        set({empresa: empresa})
     },
     session: async () => {
         const token = localStorage.getItem('jwToken')

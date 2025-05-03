@@ -10,7 +10,7 @@ export default function Header () {
     const logout = useUserStore(s => s.logout)
     const [drop, setDrop] = useState(false)
     const navigator = useNavigate()
-
+    const userEmpresa = useUserStore(s => s.empresa)
 
     const navigateTo = (link: string) => {
         setDrop(false)
@@ -51,10 +51,23 @@ export default function Header () {
 
     }
 
+    const logoDisplayer = (): string => {
+        switch (userEmpresa.toLocaleLowerCase()) {
+            case 'insudent':
+                return '/insudent.png'
+            case 'soluciones y servicios':
+                return '/logo_big.webp'
+            case 'samabe':
+                return '/cropped-LogoSamabe3.png'
+            default:
+                return '/final_logo.png'
+        }
+    }
+
     return(
         <div className='div-header'>
             <div className='div-logo'>
-                <img src="/final_logo.png" alt="" className='logo-big-home'/>
+                <img src={logoDisplayer()} alt="" className='logo-big-home'/>
             </div>
             <div className="dropdown">
                 <button className='btn-menu-header' onClick={() => setDrop(!drop)}>Menu</button>

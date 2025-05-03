@@ -2,8 +2,10 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useExpStore } from "../Store/expStore"
 import './Main.css'
-import { IExpediente, IFilterPref, IModExp } from "../Utils/interface"
+import { IExpediente, IFilterPref, IModExp, IUser } from "../Utils/interface"
 import tokenExpireCheck from "../Utils/tokenExpireCheck"
+import { jwtDecode } from "jwt-decode"
+import { useUserStore } from "../Store/userStore"
 
 export default function Main () {
 
@@ -14,6 +16,7 @@ export default function Main () {
     const estadosFn = useExpStore(s => s.estadosFn)
     const serviciosFn = useExpStore(s => s.serviciosFn)
     const empresasFn = useExpStore(s => s.empresasFn)
+    const userEmpresaFn = useUserStore(s => s.empresaFn)
     const expedientes = useExpStore(s => s.expedientes)
     const servicios = useExpStore(s => s.servicios)
     const empresas = useExpStore(s => s.empresas)
@@ -66,6 +69,17 @@ export default function Main () {
         if(ubicaciones.length === 0 ) ubiFn()
         
     },[])
+
+    useEffect(() => {
+        const token = localStorage.getItem('jwToken')
+        const userData:IUser = jwtDecode(token ? token : '')
+        const credential = userData.credentials[0].empresa_id
+        let empresa = ''
+        empresas.forEach(e => {
+            if(e.empresa_id === credential) empresa = e.nombre
+        });
+        userEmpresaFn(empresa)
+    },[empresas])
 
     useEffect(() => {
         if(editMode && exp){

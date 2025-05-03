@@ -8,6 +8,7 @@ export interface IUser {
     credentials: ICredential[]
 }
 export interface IUserStore {
+    empresa: string,
     log: boolean,
     sysUsers: IUser[],
     register: (data: IUserCreate) => void,
@@ -18,6 +19,7 @@ export interface IUserStore {
     activateUser: (id: number) => void,
     deactivateUser: (id:number) => void,
     modCredential: (userId: number, empresaId?: number) => void,
+    empresaFn: (empresa: string) => void 
 }
 
 export interface IExpStore {

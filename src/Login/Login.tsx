@@ -19,7 +19,7 @@ export default function Login () {
 
     return(
         <div className='app-div'>
-            <img src="/logo_big.webp" alt="" className='logo-big-home'/>
+            <img src="/final_logo.png" alt="" className='logo-big-home'/>
             <h1 className='title-Homepage'>Sistema de Expedientes</h1>
             <hr color='#3399ff'/>
             <h2 className='logintext'>Ingrese el Correo</h2>
