@@ -23,9 +23,7 @@ export default function DataPage () {
     const [serviceNew, setServiceNew] = useState('')
     const [estadoNew, setEstadoNew] = useState('')
     const tipos = useExpStore(s => s.tipos)
-    const ubicaciones = useExpStore(s => s.ubicaciones)
     const tipoFn = useExpStore(s => s.tiposFn)
-    const ubiFn = useExpStore(s => s.ubiFn)
 
 
     useEffect(() => {
@@ -36,7 +34,6 @@ export default function DataPage () {
         if(empresas.length === 0) empresasFn()
         if(estados.length === 0) estadosFn()
         if(tipos.length === 0 ) tipoFn()
-        if(ubicaciones.length === 0 ) ubiFn()
     },[])
     useEffect(() => {
         setServiceNew('')
@@ -196,20 +193,6 @@ export default function DataPage () {
             <table className="table-exp">
                 <tbody>
                     {tipos.map((e) => {
-                        return(
-                            <tr key={e}>
-                                <th className="table-exp-column">{e}</th>
-                            </tr> 
-                        )
-                    })}
-                </tbody>
-            </table>
-            </div>
-            <div>
-            <h3 className="title-Homepage">Ubicaciones Registradas</h3>
-            <table className="table-exp">
-                <tbody>
-                    {ubicaciones.map((e) => {
                         return(
                             <tr key={e}>
                                 <th className="table-exp-column">{e}</th>

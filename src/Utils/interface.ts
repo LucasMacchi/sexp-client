@@ -29,9 +29,7 @@ export interface IExpStore {
     estados: IEstados[],
     meses: string[],
     tipos: string[],
-    ubicaciones: string[],
     tiposFn: () => void,
-    ubiFn: () => void,
     expedientesFn: () => void,
     serviciosFn: () => void,
     empresasFn: () => void,
@@ -64,7 +62,6 @@ export interface IExpediente {
     invitacion: boolean,
     orden_compra: boolean,
     tipo: string,
-    ubicacion: string,
     fecha_facturacion: string,
     fecha_tesoreria: string
 }
@@ -80,8 +77,7 @@ export interface IAddExp {
     importe: number,
     descripcion: string,
     user_id: number,
-    tipo: string,
-    ubicacion: string
+    tipo: string
 }
 export interface IModExp {
     ultima_mod: string,
@@ -92,7 +88,6 @@ export interface IModExp {
     nro_factura: string,
     invitacion: boolean,
     orden_compra: boolean,
-    ubicacion: string,
     fecha_facturacion: string,
     fecha_tesoreria: string
 }

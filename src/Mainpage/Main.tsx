@@ -11,7 +11,6 @@ export default function Main () {
 
     const navigator = useNavigate()
     const tipoFn = useExpStore(s => s.tiposFn)
-    const ubiFn = useExpStore(s => s.ubiFn)
     const modExpFn = useExpStore(s => s.modExpediente)
     const estadosFn = useExpStore(s => s.estadosFn)
     const serviciosFn = useExpStore(s => s.serviciosFn)
@@ -23,7 +22,6 @@ export default function Main () {
     const estados = useExpStore(s => s.estados)
     const meses = useExpStore(s => s.meses)
     const tipos = useExpStore(s => s.tipos)
-    const ubicaciones = useExpStore(s => s.ubicaciones)
     const [editMode, setEdit] = useState(false)
     const [save, setSave] = useState(0)
     const [modComment, setComment] = useState(``)
@@ -36,7 +34,6 @@ export default function Main () {
     const [modNroF, setModNroF] = useState('')
     const [modInvitacion, setModInvitacion] = useState(false)
     const [modOrdenCompra, setModOrdenCompra] = useState(false)
-    const [modUbicacion, setModUbicacion] = useState('')
     const [modDateFac, setModDateFac] = useState('')
     const [modTesoreria, setTesoreria] = useState('')
     const [filter, setFilter] = useState<IFilterPref>({
@@ -66,19 +63,21 @@ export default function Main () {
         if(estados.length === 0) estadosFn()
         if(expedientes.length === 0 ) expedientesFn()
         if(tipos.length === 0 ) tipoFn()
-        if(ubicaciones.length === 0 ) ubiFn()
         
     },[])
 
     useEffect(() => {
         const token = localStorage.getItem('jwToken')
         const userData:IUser = jwtDecode(token ? token : '')
-        const credential = userData.credentials[0].empresa_id
-        let empresa = ''
-        empresas.forEach(e => {
-            if(e.empresa_id === credential) empresa = e.nombre
-        });
+        if(userData.credentials[0]) {
+            const credential = userData.credentials[0].empresa_id
+            let empresa = ''
+            empresas.forEach(e => {
+                if(e.empresa_id === credential) empresa = e.nombre
+            });
         userEmpresaFn(empresa)
+        }
+
     },[empresas])
 
     useEffect(() => {
@@ -91,7 +90,6 @@ export default function Main () {
             setDate(dateReturner(exp.fecha_ult_mod, true))
             setEstado(exp.estado_id)
             setComment(exp.descripcion)
-            setModUbicacion(exp.ubicacion)
             setModDateFac(exp.fecha_facturacion ? dateReturner(exp.fecha_facturacion, true) : '')
             setTesoreria(exp.fecha_tesoreria ? dateReturner(exp.fecha_tesoreria, true) : '')
         }
@@ -127,7 +125,6 @@ export default function Main () {
         let arr = expedientes
         if(filter.estado) arr = arr.filter((e) => e.estado_id === filter.estado)
         if(filter.periodo) arr = arr.filter((e) => e.periodo === filter.periodo)
-        if(filter.ubicacion) arr = arr.filter((e) => e.ubicacion === filter.ubicacion)
         if(filter.empresa) arr = arr.filter((e) => e.empresa_id === filter.empresa)
         if(filter.start) {
             const date = new Date(filter.start)
@@ -157,8 +154,11 @@ export default function Main () {
     const estadoReturner = (id: number): string => {
         let name = 'NaN'
         estados.forEach(e => {
-            if(e.estado_id === id) name = e.concepto
+            if(e.estado_id === id) {
+                name = e.concepto
+            }
         });
+        console.log(id, name)
         return name
     }
 
@@ -192,7 +192,6 @@ export default function Main () {
                 nro_factura: modNroF !== exp.nro_factura ? modNroF : '',
                 invitacion: modInvitacion !== exp.invitacion ? modInvitacion : exp.invitacion,
                 orden_compra: modOrdenCompra !== exp.orden_compra ? modOrdenCompra : exp.orden_compra,
-                ubicacion: modUbicacion !== exp.ubicacion ? modUbicacion : '',
                 fecha_facturacion: modDateFac !== exp.fecha_facturacion ? modDateFac : '',
                 fecha_tesoreria: modTesoreria !== exp.fecha_tesoreria ? modTesoreria : ''
 
@@ -247,15 +246,6 @@ export default function Main () {
                         <select value={filter.periodo} onChange={(e) => handleFilter(e.target.value,'periodo')}>
                             <option value={''}>---</option>
                             {meses.map((e) => (
-                                <option key={e} value={e}>{e}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div>
-                        <h6 className="filter-title">Ubicaciones</h6>
-                        <select value={filter.ubicacion} onChange={(e) => handleFilter(e.target.value,'ubicacion')}>
-                            <option value={0}>---</option>
-                            {ubicaciones.map((e) => (
                                 <option key={e} value={e}>{e}</option>
                             ))}
                         </select>
@@ -359,17 +349,6 @@ export default function Main () {
                     <h4 className="exp-data-h">Tipo:</h4>
                     <h4 className="exp-data-h">{exp.tipo}</h4>
                     <hr color='#3399ff'/>
-                    <h4 className="exp-data-h">Ubicacion:</h4>
-                    {editMode ?
-                        <select value={modUbicacion} onChange={(e) => setModUbicacion(e.target.value)}>
-                        {ubicaciones.map((e) => (
-                            <option key={e} value={e}>{e}</option>
-                        ))}
-                    </select>
-                    : 
-                    <h4 className="exp-data-h">{exp.ubicacion}</h4>
-                    }
-                    <hr color='#3399ff'/>
                     {editMode ? 
                     <div className="input-div-register">
                         <label className="label-form-register">Invitacion: </label>
@@ -415,7 +394,6 @@ export default function Main () {
                         <th className="table-exp-column-top">Concepto</th>
                         <th className={deleteColumn("table-exp-column-top")}>Periodo</th>
                         <th className={deleteColumn("table-exp-column-top")}>Tipo</th>
-                        <th className={deleteColumn("table-exp-column-top")}>Ubicacion</th>
                         <th className={deleteColumn("table-exp-column-top")}>Presentacion</th>
                         <th className="table-exp-column-top">Empresa</th>
                         <th className={deleteColumn("table-exp-column-top")}>Estado</th>
@@ -428,7 +406,6 @@ export default function Main () {
                             <th className="table-exp-column">{e.concepto}</th>
                             <th className={deleteColumn("table-exp-column")}>{e.periodo}</th>
                             <th className={deleteColumn("table-exp-column")}>{e.tipo}</th>
-                            <th className={deleteColumn("table-exp-column")}>{e.ubicacion}</th>
                             <th className={deleteColumn("table-exp-column")}>{dateReturner(e.fecha_presentacion, false)}</th>
                             <th className="table-exp-column">{empresaReturner(e.empresa_id)}</th>
                             <th className={deleteColumn("table-exp-column")}>{estadoReturner(e.estado_id)}</th>
