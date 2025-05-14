@@ -76,3 +76,11 @@
     font-weight: normal;
     color: #3399ff;
 }
+
+.btn-big {
+    color: white;
+    border-color: #3399ff;
+    background-color: #3399ff;
+    width: 150px;
+    height: 70px;
+}
