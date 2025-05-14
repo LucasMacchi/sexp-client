@@ -35,6 +35,7 @@ export default function Main() {
   const [modOrdenCompra, setModOrdenCompra] = useState(false);
   const [modDateFac, setModDateFac] = useState("");
   const [modTesoreria, setTesoreria] = useState("");
+  const [modConcepto, setModConcepto] = useState("");
   const [filter, setFilter] = useState<IFilterPref>({
     empresa: 0,
     estado: 0,
@@ -101,6 +102,7 @@ export default function Main() {
       setTesoreria(
         exp.fecha_tesoreria ? dateReturner(exp.fecha_tesoreria, true) : "",
       );
+      setModConcepto(exp.concepto)
     }
   }, [editMode]);
 
@@ -197,6 +199,7 @@ export default function Main() {
   const editExp = async () => {
     if (confirm("¿Quiere modificar el expediente?") && exp?.exp_id) {
       const data: IModExp = {
+        concepto: modConcepto !== exp.concepto ? modConcepto : "",
         ultima_mod: modDate !== exp.fecha_ult_mod ? modDate : "",
         estado_id: modEstado !== exp.estado_id ? modEstado : 0,
         descripcion: modComment !== exp.descripcion ? modComment : "",
@@ -341,7 +344,16 @@ export default function Main() {
           )}
           <hr color="#3399ff" />
           <h4 className="exp-data-h">Concepto:</h4>
-          <h4 className="exp-data-h">{exp.concepto}</h4>
+          {editMode ? (
+            <input
+              className="textfield-small"
+              value={modConcepto}
+              type="text"
+              onChange={(e) => setModConcepto(e.target.value)}
+            />
+          ) : (
+            <h4 className="exp-data-h">{exp.concepto}</h4>
+          )}
           <hr color="#3399ff" />
           <div>
             <h4 className="exp-data-h">Estado:</h4>
@@ -513,9 +525,8 @@ export default function Main() {
               <th className="table-exp-column-top">Concepto</th>
               <th className={deleteColumn("table-exp-column-top")}>Periodo</th>
               <th className={deleteColumn("table-exp-column-top")}>Tipo</th>
-              <th className={deleteColumn("table-exp-column-top")}>
-                Presentacion
-              </th>
+              <th className={deleteColumn("table-exp-column-top")}>Presentacion</th>
+              <th className="table-exp-column-top">Movimiento</th>
               <th className="table-exp-column-top">Empresa</th>
               <th className={deleteColumn("table-exp-column-top")}>Estado</th>
             </tr>
@@ -529,19 +540,12 @@ export default function Main() {
               >
                 <th className="table-exp-column">{e.numero_exp}</th>
                 <th className="table-exp-column">{e.concepto}</th>
-                <th className={deleteColumn("table-exp-column")}>
-                  {e.periodo}
-                </th>
+                <th className={deleteColumn("table-exp-column")}>{e.periodo}</th>
                 <th className={deleteColumn("table-exp-column")}>{e.tipo}</th>
-                <th className={deleteColumn("table-exp-column")}>
-                  {dateReturner(e.fecha_presentacion, false)}
-                </th>
-                <th className="table-exp-column">
-                  {empresaReturner(e.empresa_id)}
-                </th>
-                <th className={deleteColumn("table-exp-column")}>
-                  {estadoReturner(e.estado_id)}
-                </th>
+                <th className={deleteColumn("table-exp-column")}>{dateReturner(e.fecha_presentacion, false)}</th>
+                <th className="table-exp-column-top">{dateReturner(e.fecha_ult_mod, false)}</th>
+                <th className="table-exp-column">{empresaReturner(e.empresa_id)}</th>
+                <th className={deleteColumn("table-exp-column")}>{estadoReturner(e.estado_id)}</th>
               </tr>
             ))}
           </tbody>

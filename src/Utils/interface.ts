@@ -89,7 +89,8 @@ export interface IModExp {
     invitacion: boolean,
     orden_compra: boolean,
     fecha_facturacion: string,
-    fecha_tesoreria: string
+    fecha_tesoreria: string,
+    concepto: string
 }
 export interface IUserCreate {
     first_name: string,

@@ -36,9 +36,11 @@ export const useExpStore = create<IExpStore>((set) => ({
     },
     async modExpediente (data: IModExp, id: number) {
         try {
+          console.log(data)
             await axios.patch(SERVER+'/expediente/edit/'+id,data, authReturner())
             alert('Expediente modificado.')
         } catch (error) {
+          console.log(error)
             alert('Error al modificar el Expediente.')
         }
     },
@@ -51,6 +53,7 @@ export const useExpStore = create<IExpStore>((set) => ({
             alert('Expediente Creado')
             window.location.reload()
         } catch (error) {
+            console.log(error)
             alert('Error a crear un pedido.')
         }
     },

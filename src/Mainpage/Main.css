@@ -1,6 +1,6 @@
 .table-exp {
     border:1px solid ;
-    width: 850px;
+    width: auto;
 }
 @media only screen and (max-width: 1000px) {
     .table-exp {
