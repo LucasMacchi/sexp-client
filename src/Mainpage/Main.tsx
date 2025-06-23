@@ -385,11 +385,6 @@ export default function Main() {
           {editMode ? (
             <input
               type="date"
-              min={
-                exp.fecha_ult_mod
-                  ? dateReturner(exp.fecha_ult_mod, true)
-                  : dateReturner(exp.fecha_presentacion, true)
-              }
               value={modDate}
               onChange={(e) => setDate(e.target.value)}
             />
