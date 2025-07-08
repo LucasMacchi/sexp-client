@@ -1,34 +1,21 @@
 import './App.css'
-import Login from './Login/Login'
-import Main from './Mainpage/Main'
-import Header from './Header/Header'
-import AddExp from './AddExp/AddExp'
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import Users from './Users/Users'
-import DataPage from './Data/DataPage'
+import Login from './Components/Login'
+import Mainpage from './Components/Mainpage'
+import Expediente from './Components/Expediente'
+import Search from './Components/Search'
+import CrearExpediente from './Components/CrearExpediente'
 function App() {
-  const [token, setToken] = useState('')
-
-  useEffect(() => {
-    setToken(localStorage.getItem('jwToken') || '')
-  },[])
-  const headerDisplayer = () => {
-    if(token) {
-      return (<Header />)
-    }
-  }
 
   return (
     <div>
       <BrowserRouter>
-        {headerDisplayer()}
         <Routes>
-            <Route path='/' element={<Main/>}/>
+            <Route path='/' element={<Mainpage/>}/>
             <Route path='/login' element={<Login/>}/>
-            <Route path='/add' element={<AddExp/>}/>
-            <Route path='/users' element={<Users/>}/>
-            <Route path='/data' element={<DataPage/>}/>
+            <Route path='/Search' element={<Search/>}/>
+            <Route path='/Crear' element={<CrearExpediente/>}/>
+            <Route path='/expediente/:id' element={<Expediente/>}/>
         </Routes>
       </BrowserRouter>
 

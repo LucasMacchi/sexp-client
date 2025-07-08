@@ -6,7 +6,6 @@ export default function (): boolean {
         const currentDateTime = Math.floor(Date.now() / 1000)
         const data = jwtDecode(token)
         if(data['exp'] && data['exp'] < currentDateTime){
-            console.log('aca')
             return true
         }
         else return false

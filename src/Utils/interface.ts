@@ -7,40 +7,6 @@ export interface IUser {
     user_id: number,
     credentials: ICredential[]
 }
-export interface IUserStore {
-    empresa: string,
-    log: boolean,
-    sysUsers: IUser[],
-    register: (data: IUserCreate) => void,
-    login: (email: string) => void,
-    logout: () => void,
-    session: () => void,
-    getAllUsers: () => void,
-    activateUser: (id: number) => void,
-    deactivateUser: (id:number) => void,
-    modCredential: (userId: number, empresaId?: number) => void,
-    empresaFn: (empresa: string) => void 
-}
-
-export interface IExpStore {
-    expedientes: IExpediente[],
-    servicios: IServicio[],
-    empresas: IEmpresas[],
-    estados: IEstados[],
-    meses: string[],
-    tipos: string[],
-    tiposFn: () => void,
-    expedientesFn: () => void,
-    serviciosFn: () => void,
-    empresasFn: () => void,
-    estadosFn: () => void,
-    modExpediente: (data: IModExp,id: number) => void,
-    createExpediente: (exp: IAddExp) => void,
-    createServiceFn: (service: string) => void,
-    createEmpresaFn: (empresa: string, service: number) => void,
-    createEstadoFn: (estado: string) => void,
-
-}
 export interface ICredential {
     user_empresa_id: number,
     empresa_id: number,
