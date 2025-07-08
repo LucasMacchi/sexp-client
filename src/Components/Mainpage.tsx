@@ -80,7 +80,7 @@ export default function Mainpage () {
     return(
         <div >
             <Header />
-            <div style={{textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", width: "2000px", maxWidth: "2000px"}}>
+            <div style={{display: "flex", flexDirection: "column", alignItems: "center", maxWidth: "1800px"}}>
             <div>
                 <h1 id="titulo" style={{fontWeight: "bold", color: "#3399ff"}}>Expedientes</h1>
                 <hr color='#3399ff'/>
@@ -131,8 +131,8 @@ export default function Mainpage () {
                     </button>
                 </div>
             </div>
-            <div>
-                <table>
+            <div >
+                <table >
                     <tbody>
                         <tr>
                             <th style={thTable}>Nro Expediente</th>
@@ -143,7 +143,6 @@ export default function Mainpage () {
                             <th style={thTable}>Fecha Modificacion</th>
                             <th style={thTable}>Estado</th>
                             <th style={thTable}>Tipo</th>
-                            <th style={thTable}>Descripcion</th>
                         </tr>
                         {expedientesF.map((ex) => (
                             <tr key={ex.exp_id} onClick={() => window.location.href = "/expediente/"+ex.exp_id}>
@@ -155,7 +154,6 @@ export default function Mainpage () {
                                 <th style={thTable}>{ex.fecha_ult_mod.split("T")[0]}</th>
                                 <th style={thTable}>{getEstadoName(estados, ex.estado_id)}</th>
                                 <th style={thTable}>{ex.tipo}</th>
-                                <th style={thTable}>{ex.descripcion}</th>
                             </tr>
                         ))}
                     </tbody>
