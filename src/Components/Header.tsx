@@ -8,8 +8,9 @@ export default function Header () {
     const [admin, setAdmin] = useState(false)
 
     useEffect(() => {
-        const admin = localStorage.getItem("admin")
-        if(admin) setAdmin(true)
+        const adminSt = localStorage.getItem("admin")
+        if(adminSt) setAdmin(true)
+        console.log(admin)
     },[])
 
     const linkStyle: React.CSSProperties = { height: "auto", border: "1px solid", borderColor: "black",
@@ -37,7 +38,7 @@ export default function Header () {
                             <Link style={linkStyle} to={'/'}>Pagina Principal</Link>
                             <Link style={linkStyle} to={'/Search'}>Buscar</Link>
                             <Link style={linkStyle} to={'/Crear'}>Crear Expediente</Link>
-                            {/*admin && <Link style={linkStyle} to={'/Usuarios'}>Usuarios</Link>*/}
+                            {admin && <Link style={linkStyle} to={'/Usuarios'}>Usuarios</Link>}
                         </div>
                         <div style={{padding: "10px"}}>
                             <a href="/login" style={{...linkStyle, backgroundColor: "red"}} onClick={() => logout()}>Cerrar Sesion</a>
