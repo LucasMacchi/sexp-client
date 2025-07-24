@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "./Header";
 import { IEmpresas, IEstados, IExpediente, IServicio } from "../Utils/interface";
-import { editExpediente, empresaReturner, estadoReturner, getEmpresas, getEstados, getServicios, getUniqueExpediente } from "../Utils/getData";
+import { editExpediente, empresaReturner, estadoReturner, getEmpresas, getEstados, getServicios, getTipos, getUniqueExpediente } from "../Utils/getData";
 import { useParams } from "react-router-dom";
 import sessionCheck from "../Utils/sessionCheck";
 
@@ -13,6 +13,7 @@ export default function Expediente () {
     const [servicios, setServicios] = useState<IServicio[]>([])
     const [estados, setEstados] = useState<IEstados[]>([])
     const [categoria, setCategoria] = useState('')
+    const [tipos, setTipos] = useState<string[]>([])
     const [data, setData] = useState({
         prop: "",
         value: ""
@@ -34,6 +35,7 @@ export default function Expediente () {
             getEmpresas().then(e => setEmpresas(e))
             getEstados().then(es => setEstados(es))
             getServicios().then(se => setServicios(se))
+            getTipos().then(tys => setTipos(tys))
         }
         
     },[])
@@ -202,6 +204,22 @@ export default function Expediente () {
                         </button>
                     </div>
                 )
+            case "tipo":
+                return (
+                    <div>
+                        <h3 style={textStyle}>Valor previo: {exp?.tipo ? exp?.tipo : "NaN"}</h3>
+                        <select style={filterSelect} name="invitacion" onChange={(e) => setData({prop:"tipo",value: e.target.value})}>
+                            <option value={""}>---</option>
+                            {tipos.map((tp) => (
+                                <option value={tp}>{tp}</option>
+                            ))}
+                        </select>
+                        <p></p>
+                        <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}} onClick={() => editExp()}>
+                            Editar
+                        </button>
+                    </div>
+                )
             default:
                 return(<h4 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Ningun elemento seleccionado</h4>)
         }
@@ -295,6 +313,7 @@ export default function Expediente () {
                                 <option value="invitacion">Invitacion</option>
                                 <option value="ordencompra">Orden de Compra</option>
                                 <option value="descripcion">Descripcion</option>
+                                <option value="tipo">Tipo</option>
                             </select>
                             {displayMod()}
                        </div>
