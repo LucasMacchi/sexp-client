@@ -1,6 +1,6 @@
 import axios from "axios";
 import mesesJSON from '../meses.json'
-import { IAddExp, IEmpresas, IEstados, IExpediente, IServicio, IUser } from "./interface";
+import { IAddExp, IEmpresas, IEstados, IExpediente, IServicio, IUser, IUserCreate } from "./interface";
 import authReturner from "./authReturner";
 import { jwtDecode } from "jwt-decode";
 const SERVER = import.meta.env.VITE_SERVER;
@@ -90,6 +90,16 @@ export async function getUniqueExpediente(id:number): Promise<IExpediente | null
     }
 }
 
+export async function getAllUsers(): Promise<IUser[]> {
+    try {
+        const usuarios: IUser[] = await (await axios.get(SERVER+'/user/all', authReturner())).data
+        return usuarios
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+}
+
 export function getEstadoName (estados: IEstados[], id: number): string {
     let name = ''
     estados.forEach(es => {
@@ -145,5 +155,82 @@ export async function getByNumber (nro: string) {
     } catch (error) {
         console.log(error)
         alert("No existe el expediente solicitado")
+    }
+}
+
+export async function activateUser (id: number) {
+    try {
+        await axios.patch(SERVER+"/user/activate/"+id,{},authReturner())
+        alert("Usuario activado")
+        window.location.reload()
+    } catch (error) {
+        console.log(error)
+        alert("No se pudo activar el usuario")
+    }
+}
+
+export async function deactivateUser (id: number) {
+    try {
+        await axios.patch(SERVER+"/user/deactivate/"+id,{},authReturner())
+        alert("Usuario desactivado")
+        window.location.reload()
+    } catch (error) {
+        console.log(error)
+        alert("No se pudo desactivar el usuario")
+    }
+}
+
+export async function registerUser(data:IUserCreate) {
+    try {
+        await axios.post(SERVER+"/user/register",data,authReturner())
+        alert("Usuario registrado")
+        window.location.reload()
+    } catch (error) {
+        console.log(error)
+        alert("Error al crear el usuario")
+    }
+}
+
+export async function addUserCredential(user:number,empresa: number) {
+    try {
+        await axios.post(SERVER+`/user/credential/${user}/${empresa}`,{},authReturner())
+        alert("Credenciales modificadas")
+        window.location.reload()
+    } catch (error) {
+        console.log(error)
+        alert("Error al cambiar las credenciales")
+    }
+}
+
+export async function removeUserCredential(cred: number) {
+    try {
+        await axios.delete(SERVER+`/user/credential/${cred}`,authReturner())
+        alert("Credenciales modificadas")
+        window.location.reload()
+    } catch (error) {
+        console.log(error)
+        alert("Error al cambiar las credenciales")
+    }
+}
+
+export async function addEstado(estado: string) {
+    try {
+        await axios.post(SERVER+`/data/estado/${estado}`,{},authReturner())
+        alert("Estado agregado.")
+        window.location.reload()
+    } catch (error) {
+        console.log(error)
+        alert("Error al agregar estado.")
+    }
+}
+
+export async function addService(service: string) {
+    try {
+        await axios.post(SERVER+`/data/service/${service}`,{},authReturner())
+        alert("Servicio agregado.")
+        window.location.reload()
+    } catch (error) {
+        console.log(error)
+        alert("Error al servicio estado.")
     }
 }

@@ -5,6 +5,9 @@ import Mainpage from './Components/Mainpage'
 import Expediente from './Components/Expediente'
 import Search from './Components/Search'
 import CrearExpediente from './Components/CrearExpediente'
+import Usuarios from './Components/Usuarios'
+import Data from './Components/Data'
+
 function App() {
 
   return (
@@ -15,6 +18,8 @@ function App() {
             <Route path='/login' element={<Login/>}/>
             <Route path='/Search' element={<Search/>}/>
             <Route path='/Crear' element={<CrearExpediente/>}/>
+            <Route path='/Usuarios' element={<Usuarios/>}/>
+            <Route path='/Datos' element={<Data/>}/>
             <Route path='/expediente/:id' element={<Expediente/>}/>
         </Routes>
       </BrowserRouter>

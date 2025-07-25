@@ -38,6 +38,7 @@ export default function Header () {
                             <Link style={linkStyle} to={'/'}>Pagina Principal</Link>
                             <Link style={linkStyle} to={'/Search'}>Buscar</Link>
                             <Link style={linkStyle} to={'/Crear'}>Crear Expediente</Link>
+                            <Link style={linkStyle} to={'/Datos'}>Datos</Link>
                             {admin && <Link style={linkStyle} to={'/Usuarios'}>Usuarios</Link>}
                         </div>
                         <div style={{padding: "10px"}}>

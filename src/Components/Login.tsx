@@ -35,7 +35,7 @@ export default function Login () {
             <form >
                 <div style={{padding: "8px"}}>
                     <h2 id='subtitle' style={{fontWeight: "normal", color: "#3399ff"}}>Ingrese el Correo</h2>
-                    <input type='text' id='username' size={20} value={email} onChange={e => setEmail(e.target.value)}
+                    <input type='text' id='username' size={40} value={email} onChange={e => setEmail(e.target.value)}
                     style={{fontSize:"x-large", color: "#3399ff"}}/>
                 </div>
                 <div style={{padding: "7px"}}>

@@ -183,7 +183,7 @@ export default function CrearExpediente () {
                                 <th><h3 style={textStyle}>Importe (Opcional):</h3></th>
                                 <th>
                                     <input type="number" min={0} style={{width:"30%"}} value={data.importe} 
-                                    onChange={(e) => setData({...data,importe:parseInt(e.target.value)})}/>
+                                    onChange={(e) => setData({...data,importe:parseFloat(e.target.value)})}/>
                                 </th>
                             </tr>
                             <tr>
