@@ -48,7 +48,7 @@ export default function Mainpage () {
         getServicios().then(se => setServicios(se))
         getExpedientes().then(ex => {
             setExpedientes(ex)
-            setExpedienteF(ex)
+            setExpedienteF(ex.filter((exp) => !exp.ocultado))
         })
         setMeses(getMeses())
     },[])
