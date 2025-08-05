@@ -29,7 +29,8 @@ export interface IExpediente {
     orden_compra: boolean,
     tipo: string,
     fecha_facturacion: string,
-    fecha_tesoreria: string
+    fecha_tesoreria: string,
+    ocultado: boolean
 }
 export interface IAddExp {
     servicio_id: number,
@@ -83,5 +84,51 @@ export interface IFilterPref {
     periodo: string,
     start: string,
     end: string,
-    ubicacion:string
+    ubicacion:string,
+    oculto: boolean
+}
+export interface ITicket {
+    fecha: string,
+    comprobante: string,
+    tipo: string,
+    pv: string,
+    nro: string,
+    prov_cuit: number,
+    prov_name: string,
+    prov_cod: number,
+    provsiv_cod: number,
+    proprv_codigo: number,
+    neto: number,
+    ivapor: number,
+    iva: number,
+    total: number,
+    concepto: string,
+    concepto_cod: string,
+    ticket_id?: number
+}
+
+export interface IProveedor {
+    pro_cod: number,
+    pro_razsoc: string,
+    pro_cuit: number,
+    prosiv_cod: number,
+    proprv_codigo: number
+}
+
+export interface IConcepto {
+    concepto_cod: string,
+    concepto_des: string
+}
+
+export interface ITxtData {
+    cabecera: string[],
+    items: string[],
+    medpago: string[],
+    cco: string[]
+}
+
+export interface ITxtDto {
+    fechaInicio: string,
+    fechaFin: string,
+    cco: string
 }

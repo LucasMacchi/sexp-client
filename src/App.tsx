@@ -7,6 +7,7 @@ import Search from './Components/Search'
 import CrearExpediente from './Components/CrearExpediente'
 import Usuarios from './Components/Usuarios'
 import Data from './Components/Data'
+import Tickets from './Components/Tickets'
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
             <Route path='/Crear' element={<CrearExpediente/>}/>
             <Route path='/Usuarios' element={<Usuarios/>}/>
             <Route path='/Datos' element={<Data/>}/>
+            <Route path='/Tickets' element={<Tickets/>}/>
             <Route path='/expediente/:id' element={<Expediente/>}/>
         </Routes>
       </BrowserRouter>

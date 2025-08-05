@@ -1,6 +1,6 @@
 import axios from "axios";
 import mesesJSON from '../meses.json'
-import { IAddExp, IEmpresas, IEstados, IExpediente, IServicio, IUser, IUserCreate } from "./interface";
+import { IAddExp, IConcepto, IEmpresas, IEstados, IExpediente, IProveedor, IServicio, ITicket, ITxtData, ITxtDto, IUser, IUserCreate } from "./interface";
 import authReturner from "./authReturner";
 import { jwtDecode } from "jwt-decode";
 const SERVER = import.meta.env.VITE_SERVER;
@@ -232,5 +232,59 @@ export async function addService(service: string) {
     } catch (error) {
         console.log(error)
         alert("Error al servicio estado.")
+    }
+}
+
+export async function createTicketFn(data:ITicket) {
+    try {
+        await axios.post(SERVER+`/tickets/add`,data,authReturner())
+        alert("Ticket agregado.")
+    } catch (error) {
+        console.log(error)
+        alert("Error al crear ticket.")
+    }
+}
+
+export async function getProveedores(): Promise<IProveedor[]> {
+    try {
+        const provedores: IProveedor[] = (await axios.get(SERVER+"/tickets/prov/all",authReturner())).data
+        return provedores
+    } catch (error) {
+        console.log(error)
+        alert("Error al traer los proveedores.")
+        return []
+    }
+}
+
+export async function getConceptos(): Promise<IConcepto[]> {
+    try {
+        const conceptos: IConcepto[] = (await axios.get(SERVER+"/tickets/conc/all",authReturner())).data
+        return conceptos
+    } catch (error) {
+        console.log(error)
+        alert("Error al traer los conceptos.")
+        return []
+    }
+}
+
+export async function getTicketsFn(): Promise<ITicket[]> {
+    try {
+        const tickets: ITicket[] = (await axios.get(SERVER+"/tickets/latest",authReturner())).data
+        return tickets
+    } catch (error) {
+        console.log(error)
+        alert("Error al traer los tickets.")
+        return []
+    }
+}
+
+export async function getTicketsTxtFn(data: ITxtDto): Promise<ITxtData> {
+    try {
+        const tickets: ITxtData = (await axios.post(SERVER+"/tickets/txt",data,authReturner())).data
+        return tickets
+    } catch (error) {
+        console.log(error)
+        alert("Error al generar los datos para exportar.")
+        return {cabecera: [], items: [], medpago: [], cco: []}
     }
 }

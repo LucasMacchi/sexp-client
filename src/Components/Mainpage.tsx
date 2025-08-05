@@ -19,7 +19,8 @@ export default function Mainpage () {
         periodo: '',
         start: '',
         end: '',
-        ubicacion: ''
+        ubicacion: '',
+        oculto: false
     })
 
     const thTable: React.CSSProperties = {
@@ -74,6 +75,7 @@ export default function Mainpage () {
                 if(date <= endD) return e
             })
         }
+        if(!filter.oculto) arr = arr.filter((ex) => ex.ocultado === false)
         setExpedienteF(arr)
     }
 
@@ -123,6 +125,10 @@ export default function Mainpage () {
                 <div style={divFilter}>
                     <h5 style={{fontWeight: "bold", color: "#3399ff"}}>Fecha Final</h5>
                     <input type="date" value={filter.end} onChange={(e) => setFilter({...filter, end: e.target.value})}/>
+                </div>
+                <div style={divFilter}>
+                    <h5 style={{fontWeight: "bold", color: "#3399ff"}}>Mostrar Ocultos</h5>
+                    <input type="checkbox" checked={filter.oculto} onChange={(e) => setFilter({...filter, oculto: e.target.checked})}/>
                 </div>
                 <div style={divFilter}>
                     <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}}

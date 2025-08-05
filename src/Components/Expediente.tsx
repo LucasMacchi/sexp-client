@@ -37,7 +37,6 @@ export default function Expediente () {
             getServicios().then(se => setServicios(se))
             getTipos().then(tys => setTipos(tys))
         }
-        
     },[])
 
     useEffect(() => {
@@ -53,7 +52,7 @@ export default function Expediente () {
     }
     const editExp = () => {
         if(data.value.length > 0 && exp && exp.exp_id) {
-            if(data.prop === "invitacion" || data.prop === "orden_compra"){
+            if(data.prop === "invitacion" || data.prop === "orden_compra" || data.prop === "ocultado"){
                 const bool = data.value === "true" ? true : false
                 setExp({...exp, [data.prop]:bool})
             }
@@ -104,6 +103,18 @@ export default function Expediente () {
                         <h3 style={textStyle}>Valor previo: {exp?.fecha_ult_mod ? exp?.fecha_ult_mod.split("T")[0] : "NaN"}</h3>
                         <input type="date" value={data.value} 
                         onChange={(e) => setData({prop:"fecha_ult_mod",value:e.target.value})}/>
+                        <p></p>
+                        <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}} onClick={() => editExp()}>
+                            Editar
+                        </button>
+                    </div>
+                )
+            case "presf":
+                return (
+                    <div>
+                        <h3 style={textStyle}>Valor previo: {exp?.fecha_presentacion ? exp?.fecha_presentacion.split("T")[0] : "NaN"}</h3>
+                        <input type="date" value={data.value} 
+                        onChange={(e) => setData({prop:"fecha_presentacion",value:e.target.value})}/>
                         <p></p>
                         <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}} onClick={() => editExp()}>
                             Editar
@@ -178,6 +189,21 @@ export default function Expediente () {
                     <div>
                         <h3 style={textStyle}>Valor previo: {exp?.orden_compra ? "Si":"No"}</h3>
                         <select style={filterSelectSm} name="invitacion" onChange={(e) => setData({prop:"orden_compra",value: e.target.value})}>
+                            <option value="">---</option>
+                            <option value="true">Si</option>
+                            <option value="false">No</option>
+                        </select>
+                        <p></p>
+                        <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}} onClick={() => editExp()}>
+                            Editar
+                        </button>
+                    </div>
+                )
+            case "ocult":
+                return (
+                    <div>
+                        <h3 style={textStyle}>Valor previo: {exp?.ocultado ? "Si":"No"}</h3>
+                        <select style={filterSelectSm} name="invitacion" onChange={(e) => setData({prop:"ocultado",value: e.target.value})}>
                             <option value="">---</option>
                             <option value="true">Si</option>
                             <option value="false">No</option>
@@ -291,6 +317,10 @@ export default function Expediente () {
                                 <th><h3 style={textStyle}>{exp?.invitacion ? "Si" : "No"}</h3></th>
                             </tr>
                             <tr>
+                                <th><h3 style={textStyle}>Ocultado:</h3></th>
+                                <th><h3 style={textStyle}>{exp?.ocultado ? "Si" : "No"}</h3></th>
+                            </tr>
+                            <tr>
                                 <th><h3 style={textStyle}>Descripcion:</h3></th>
                                 <th><h3 style={textStyle}>{exp?.descripcion && exp?.descripcion}</h3></th>
                             </tr>
@@ -305,6 +335,7 @@ export default function Expediente () {
                                 <option value="">---</option>
                                 <option value="expediente">Numero de expediente</option>
                                 <option value="estado">Estado</option>
+                                <option value="presf">Fecha de presentacion</option>
                                 <option value="ultmod">Fecha de ultima modificacion</option>
                                 <option value="tesodate">Fecha de tesoreria</option>
                                 <option value="facdate">Fecha de facturacion</option>
@@ -314,6 +345,7 @@ export default function Expediente () {
                                 <option value="ordencompra">Orden de Compra</option>
                                 <option value="descripcion">Descripcion</option>
                                 <option value="tipo">Tipo</option>
+                                <option value="ocult">Ocultado</option>
                             </select>
                             {displayMod()}
                        </div>

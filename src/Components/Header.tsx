@@ -21,7 +21,7 @@ export default function Header () {
     const logout = async () => {
         if(confirm("Quieres cerrar Sesion?")) await logoutFn()
     }
-
+    //<Link style={linkStyle} to={'/Tickets'}>Tickets</Link>
     const navbarDisplay = () => {
         return (
             <div>
