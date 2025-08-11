@@ -108,6 +108,12 @@ export function getEstadoName (estados: IEstados[], id: number): string {
     return name
 }
 
+export function getEmpresasNames (empresas: IEmpresas[]): string[] {
+    const empNames = empresas.map(s => s.nombre)
+    const namesSet = new Set(empNames)
+    return Array.from(namesSet)
+}
+
 export function empresaReturner (id: number, empresas: IEmpresas[],servicios: IServicio[]): string {
     let name = "NaN";
     empresas.forEach((e) => {
@@ -234,6 +240,17 @@ export async function addService(service: string) {
         alert("Error al servicio estado.")
     }
 }
+
+export async function addEmpresaServicioFn (empresa: string, servicio: number) {
+    try {
+        await axios.post(SERVER+`/data/empresa/${empresa}/${servicio}`,{},authReturner())
+        alert("Empresa agregada.")
+        window.location.reload()
+    } catch (error) {
+        console.log(error)
+        alert("Error al agregar empresa.")
+    }
+}  
 
 export async function createTicketFn(data:ITicket) {
     try {

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "./Header";
 import { IEmpresas, IEstados, IServicio } from "../Utils/interface";
 import sessionCheck from "../Utils/sessionCheck";
-import { addEstado, addService, empresaReturner, getEmpresas, getEstados, getServicios, getTipos } from "../Utils/getData";
+import { addEmpresaServicioFn, addEstado, addService, empresaReturner, getEmpresas, getEmpresasNames, getEstados, getServicios, getTipos } from "../Utils/getData";
 
 
 export default function Data () {
@@ -10,6 +10,7 @@ export default function Data () {
     const [empresas, setEmpresas] = useState<IEmpresas[]>([])
     const [servicios, setServicios] = useState<IServicio[]>([])
     const [estados, setEstados] = useState<IEstados[]>([])
+    const [empname, setEmpname] = useState({emp: "", srv: 0})
     const [tipos, setTipos] = useState<string[]>([])
     const [newEstado, setNewEstado] = useState("")
     const [newServicio, setNewServicio] = useState("")
@@ -36,6 +37,22 @@ export default function Data () {
         else alert("Ingrese un servicio valido")
     }
 
+    const createEmpresaServ = async () => {
+        if(empname.emp.length > 0 && empname.srv) {
+            await addEmpresaServicioFn(empname.emp, empname.srv)
+        } else alert("Falta datos para crear la empresa.")
+    }
+
+    const editRegister = async (index: number, servicio: boolean, estado: boolean) => {
+        if(servicio) {
+            prompt(`Ingrese la nueva descripcion del servicio ${servicios[index].nombre}: `)
+        }
+        if(estado) {
+            prompt(`Ingrese la nueva descripcion del estado ${estados[index].concepto}: `)
+        }
+        
+    }
+
     return (
         <div>
             <Header />
@@ -47,7 +64,7 @@ export default function Data () {
                         <div style={{maxHeight: "350px", height: "350px", overflow: "scroll"}}>
                         <table>
                             <tbody>
-                                {estados.map((e) => (<tr><th style={rowStyle}>{e.concepto}</th></tr>))}
+                                {estados.map((e,i) => (<tr><th onClick={() => editRegister(i, false, true)} style={rowStyle} >{e.concepto}</th></tr>))}
                             </tbody>
                         </table>
                         </div>
@@ -68,6 +85,30 @@ export default function Data () {
                                     <th style={rowStyle}>{empresaReturner(e.empresa_id,empresas,servicios)}</th></tr>))}
                             </tbody>
                         </table>
+                        </div>
+                        <div>
+                            <h4 style={textStyle}>Crear Empresa - Servicio</h4>
+                            <h4 style={textStyle}>Seleccione la empresa:</h4>
+                            <select value={empname.emp} style={{width: "250px", textAlign: "left" }}
+                            onChange={(e) => setEmpname({...empname ,emp: e.target.value})}>
+                                <option value={""}>---</option>
+                                {getEmpresasNames(empresas).map((e) => (
+                                    <option value={e} key={e}>{e}</option>
+                                ))}
+                            </select>
+                            <h4 style={textStyle}>Seleccione el servicio:</h4>
+                            <select value={empname.srv} style={{width: "250px", textAlign: "left" }}
+                            onChange={(e) => setEmpname({...empname ,srv: parseInt(e.target.value)})}>
+                                <option value={""}>---</option>
+                                {servicios.map((s) => (
+                                    <option value={s.servicio_id} key={s.servicio_id}>{s.nombre}</option>
+                                ))}
+                            </select>
+                            <div>
+                                <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px", marginTop: "30px"}} onClick={() => createEmpresaServ()}>
+                                    Agregar
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div style={{width: "250px", textAlign: "left" }}>
