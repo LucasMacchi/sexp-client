@@ -28,8 +28,8 @@ export default function Tickets () {
         concepto: "",
         concepto_cod: ""
     })
-    const [conceptoId, setConceptoId] = useState(0)
-    const [provId, setProvId] = useState(0)
+    const [conceptoId, setConceptoId] = useState(99)
+    const [provId, setProvId] = useState(99)
     const [txtData, setTxtData] = useState<ITxtDto>({fechaFin:"",fechaInicio:"",cco:"0900006"})
 
     useEffect(() => {
@@ -40,20 +40,33 @@ export default function Tickets () {
     },[])
 
     useEffect(() => {
-        if(ticket.total) {
-            const iva = ticket.total * ticket.ivapor / 100
-            const neto = ticket.total - iva
-            setTicket({...ticket, neto: Math.round(neto * 100) / 100, iva: Math.round(iva*100) / 100})
+        if(ticket.neto) {
+            const iva = ticket.neto * ticket.ivapor / 100
+            const total = ticket.neto + iva
+            setTicket({...ticket, total: parseFloat(total.toFixed(2)), iva: Math.round(iva*100) / 100})
         }
 
-    },[ticket.total])
+    },[ticket.neto])
+    
+    useEffect(() => {
+        if(conceptoId > 0 && conceptoId < 50 && conceptos[conceptoId]){
+            setTicket({...ticket, ivapor: conceptos[conceptoId].concepto_iva})
+        }
+    },[conceptoId])
+
+    useEffect(() => {
+        const prov = proveedores[provId]
+        if(prov){
+            setTicket({...ticket, prov_name: prov.pro_razsoc, prov_cod: prov.pro_cod, proprv_codigo: prov.proprv_codigo, prov_cuit: prov.pro_cuit, provsiv_cod: prov.prosiv_cod})
+        }
+    },[provId])
 
 
     const addProveedor = (index: number) => {
-        const prov = proveedores[index]
+        //const prov = proveedores[index]
         setProvId(index)
-        setTicket({...ticket, prov_name: prov.pro_razsoc, prov_cod: prov.pro_cod, proprv_codigo: prov.proprv_codigo, prov_cuit: prov.pro_cuit, provsiv_cod: prov.prosiv_cod})
-        console.log(prov)
+        //setTicket({...ticket, prov_name: prov.pro_razsoc, prov_cod: prov.pro_cod, proprv_codigo: prov.proprv_codigo, prov_cuit: prov.pro_cuit, provsiv_cod: prov.prosiv_cod})
+        //console.log(prov)
     }
 
     const addConcepto = (index: number) => {
@@ -153,11 +166,15 @@ export default function Tickets () {
                         <hr color='#3399ff'/>
                     </div>
                     <div style={{width: "450px"}}>
-                        <h2 style={textStyle}>Total:</h2>
+                        <h2 style={textStyle}>Neto:</h2>
+                        <input type="number" value={ticket.neto} style={{width: "200px", fontSize: 24}}
+                        min={0} onChange={(e) => setTicket({...ticket,neto:parseFloat(e.target.value)})}/>
+                        <h2 style={textStyle}>IVA: </h2>
+                        <input type="number" value={ticket.iva} style={{width: "200px", fontSize: 24}}
+                        min={0} onChange={(e) => setTicket({...ticket,iva:parseFloat(e.target.value)})}/>
+                        <h2 style={textStyle}>Total: </h2>
                         <input type="number" value={ticket.total} style={{width: "200px", fontSize: 24}}
                         min={0} onChange={(e) => setTicket({...ticket,total:parseFloat(e.target.value)})}/>
-                        <h2 style={textStyle}>IVA: {ticket.iva}</h2>
-                        <h2 style={textStyle}>Neto: {ticket.neto}</h2>
                         <hr color='#3399ff'/>
                     </div>
                 </div>

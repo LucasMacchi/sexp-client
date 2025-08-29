@@ -117,7 +117,8 @@ export interface IProveedor {
 
 export interface IConcepto {
     concepto_cod: string,
-    concepto_des: string
+    concepto_des: string,
+    concepto_iva: number
 }
 
 export interface ITxtData {
