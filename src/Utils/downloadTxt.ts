@@ -1,7 +1,7 @@
 import { ITxtData } from "./interface";
 import JSZip from "jszip";
 
-export default function (txtLines: ITxtData) {
+export default function (txtLines: ITxtData, samabe: boolean) {
     const zip = new JSZip();
     let cabecera = ""
     let items = ""
@@ -18,12 +18,12 @@ export default function (txtLines: ITxtData) {
     zip.file('CCENCOST.txt',cco)
 
     const dateNow = dateParser(new Date())
-
+    const fileName = samabe ? "-exportacion-samabe.zip" : "-exportacion.zip"
     zip.generateAsync({type: 'blob'}).then((blob) => {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = dateNow+'-exportacion.zip';
+        link.download = dateNow+fileName;
         link.click();
         URL.revokeObjectURL(url);
     })

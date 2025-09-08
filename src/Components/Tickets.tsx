@@ -111,7 +111,7 @@ export default function Tickets () {
         ){
             setTxtData({...txtData, fechaFin: "", fechaInicio: "", samabe: false})
             const lineas: ITxtData = await getTicketsTxtFn(txtData)
-            downloadTxt(lineas)
+            downloadTxt(lineas,txtData.samabe)
 
         }
         else alert("Ingrese una fecha de inicio y fin valido.")
