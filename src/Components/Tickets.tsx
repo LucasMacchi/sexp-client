@@ -26,11 +26,12 @@ export default function Tickets () {
         iva: 0,
         total: 0,
         concepto: "",
-        concepto_cod: ""
+        concepto_cod: "",
+        samabe: false
     })
     const [conceptoId, setConceptoId] = useState(99)
     const [provId, setProvId] = useState(99)
-    const [txtData, setTxtData] = useState<ITxtDto>({fechaFin:"",fechaInicio:"",cco:"0900006"})
+    const [txtData, setTxtData] = useState<ITxtDto>({fechaFin:"",fechaInicio:"",cco:"0900006", samabe: false})
 
     useEffect(() => {
         sessionCheck()
@@ -98,7 +99,7 @@ export default function Tickets () {
         const empty: ITicket = {fecha: "",comprobante: "TIK",tipo: "A",
         pv: "",nro: "",prov_cuit: 0,prov_name: "",prov_cod: 0,provsiv_cod: 0,
         proprv_codigo: 0,neto: 0,ivapor: 21.0,iva: 0,total: 0,concepto: "",
-        concepto_cod: ""}
+        concepto_cod: "", samabe: false}
         setTicket(empty)
         setConceptoId(99)
         setProvId(99)
@@ -108,7 +109,7 @@ export default function Tickets () {
         if(txtData.fechaFin.length > 0 && txtData.fechaFin.length > 0 && txtData.cco && 
             confirm("Quieres exportar los comprobantes desde la fecha "+txtData.fechaInicio+" hasta "+txtData.fechaFin+"? (Los mismos se ocultaran despues de hacerlo.)")
         ){
-            setTxtData({...txtData, fechaFin: "", fechaInicio: ""})
+            setTxtData({...txtData, fechaFin: "", fechaInicio: "", samabe: false})
             const lineas: ITxtData = await getTicketsTxtFn(txtData)
             downloadTxt(lineas)
 
@@ -123,6 +124,13 @@ export default function Tickets () {
             <hr color='#3399ff'/>
             <div style={{display: "flex", marginLeft: 20}}>
                 <div>
+                    <div style={{width: "450px"}}>
+                        <h2 style={textStyle}>Samabe:
+                        <input type="checkbox" checked={ticket.samabe} 
+                        onChange={(e) => setTicket({...ticket,samabe:e.target.checked})}/>
+                        </h2>
+                        <hr color='#3399ff'/>
+                    </div>
                     <div style={{width: "450px"}}>
                         <h2 style={textStyle}>Tipo de Comprobante:</h2>
                         <input type="text" value={ticket.comprobante} style={{width: "200px", fontSize: 24}}
@@ -209,6 +217,13 @@ export default function Tickets () {
                             <h2 style={textStyle}>Fecha Fin:</h2>
                             <input type="date" value={txtData.fechaFin} style={{width: "200px", fontSize: 24}}
                             onChange={(e) => setTxtData({...txtData, fechaFin: e.target.value})}/>
+                        </div>
+                        <div style={{width: "450px"}}>
+                            <h2 style={textStyle}>Samabe:
+                            <input type="checkbox" checked={txtData.samabe} 
+                            onChange={(e) => setTxtData({...txtData, samabe: e.target.checked})}/>
+                            </h2>
+                            <hr color='#3399ff'/>
                         </div>
                         <div style={{width: "500px"}}>
                             <h2 style={textStyle}>Centro de costo: {txtData.cco}</h2>

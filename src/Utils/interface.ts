@@ -104,7 +104,8 @@ export interface ITicket {
     total: number,
     concepto: string,
     concepto_cod: string,
-    ticket_id?: number
+    ticket_id?: number,
+    samabe: boolean
 }
 
 export interface IProveedor {
@@ -131,5 +132,6 @@ export interface ITxtData {
 export interface ITxtDto {
     fechaInicio: string,
     fechaFin: string,
-    cco: string
+    cco: string,
+    samabe: boolean
 }
