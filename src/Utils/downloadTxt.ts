@@ -7,10 +7,10 @@ export default function (txtLines: ITxtData, samabe: boolean) {
     let items = ""
     let medpago = ""
     let cco = ""
-    txtLines.cabecera.forEach(l => cabecera += l+"\n");
-    txtLines.items.forEach(l => items += l+"\n");
-    txtLines.medpago.forEach(l => medpago += l+"\n");
-    txtLines.cco.forEach(l => cco += l+"\n");
+    txtLines.cabecera.forEach(l => cabecera += l+"\r\n");
+    txtLines.items.forEach(l => items += l+"\r\n");
+    txtLines.medpago.forEach(l => medpago += l+"\r\n");
+    txtLines.cco.forEach(l => cco += l+"\r\n");
 
     zip.file('CCABECER.txt',cabecera)
     zip.file('CITEMS.txt',items)
