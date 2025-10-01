@@ -57,7 +57,10 @@ export default function Expediente () {
                 setExp({...exp, [data.prop]:bool})
             }
             else if(data.prop === "estado_id") {
-                setExp({...exp, [data.prop]:parseInt(data.value)})
+                const estado = parseInt(data.value)
+                if(confirm("Si va a cambiar a un estado CONTABLE, asegurese de tener un numero de factura asigando."))
+                setExp({...exp, [data.prop]:estado})
+                
             }
             else {
                 setExp({...exp, [data.prop]:data.value})

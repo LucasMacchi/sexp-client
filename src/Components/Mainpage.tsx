@@ -148,6 +148,7 @@ export default function Mainpage () {
                             <th style={thTable}>Fecha Presentacion</th>
                             <th style={thTable}>Fecha Modificacion</th>
                             <th style={thTable}>Estado</th>
+                            <th style={thTable}>Factura</th>
                             <th style={thTable}>Importe</th>
                         </tr>
                         {expedientesF.map((ex) => (
@@ -159,6 +160,7 @@ export default function Mainpage () {
                                 <th style={thTable}>{ex.fecha_presentacion.split("T")[0]}</th>
                                 <th style={thTable}>{ex.fecha_ult_mod.split("T")[0]}</th>
                                 <th style={thTable}>{getEstadoName(estados, ex.estado_id)}</th>
+                                <th style={thTable}>{ex.nro_factura ? ex.nro_factura : "-"}</th>
                                 <th style={thTable}>{ex.importe ? ex.importe : 0}</th>
                             </tr>
                         ))}
