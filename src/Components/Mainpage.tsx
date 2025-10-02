@@ -3,6 +3,7 @@ import sessionCheck from "../Utils/sessionCheck"
 import Header from "./Header"
 import { IEmpresas, IEstados, IExpediente, IFilterPref, IServicio } from "../Utils/interface"
 import { empresaReturner, estadoReturner, getEmpresas, getEstadoName, getEstados, getExpedientes, getMeses, getServicios } from "../Utils/getData"
+import {currencyFormatter} from "../Utils/currencyFormater"
 
 
 export default function Mainpage () {
@@ -60,6 +61,9 @@ export default function Mainpage () {
         }
         if(filter.estado){
             arr = arr.filter((e) => e.estado_id === filter.estado)
+        }
+        if(filter.periodo){
+            arr = arr.filter((e) => e.periodo === filter.periodo)
         }
         if(filter.start){
             const startD = new Date(filter.start)
@@ -148,7 +152,7 @@ export default function Mainpage () {
                             <th style={thTable}>Fecha Presentacion</th>
                             <th style={thTable}>Fecha Modificacion</th>
                             <th style={thTable}>Estado</th>
-                            <th style={thTable}>Factura</th>
+                            <th style={thTable}>Nro Factura</th>
                             <th style={thTable}>Importe</th>
                         </tr>
                         {expedientesF.map((ex) => (
@@ -161,7 +165,7 @@ export default function Mainpage () {
                                 <th style={thTable}>{ex.fecha_ult_mod.split("T")[0]}</th>
                                 <th style={thTable}>{getEstadoName(estados, ex.estado_id)}</th>
                                 <th style={thTable}>{ex.nro_factura ? ex.nro_factura : "-"}</th>
-                                <th style={thTable}>{ex.importe ? ex.importe : 0}</th>
+                                <th style={thTable}>{ex.importe ? currencyFormatter(ex.importe.toString()) : "$"+0}</th>
                             </tr>
                         ))}
                     </tbody>

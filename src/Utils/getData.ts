@@ -3,6 +3,7 @@ import mesesJSON from '../meses.json'
 import { IAddExp, IConcepto, IEmpresas, IEstados, IExpediente, IProveedor, IServicio, ITicket, ITxtData, ITxtDto, IUser, IUserCreate } from "./interface";
 import authReturner from "./authReturner";
 import { jwtDecode } from "jwt-decode";
+import { deFormatterCurrency } from "./currencyFormater";
 const SERVER = import.meta.env.VITE_SERVER;
 
 export function getMeses () : string[] {
@@ -144,6 +145,10 @@ export function estadoReturner (id: number, estados: IEstados[]):string {
 export async function editExpediente (id: number, prop: string, value: string) {
     try {
         const data = {prop,value}
+        if(data.prop === "importe") {
+            data.value = deFormatterCurrency(data.value).toString()
+        }
+        console.log(data)
         await axios.patch(SERVER+"/expediente/edit/"+id,data,authReturner())
     } catch (error) {
         console.log(error)

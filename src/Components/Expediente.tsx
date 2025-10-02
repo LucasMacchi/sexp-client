@@ -4,6 +4,7 @@ import { IEmpresas, IEstados, IExpediente, IServicio } from "../Utils/interface"
 import { editExpediente, empresaReturner, estadoReturner, getEmpresas, getEstados, getServicios, getTipos, getUniqueExpediente } from "../Utils/getData";
 import { useParams } from "react-router-dom";
 import sessionCheck from "../Utils/sessionCheck";
+import {currencyFormatter} from "../Utils/currencyFormater";
 
 export default function Expediente () {
 
@@ -101,10 +102,11 @@ export default function Expediente () {
                     </div>
                 )
             case "ultmod":
+                const maxDate = new Date().toISOString().split("T")[0]
                 return (
                     <div>
                         <h3 style={textStyle}>Valor previo: {exp?.fecha_ult_mod ? exp?.fecha_ult_mod.split("T")[0] : "NaN"}</h3>
-                        <input type="date" value={data.value} 
+                        <input type="date" value={data.value} max={maxDate}
                         onChange={(e) => setData({prop:"fecha_ult_mod",value:e.target.value})}/>
                         <p></p>
                         <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}} onClick={() => editExp()}>
@@ -113,10 +115,11 @@ export default function Expediente () {
                     </div>
                 )
             case "presf":
+                const minDate = new Date().toISOString().split("T")[0]
                 return (
                     <div>
                         <h3 style={textStyle}>Valor previo: {exp?.fecha_presentacion ? exp?.fecha_presentacion.split("T")[0] : "NaN"}</h3>
-                        <input type="date" value={data.value} 
+                        <input type="date" value={data.value} max={minDate}
                         onChange={(e) => setData({prop:"fecha_presentacion",value:e.target.value})}/>
                         <p></p>
                         <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}} onClick={() => editExp()}>
@@ -163,9 +166,9 @@ export default function Expediente () {
             case "importe":
                 return (
                     <div>
-                        <h3 style={textStyle}>Valor previo: {exp?.importe ? exp.importe : "NaN"}</h3>
-                        <input type="number" value={data.value} 
-                        onChange={(e) => setData({prop:"importe",value:e.target.value})}/>
+                        <h3 style={textStyle}>Valor previo: {exp?.importe ? currencyFormatter(exp.importe.toString()) : "NaN"}</h3>
+                        $<input type="text" value={data.value} 
+                        onChange={(e) => setData({prop:"importe",value:e.target.value})} placeholder="$0,00"/>
                         <p></p>
                         <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}} onClick={() => editExp()}>
                             Editar
@@ -301,7 +304,7 @@ export default function Expediente () {
                             </tr>
                             <tr>
                                 <th><h3 style={textStyle}>Importe:</h3></th>
-                                <th><h3 style={textStyle}>{exp?.importe ? exp?.importe : "NaN"}</h3></th>
+                                <th><h3 style={textStyle}>{exp?.importe ? currencyFormatter(exp.importe.toString()) : "NaN"}</h3></th>
                             </tr>
                             <tr>
                                 <th><h3 style={textStyle}>Tipo:</h3></th>
