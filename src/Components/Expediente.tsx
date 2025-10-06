@@ -4,7 +4,6 @@ import { IEmpresas, IEstados, IExpediente, IServicio } from "../Utils/interface"
 import { editExpediente, empresaReturner, estadoReturner, getEmpresas, getEstados, getServicios, getTipos, getUniqueExpediente } from "../Utils/getData";
 import { useParams } from "react-router-dom";
 import sessionCheck from "../Utils/sessionCheck";
-import {currencyFormatter} from "../Utils/currencyFormater";
 
 export default function Expediente () {
 
@@ -166,7 +165,7 @@ export default function Expediente () {
             case "importe":
                 return (
                     <div>
-                        <h3 style={textStyle}>Valor previo: {exp?.importe ? currencyFormatter(exp.importe.toString()) : "NaN"}</h3>
+                        <h3 style={textStyle}>Valor previo: {exp?.importe ? "$"+exp.importe.toString() : "NaN"}</h3>
                         $<input type="text" value={data.value} 
                         onChange={(e) => setData({prop:"importe",value:e.target.value})} placeholder="$0,00"/>
                         <p></p>
@@ -304,7 +303,7 @@ export default function Expediente () {
                             </tr>
                             <tr>
                                 <th><h3 style={textStyle}>Importe:</h3></th>
-                                <th><h3 style={textStyle}>{exp?.importe ? currencyFormatter(exp.importe.toString()) : "NaN"}</h3></th>
+                                <th><h3 style={textStyle}>{ exp?.importe ? "$"+exp.importe.toString() : "NaN"}</h3></th>
                             </tr>
                             <tr>
                                 <th><h3 style={textStyle}>Tipo:</h3></th>
