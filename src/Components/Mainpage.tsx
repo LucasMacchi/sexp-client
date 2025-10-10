@@ -85,11 +85,11 @@ export default function Mainpage () {
     const colorChangeCheck = (exp: IExpediente) => {
         const lastmod = exp.last_mod ? exp.last_mod.split("T")[0] : null
         const lastsaw = exp.last_saw ? exp.last_saw.split("T")[0] : null
+        const now = new Date().toISOString().split("T")[0]
         console.log(lastsaw)
-        console.log(exp.last_saw)
-        console.log(new Date().toISOString())
-        if(lastmod && lastmod === new Date().toISOString().split("T")[0]) return "LimeGreen"
-        else if(lastsaw && lastsaw === new Date().toDateString()) return "LightSkyBlue"
+        console.log(now)
+        if(lastmod && lastmod === now) return "LimeGreen"
+        else if(lastsaw && lastsaw === now) return "LightSkyBlue"
     }
 
     return(
