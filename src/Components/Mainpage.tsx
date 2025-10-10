@@ -82,6 +82,14 @@ export default function Mainpage () {
         setExpedienteF(arr)
     }
 
+    const colorChangeCheck = (exp: IExpediente) => {
+        const lastmod = exp.last_mod ? new Date(exp.last_mod) : null
+        const lastsaw = exp.last_saw ? new Date(exp.last_saw) : null
+        console.log(lastmod,lastsaw, new Date)
+        if(lastmod && lastmod.toDateString() === new Date().toDateString()) return "LimeGreen"
+        else if(lastsaw && lastsaw.toDateString() === new Date().toDateString()) return "LightSkyBlue"
+    }
+
     return(
         <div >
             <Header />
@@ -155,7 +163,7 @@ export default function Mainpage () {
                             <th style={thTable}>Importe</th>
                         </tr>
                         {expedientesF.map((ex) => (
-                            <tr key={ex.exp_id} onClick={() => window.location.href = "/expediente/"+ex.exp_id}>
+                            <tr key={ex.exp_id} onClick={() => window.location.href = "/expediente/"+ex.exp_id} style={{backgroundColor: colorChangeCheck(ex)}}>
                                 <th style={thTable}>{ex.numero_exp}</th>
                                 <th style={thTableBg}>{ex.concepto}</th>
                                 <th style={thTableBg}>{empresaReturner(ex.empresa_id,empresas,servicios)}</th>

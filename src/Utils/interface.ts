@@ -30,7 +30,9 @@ export interface IExpediente {
     tipo: string,
     fecha_facturacion: string,
     fecha_tesoreria: string,
-    ocultado: boolean
+    ocultado: boolean,
+    last_saw?: string,
+    last_mod?: string
 }
 export interface IAddExp {
     servicio_id: number,
