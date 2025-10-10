@@ -86,8 +86,6 @@ export default function Mainpage () {
         const lastmod = exp.last_mod ? exp.last_mod.split("T")[0] : null
         const lastsaw = exp.last_saw ? exp.last_saw.split("T")[0] : null
         const now = new Date().toISOString().split("T")[0]
-        console.log(lastsaw)
-        console.log(now)
         if(lastmod && lastmod === now) return "LimeGreen"
         else if(lastsaw && lastsaw === now) return "LightSkyBlue"
     }
