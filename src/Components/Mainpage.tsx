@@ -87,7 +87,7 @@ export default function Mainpage () {
         const lastsaw = exp.last_saw ? new Date(exp.last_saw) : null
         console.log(lastsaw)
         console.log(exp.last_saw)
-        console.log(new Date())
+        console.log(new Date().toISOString())
         if(lastmod && lastmod.toDateString() === new Date().toDateString()) return "LimeGreen"
         else if(lastsaw && lastsaw.toDateString() === new Date().toDateString()) return "LightSkyBlue"
     }
