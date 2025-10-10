@@ -85,7 +85,7 @@ export default function Mainpage () {
     const colorChangeCheck = (exp: IExpediente) => {
         const lastmod = exp.last_mod ? new Date(exp.last_mod) : null
         const lastsaw = exp.last_saw ? new Date(exp.last_saw) : null
-        console.log(lastmod,lastsaw, new Date)
+        console.log(lastmod?.toDateString(),lastsaw?.toDateString(), new Date().toDateString())
         if(lastmod && lastmod.toDateString() === new Date().toDateString()) return "LimeGreen"
         else if(lastsaw && lastsaw.toDateString() === new Date().toDateString()) return "LightSkyBlue"
     }
