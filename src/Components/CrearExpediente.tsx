@@ -87,6 +87,7 @@ export default function CrearExpediente () {
                 user_id: 0,
                 tipo: ""
             })
+            alert("Expediente creado")
         }
         else {
             alert("Faltan datos.")
