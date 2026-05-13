@@ -318,7 +318,7 @@ export default function Expediente () {
                                 <th><h3 style={textStyle}>{ exp?.importe ? "$"+exp.importe.toString() : "NaN"}</h3></th>
                             </tr>
                             <tr>
-                                <th><h3 style={textStyle}>Importe pendiente a facturar:</h3></th>
+                                <th><h3 style={textStyle}>Importe pendiente a cobrar:</h3></th>
                                 <th><h3 style={textStyle}>{ exp?.importe_2 ? "$"+exp.importe_2.toString() : "NaN"}</h3></th>
                             </tr>
                             <tr>
@@ -362,7 +362,7 @@ export default function Expediente () {
                                 <option value="facdate">Fecha de facturacion</option>
                                 <option value="nrofac">Numero de factura</option>
                                 <option value="importe">Importe Facturado</option>
-                                <option value="importe_2">Importe pendiente a Facturar</option>
+                                <option value="importe_2">Importe pendiente a cobrar</option>
                                 <option value="invitacion">Invitacion</option>
                                 <option value="ordencompra">Orden de Compra</option>
                                 <option value="descripcion">Descripcion</option>
