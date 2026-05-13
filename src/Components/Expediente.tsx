@@ -174,6 +174,18 @@ export default function Expediente () {
                         </button>
                     </div>
                 )
+            case "importe_2":
+                return (
+                    <div>
+                        <h3 style={textStyle}>Valor previo: {exp?.importe_2 ? "$"+exp.importe_2.toString() : "NaN"}</h3>
+                        $<input type="text" value={data.value} 
+                        onChange={(e) => setData({prop:"importe_2",value:e.target.value})} placeholder="$0,00"/>
+                        <p></p>
+                        <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}} onClick={() => editExp()}>
+                            Editar
+                        </button>
+                    </div>
+                )
             case "invitacion":
                 return (
                     <div>
@@ -306,6 +318,10 @@ export default function Expediente () {
                                 <th><h3 style={textStyle}>{ exp?.importe ? "$"+exp.importe.toString() : "NaN"}</h3></th>
                             </tr>
                             <tr>
+                                <th><h3 style={textStyle}>Falta a Cobrar:</h3></th>
+                                <th><h3 style={textStyle}>{ exp?.importe_2 ? "$"+exp.importe_2.toString() : "NaN"}</h3></th>
+                            </tr>
+                            <tr>
                                 <th><h3 style={textStyle}>Tipo:</h3></th>
                                 <th><h3 style={textStyle}>{exp?.tipo ? exp?.tipo : "NaN"}</h3></th>
                             </tr>
@@ -345,7 +361,8 @@ export default function Expediente () {
                                 <option value="tesodate">Fecha de tesoreria</option>
                                 <option value="facdate">Fecha de facturacion</option>
                                 <option value="nrofac">Numero de factura</option>
-                                <option value="importe">Importe</option>
+                                <option value="importe">Importe Facturado</option>
+                                <option value="importe_2">Importe pendiente a Facturar</option>
                                 <option value="invitacion">Invitacion</option>
                                 <option value="ordencompra">Orden de Compra</option>
                                 <option value="descripcion">Descripcion</option>

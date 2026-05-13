@@ -24,6 +24,7 @@ export interface IExpediente {
     empresa_id: number,
     estado_id: number,
     importe: number,
+    importe_2: number,
     descripcion: string,
     invitacion: boolean,
     orden_compra: boolean,
