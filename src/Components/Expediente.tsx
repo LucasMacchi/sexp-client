@@ -314,11 +314,11 @@ export default function Expediente () {
                                 <th><h3 style={textStyle}>{exp?.nro_factura ? exp?.nro_factura : "NaN"}</h3></th>
                             </tr>
                             <tr>
-                                <th><h3 style={textStyle}>Importe:</h3></th>
+                                <th><h3 style={textStyle}>Importe facturado:</h3></th>
                                 <th><h3 style={textStyle}>{ exp?.importe ? "$"+exp.importe.toString() : "NaN"}</h3></th>
                             </tr>
                             <tr>
-                                <th><h3 style={textStyle}>Falta a Cobrar:</h3></th>
+                                <th><h3 style={textStyle}>Importe pendiente a facturar:</h3></th>
                                 <th><h3 style={textStyle}>{ exp?.importe_2 ? "$"+exp.importe_2.toString() : "NaN"}</h3></th>
                             </tr>
                             <tr>
