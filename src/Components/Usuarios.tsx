@@ -158,7 +158,7 @@ export default function Usuarios () {
                             onChange={(e) => addCredential(parseInt(e.target.value),selectedUser)}>
                                 <option value={0}>---</option>
                                 {filterEmpresa().map((e) => (
-                                    <option value={e.empresa_id}>{empresaReturner(e.empresa_id, empresas, servicios)}</option>
+                                    <option value={e.empresa_id}>{empresaReturner(e.empresa_id, empresas)}</option>
                                 ))}
                             </select>
                         </div>
@@ -168,7 +168,7 @@ export default function Usuarios () {
                             onChange={(e) => removeCredential(parseInt(e.target.value))}>
                                 <option value={0}>---</option>
                                 {userCred().map((e) => (
-                                    <option value={e.user_empresa_id}>{empresaReturner(e.empresa_id, empresas, servicios)}</option>
+                                    <option value={e.user_empresa_id}>{empresaReturner(e.empresa_id, empresas)}</option>
                                 ))}
                             </select>
                         </div>

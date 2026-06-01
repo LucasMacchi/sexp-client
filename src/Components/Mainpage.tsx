@@ -105,7 +105,7 @@ export default function Mainpage () {
                     onChange={(e) => setFilter({...filter, empresa: parseInt(e.target.value)})}>
                         <option value={0}>---</option>
                         {empresas.map((e) => (
-                            <option value={e.empresa_id}>{empresaReturner(e.empresa_id, empresas, servicios)}</option>
+                            <option value={e.empresa_id}>{empresaReturner(e.empresa_id, empresas)}</option>
                         ))}
                     </select>
                 </div>
@@ -166,7 +166,7 @@ export default function Mainpage () {
                             <tr key={ex.exp_id} onClick={() => window.location.href = "/expediente/"+ex.exp_id} style={{backgroundColor: colorChangeCheck(ex)}}>
                                 <th style={thTable}>{ex.numero_exp}</th>
                                 <th style={thTableBg}>{ex.concepto}</th>
-                                <th style={thTableBg}>{empresaReturner(ex.empresa_id,empresas,servicios)}</th>
+                                <th style={thTableBg}>{empresaReturner(ex.empresa_id,empresas)}</th>
                                 <th style={thTable}>{ex.periodo}</th>
                                 <th style={thTable}>{ex.fecha_presentacion.split("T")[0]}</th>
                                 <th style={thTable}>{ex.fecha_ult_mod.split("T")[0]}</th>
