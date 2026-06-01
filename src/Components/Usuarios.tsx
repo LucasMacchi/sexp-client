@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "./Header";
-import { ICredential, IEmpresas, IServicio, IUser, IUserCreate } from "../Utils/interface";
-import { activateUser, addUserCredential, deactivateUser, empresaReturner, getAllUsers, getEmpresas, getServicios, registerUser, removeUserCredential } from "../Utils/getData";
+import { ICredential, IEmpresas, IUser, IUserCreate } from "../Utils/interface";
+import { activateUser, addUserCredential, deactivateUser, empresaReturner, getAllUsers, getEmpresas, registerUser, removeUserCredential } from "../Utils/getData";
 import sessionCheck from "../Utils/sessionCheck";
 
 
@@ -10,14 +10,12 @@ export default function Usuarios () {
     const [users, setUsers] = useState<IUser[]>([])
     const [register, setRegister] = useState<IUserCreate>({
     last_name: "",first_name: "",email: "",admin: false})
-    const [servicios, setServicios] = useState<IServicio[]>([])
     const [empresas, setEmpresas] = useState<IEmpresas[]>([])
     const [selectedUser, setSelectedUser] = useState(0)
     
     useEffect(() => {
         sessionCheck()
         getAllUsers().then(usrs => setUsers(usrs))
-        getServicios().then(se => setServicios(se))
         getEmpresas().then(e => setEmpresas(e))
     },[])
 

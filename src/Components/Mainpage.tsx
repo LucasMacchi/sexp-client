@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react"
 import sessionCheck from "../Utils/sessionCheck"
 import Header from "./Header"
-import { IEmpresas, IEstados, IExpediente, IFilterPref, IServicio } from "../Utils/interface"
-import { empresaReturner, estadoReturner, getEmpresas, getEstadoName, getEstados, getExpedientes, getMeses, getServicios } from "../Utils/getData"
+import { IEmpresas, IEstados, IExpediente, IFilterPref } from "../Utils/interface"
+import { empresaReturner, estadoReturner, getEmpresas, getEstadoName, getEstados, getExpedientes, getMeses } from "../Utils/getData"
 
 
 export default function Mainpage () {
 
     const [empresas, setEmpresas] = useState<IEmpresas[]>([])
-    const [servicios, setServicios] = useState<IServicio[]>([])
     const [estados, setEstados] = useState<IEstados[]>([])
     const [meses, setMeses] = useState<string[]>([])
     const [expedientes, setExpedientes] = useState<IExpediente[]>([])
@@ -45,7 +44,6 @@ export default function Mainpage () {
         sessionCheck()
         getEmpresas().then(e => setEmpresas(e))
         getEstados().then(es => setEstados(es))
-        getServicios().then(se => setServicios(se))
         getExpedientes().then(ex => {
             setExpedientes(ex)
             setExpedienteF(ex.filter((exp) => !exp.ocultado))
