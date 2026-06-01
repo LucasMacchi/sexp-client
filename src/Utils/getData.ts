@@ -1,6 +1,6 @@
 import axios from "axios";
 import mesesJSON from '../meses.json'
-import { IAddExp, IConcepto, IEmpresas, IEstados, IExpediente, IProveedor, IServicio, ITicket, ITxtData, ITxtDto, IUser, IUserCreate } from "./interface";
+import { IAddExp, ICliente, IConcepto, IEmpresas, IEstados, IExpediente, IProveedor, IServicio, ITicket, ITxtData, ITxtDto, IUser, IUserCreate } from "./interface";
 import authReturner from "./authReturner";
 import { jwtDecode } from "jwt-decode";
 import { deFormatterCurrency } from "./currencyFormater";
@@ -33,6 +33,16 @@ export async function getTipos () : Promise<string[]> {
 export async function getEmpresas(): Promise<IEmpresas[]> {
     try {
         const res: IEmpresas[] = (await axios.get(SERVER+"/data/empresas", authReturner())).data
+        return res
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+}
+
+export async function getClientes(): Promise<ICliente[]> {
+    try {
+        const res: ICliente[] = (await axios.get(SERVER+"/data/clientes", authReturner())).data
         return res
     } catch (error) {
         console.log(error)
@@ -115,11 +125,11 @@ export function getEmpresasNames (empresas: IEmpresas[]): string[] {
     return Array.from(namesSet)
 }
 
-export function empresaReturner (id: number, empresas: IEmpresas[],servicios: IServicio[]): string {
+export function empresaReturner (id: number, empresas: IEmpresas[]): string {
     let name = "NaN";
     empresas.forEach((e) => {
       if (e.empresa_id === id)
-        name = e.nombre + " - " + servicioReturner(servicios,e.servicio_id);
+        name = e.nombre;
     });
     return name;
 }

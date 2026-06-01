@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "./Header";
-import { IEmpresas, IEstados, IExpediente, IServicio } from "../Utils/interface";
-import { editExpediente, empresaReturner, estadoReturner, getEmpresas, getEstados, getServicios, getTipos, getUniqueExpediente } from "../Utils/getData";
+import { IEmpresas, IEstados, IExpediente } from "../Utils/interface";
+import { editExpediente, empresaReturner, estadoReturner, getEmpresas, getEstados, getTipos, getUniqueExpediente } from "../Utils/getData";
 import { useParams } from "react-router-dom";
 import sessionCheck from "../Utils/sessionCheck";
 
@@ -10,7 +10,6 @@ export default function Expediente () {
     const params = useParams();
     const [exp, setExp] = useState<IExpediente | null>(null)
     const [empresas, setEmpresas] = useState<IEmpresas[]>([])
-    const [servicios, setServicios] = useState<IServicio[]>([])
     const [estados, setEstados] = useState<IEstados[]>([])
     const [categoria, setCategoria] = useState('')
     const [tipos, setTipos] = useState<string[]>([])
@@ -34,7 +33,6 @@ export default function Expediente () {
             getUniqueExpediente(parseInt(params.id)).then(e => setExp(e))
             getEmpresas().then(e => setEmpresas(e))
             getEstados().then(es => setEstados(es))
-            getServicios().then(se => setServicios(se))
             getTipos().then(tys => setTipos(tys))
         }
     },[])
@@ -307,7 +305,7 @@ export default function Expediente () {
                             </tr>
                             <tr>
                                 <th><h3 style={textStyle}>Empresa:</h3></th>
-                                <th><h3 style={textStyle}>{exp?.empresa_id ? empresaReturner(exp?.empresa_id, empresas,servicios) : "NaN"}</h3></th>
+                                <th><h3 style={textStyle}>{exp?.empresa_id ? empresaReturner(exp?.empresa_id, empresas) : "NaN"}</h3></th>
                             </tr>
                             <tr>
                                 <th><h3 style={textStyle}>Numero de factura:</h3></th>

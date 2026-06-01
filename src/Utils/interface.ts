@@ -46,6 +46,7 @@ export interface IAddExp {
     estado_id: number,
     importe: number,
     descripcion: string,
+    client_id: number,
     user_id: number,
     tipo: string
 }
@@ -72,10 +73,13 @@ export interface IServicio {
     servicio_id: number,
     nombre: string
 }
+export interface ICliente {
+    client_id: number,
+    descripcion: string
+}
 export interface IEmpresas {
     empresa_id: number,
     nombre: string,
-    servicio_id: number
 }
 export interface IEstados {
     estado_id: number,

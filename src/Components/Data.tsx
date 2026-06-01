@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Header from "./Header";
-import { IEmpresas, IEstados, IServicio } from "../Utils/interface";
+import { ICliente, IEmpresas, IEstados, IServicio } from "../Utils/interface";
 import sessionCheck from "../Utils/sessionCheck";
-import { addEmpresaServicioFn, addEstado, addService, empresaReturner, getEmpresas, getEmpresasNames, getEstados, getServicios, getTipos } from "../Utils/getData";
+import { addEmpresaServicioFn, addEstado, addService, getClientes, getEmpresas, getEmpresasNames, getEstados, getServicios } from "../Utils/getData";
 
 
 export default function Data () {
@@ -11,8 +11,8 @@ export default function Data () {
     const [servicios, setServicios] = useState<IServicio[]>([])
     const [estados, setEstados] = useState<IEstados[]>([])
     const [empname, setEmpname] = useState({emp: "", srv: 0})
-    const [tipos, setTipos] = useState<string[]>([])
     const [newEstado, setNewEstado] = useState("")
+    const [clientes, setClientes] = useState<ICliente[]>([])
     const [newServicio, setNewServicio] = useState("")
 
     useEffect(() => {
@@ -20,7 +20,7 @@ export default function Data () {
         getEmpresas().then(e => setEmpresas(e))
         getEstados().then(es => setEstados(es))
         getServicios().then(se => setServicios(se))
-        getTipos().then(typs => setTipos(typs))
+        getClientes().then(cl => setClientes(cl))
     },[])
 
     const createEstado = async () => {
@@ -82,7 +82,7 @@ export default function Data () {
                         <table>
                             <tbody>
                                 {empresas.map((e) => (<tr>
-                                    <th style={rowStyle}>{empresaReturner(e.empresa_id,empresas,servicios)}</th></tr>))}
+                                    <th style={rowStyle}>{e.nombre}</th></tr>))}
                             </tbody>
                         </table>
                         </div>
@@ -111,19 +111,19 @@ export default function Data () {
                             </div>
                         </div>
                     </div>
-                    <div style={{width: "250px", textAlign: "left" }}>
-                        <h3 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Tipo</h3>
+                    <div style={{width: "400px", textAlign: "left" }}>
+                        <h3 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Clientes</h3>
                         <hr color='#3399ff'/>
                         <div style={{maxHeight: "350px", height: "350px", overflow: "scroll"}}>
                         <table>
                             <tbody>
-                                {tipos.map((e) => (<tr>
-                                    <th style={rowStyle}>{e}</th></tr>))}
+                                {clientes.map((e) => (<tr>
+                                    <th style={rowStyle}>{e.descripcion}</th></tr>))}
                             </tbody>
                         </table>
                         </div>
                     </div>
-                    <div style={{width: "400px", textAlign: "left" }}>
+                    <div style={{width: "300px", textAlign: "left" }}>
                         <h3 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Servicios</h3>
                         <hr color='#3399ff'/>
                         <div style={{maxHeight: "350px", height: "350px", overflow: "scroll"}}>

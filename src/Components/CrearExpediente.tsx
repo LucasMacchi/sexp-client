@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
-import { IAddExp, IEmpresas, IEstados, IServicio, IUser } from "../Utils/interface";
-import { empresaReturner, getEmpresas, getEstados, getMeses, getServicios, getTipos, postExpediente } from "../Utils/getData";
+import { IAddExp, ICliente, IEmpresas, IEstados, IServicio, IUser } from "../Utils/interface";
+import {getClientes, getEmpresas, getEstados, getMeses, getServicios, getTipos, postExpediente } from "../Utils/getData";
 import sessionCheck from "../Utils/sessionCheck";
 import { jwtDecode } from "jwt-decode";
 
@@ -13,6 +13,7 @@ export default function CrearExpediente () {
     const [estados, setEstados] = useState<IEstados[]>([])
     const [meses, setMeses] = useState<string[]>([])
     const [tipos, setTipos] = useState<string[]>([])
+    const [clientes, setClientes] = useState<ICliente[]>([])
 
     useEffect(() => {
         sessionCheck()
@@ -20,6 +21,7 @@ export default function CrearExpediente () {
         getEstados().then(es => setEstados(es))
         getServicios().then(se => setServicios(se))
         getTipos().then(tps => setTipos(tps))
+        getClientes().then(cl => setClientes(cl))
         setMeses(getMeses())
     },[])
     const textStyle: React.CSSProperties = {
@@ -48,25 +50,17 @@ export default function CrearExpediente () {
         estado_id: 0,
         importe: 0,
         descripcion: "",
+        client_id: 0,
         user_id: 0,
         tipo: ""
     })
 
-    const setEmpresaServicio = (empresa: number): number => {
-        let service = 0
-        empresas.forEach(em => {
-            if(em.empresa_id === empresa){
-                service = em.servicio_id
-            }
-        });
-        return service
-    }
 
     const createExpediente = async () => {
         const token = localStorage.getItem("jwToken");
-        data.servicio_id = setEmpresaServicio(data.empresa_id)
+        // data.servicio_id = setEmpresaServicio(data.empresa_id)
         console.log(data)
-        if(data.servicio_id && data.numero_exp.length > 2 && data.concepto.length > 2 && data.periodo.length > 0 && data.empresa_id && data.estado_id 
+        if(data.servicio_id && data.numero_exp.length > 2 && data.concepto.length > 2 && data.periodo.length > 0 && data.empresa_id && data.estado_id && data.client_id 
             && token && data.tipo.length > 0 && confirm("Quieres crear el nuevo expediente?")
         ) {
             const user: IUser = jwtDecode(token);
@@ -81,6 +75,7 @@ export default function CrearExpediente () {
                 fecha_presentacion: "",
                 nro_factura: "",
                 empresa_id: 0,
+                client_id: 0,
                 estado_id: 0,
                 importe: 0,
                 descripcion: "",
@@ -115,13 +110,37 @@ export default function CrearExpediente () {
                                 </th>
                             </tr>
                             <tr>
-                                <th><h3 style={textStyle}>Empresa y Servicio:</h3></th>
+                                <th><h3 style={textStyle}>Empresa:</h3></th>
                                 <th>
                                     <select style={filterSelect} name="invitacion" value={data.empresa_id} 
                                     onChange={(e) => setData({...data, empresa_id: parseInt(e.target.value)})}>
                                         <option value={0}>---</option>
                                         {empresas.map((es) => (
-                                            <option value={es.empresa_id}>{empresaReturner(es.empresa_id, empresas,servicios)}</option>
+                                            <option value={es.empresa_id}>{es.nombre}</option>
+                                        ))}
+                                    </select>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th><h3 style={textStyle}>Servicio:</h3></th>
+                                <th>
+                                    <select style={filterSelect} name="invitacion" value={data.servicio_id} 
+                                    onChange={(e) => setData({...data, servicio_id: parseInt(e.target.value)})}>
+                                        <option value={0}>---</option>
+                                        {servicios.map((es) => (
+                                            <option value={es.servicio_id}>{es.nombre}</option>
+                                        ))}
+                                    </select>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th><h3 style={textStyle}>Cliente:</h3></th>
+                                <th>
+                                    <select style={filterSelect} name="invitacion" value={data.client_id} 
+                                    onChange={(e) => setData({...data, client_id: parseInt(e.target.value)})}>
+                                        <option value={0}>---</option>
+                                        {clientes.map((es) => (
+                                            <option value={es.client_id}>{es.descripcion}</option>
                                         ))}
                                     </select>
                                 </th>
