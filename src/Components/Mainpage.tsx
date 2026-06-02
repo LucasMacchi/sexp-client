@@ -1,21 +1,24 @@
 import { useEffect, useState } from "react"
 import sessionCheck from "../Utils/sessionCheck"
 import Header from "./Header"
-import { IEmpresas, IEstados, IExpediente, IFilterPref } from "../Utils/interface"
-import { empresaReturner, estadoReturner, getEmpresas, getEstadoName, getEstados, getExpedientes, getMeses } from "../Utils/getData"
+import { ICliente, IEmpresas, IEstados, IExpediente, IFilterPref, IServicio } from "../Utils/interface"
+import { empresaReturner, estadoReturner, getClientes, getEmpresas, getEstadoName, getEstados, getExpedientes,getServicios } from "../Utils/getData"
 
 
 export default function Mainpage () {
 
     const [empresas, setEmpresas] = useState<IEmpresas[]>([])
     const [estados, setEstados] = useState<IEstados[]>([])
-    const [meses, setMeses] = useState<string[]>([])
+    const [clientes, setClientes] = useState<ICliente[]>([])
+    const [servicios, setServicios] = useState<IServicio[]>([])
     const [expedientes, setExpedientes] = useState<IExpediente[]>([])
     const [expedientesF, setExpedienteF] = useState<IExpediente[]>([])
     const [filter, setFilter] = useState<IFilterPref>({
         empresa: 0,
         estado: 0,
         periodo: '',
+        servicio: 0,
+        cliente: 0,
         start: '',
         end: '',
         ubicacion: '',
@@ -23,32 +26,30 @@ export default function Mainpage () {
     })
 
     const thTable: React.CSSProperties = {
-        border: "1px solid", padding: "5px"
+        border: "1px solid", fontSize: "small"
     }
     const thTableBg: React.CSSProperties = {
-        border: "1px solid", width: "20%", padding: "5px"
+        border: "1px solid", width: "20%", fontSize: "small"
     }
 
-    const selectFilter: React.CSSProperties = {
-        width: "100px"
-    }
 
     const selectFilterBg: React.CSSProperties = {
-        width: "300px"
+        width: "auto"
     }
 
     const divFilter: React.CSSProperties = {
-        margin: "15px"
+        margin: "8px"
     }
     useEffect(() => {
         sessionCheck()
         getEmpresas().then(e => setEmpresas(e))
         getEstados().then(es => setEstados(es))
+        getServicios().then(s => setServicios(s))
         getExpedientes().then(ex => {
             setExpedientes(ex)
             setExpedienteF(ex.filter((exp) => !exp.ocultado))
         })
-        setMeses(getMeses())
+        getClientes().then(c => setClientes(c))
     },[])
 
     const filterAction = () => {
@@ -59,8 +60,11 @@ export default function Mainpage () {
         if(filter.estado){
             arr = arr.filter((e) => e.estado_id === filter.estado)
         }
-        if(filter.periodo){
-            arr = arr.filter((e) => e.periodo === filter.periodo)
+        if(filter.servicio){
+            arr = arr.filter((e) => e.service_id === filter.servicio)
+        }
+        if(filter.cliente){
+            arr = arr.filter((e) => e.client_id === filter.cliente)
         }
         if(filter.start){
             const startD = new Date(filter.start)
@@ -88,6 +92,68 @@ export default function Mainpage () {
         else if(lastsaw && lastsaw === now) return "LightSkyBlue"
     }
 
+    const parsedPeriodo = (periodo: Date) => {
+        const [year, month, _day] = periodo.toString().split("-")
+        let mes = ""
+        switch(month){
+            case "01":
+                mes = "Enero"
+                break;
+            case "02":
+                mes = "Febrero"
+                break;
+            case "03":
+                mes = "Marzo"
+                break;
+            case "04":
+                mes = "Abril"
+                break;
+            case "05":
+                mes = "Mayo"
+                break;
+            case "06":
+                mes = "Junio"
+                break;
+            case "07":
+                mes = "Julio"
+                break;
+            case "08":
+                mes = "Agosto"
+                break;
+            case "09":
+                mes = "Septiembre"
+                break;
+            case "10":
+                mes = "Octubre"
+                break;
+            case "11":
+                mes = "Noviembre"
+                break;
+            case "12":
+                mes = "Diciembre"
+                break;
+            default:
+                mes = "NaN"
+        }
+        return mes + " " + year
+    }
+
+    const servicioReturner = (service_id: number): string => {
+        let serv = "NaN"
+        servicios.forEach(s => {
+            if(s.servicio_id === service_id) serv = s.nombre
+        })
+        return serv
+    }
+
+    const clienteReturner = (client_id: number): string => {
+        let cliente = "NaN"
+        clientes.forEach(c => {
+            if(c.client_id === client_id) cliente = c.descripcion
+        })
+        return cliente
+    }
+
     return(
         <div >
             <Header />
@@ -98,12 +164,32 @@ export default function Mainpage () {
             </div>
             <div style={{display: "flex", marginBottom: "50px", alignItems: "flex-end"}}>
                 <div style={divFilter}>
-                    <h5 style={{fontWeight: "bold", color: "#3399ff"}}>Empresa y Servicio</h5>
+                    <h5 style={{fontWeight: "bold", color: "#3399ff"}}>Empresa</h5>
                     <select name="empresas" value={filter.empresa} style={selectFilterBg}
                     onChange={(e) => setFilter({...filter, empresa: parseInt(e.target.value)})}>
                         <option value={0}>---</option>
                         {empresas.map((e) => (
-                            <option value={e.empresa_id}>{empresaReturner(e.empresa_id, empresas)}</option>
+                            <option value={e.empresa_id}>{e.nombre}</option>
+                        ))}
+                    </select>
+                </div>
+                <div style={divFilter}>
+                    <h5 style={{fontWeight: "bold", color: "#3399ff"}}>Servicio</h5>
+                    <select name="servicios" value={filter.servicio} style={selectFilterBg}
+                    onChange={(e) => setFilter({...filter, servicio: parseInt(e.target.value)})}>
+                        <option value={0}>---</option>
+                        {servicios.map((s) => (
+                            <option value={s.servicio_id}>{s.nombre}</option>
+                        ))}
+                    </select>
+                </div>
+                <div style={divFilter}>
+                    <h5 style={{fontWeight: "bold", color: "#3399ff"}}>Cliente</h5>
+                    <select name="clientes" value={filter.cliente} style={selectFilterBg}
+                    onChange={(e) => setFilter({...filter, cliente: parseInt(e.target.value)})}>
+                        <option value={0}>---</option>
+                        {clientes.map((c) => (
+                            <option value={c.client_id}>{c.descripcion}</option>
                         ))}
                     </select>
                 </div>
@@ -114,16 +200,6 @@ export default function Mainpage () {
                         <option value={0}>---</option>
                         {estados.map((e) => (
                             <option value={e.estado_id}>{estadoReturner(e.estado_id, estados)}</option>
-                        ))}
-                    </select>
-                </div>
-                <div style={divFilter}>
-                    <h5 style={{fontWeight: "bold", color: "#3399ff"}}>Periodo</h5>
-                    <select name="empresas" value={filter.periodo} style={selectFilter}
-                    onChange={(e) => setFilter({...filter, periodo: e.target.value})}>
-                        <option value={0}>---</option>
-                        {meses.map((e) => (
-                            <option value={e}>{e}</option>
                         ))}
                     </select>
                 </div>
@@ -152,7 +228,9 @@ export default function Mainpage () {
                         <tr>
                             <th style={thTable}>Nro Expediente</th>
                             <th style={thTableBg}>Concepto</th>
-                            <th style={thTable}>Empresa/Servicio</th>
+                            <th style={thTable}>Empresa</th>
+                            <th style={thTable}>Servicio</th>
+                            <th style={thTable}>Cliente</th>
                             <th style={thTable}>Periodo</th>
                             <th style={thTable}>Fecha Presentacion</th>
                             <th style={thTable}>Fecha Modificacion</th>
@@ -165,7 +243,9 @@ export default function Mainpage () {
                                 <th style={thTable}>{ex.numero_exp}</th>
                                 <th style={thTableBg}>{ex.concepto}</th>
                                 <th style={thTableBg}>{empresaReturner(ex.empresa_id,empresas)}</th>
-                                <th style={thTable}>{ex.periodo}</th>
+                                <th style={thTable}>{servicioReturner(ex.service_id)}</th>
+                                <th style={thTable}>{clienteReturner(ex.client_id)}</th>
+                                <th style={thTable}>{parsedPeriodo(ex.periodo)}</th>
                                 <th style={thTable}>{ex.fecha_presentacion.split("T")[0]}</th>
                                 <th style={thTable}>{ex.fecha_ult_mod.split("T")[0]}</th>
                                 <th style={thTable}>{getEstadoName(estados, ex.estado_id)}</th>

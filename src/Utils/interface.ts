@@ -12,12 +12,17 @@ export interface ICredential {
     empresa_id: number,
     user_id: number
 }
+export interface IPeriodo {
+    nombre:string,
+    numeracion:string
+}
 export interface IExpediente {
     exp_id: number,
-    servicio_id: number,
+    service_id: number,
     numero_exp: string,
+    client_id: number,
     concepto: string,
-    periodo: string,
+    periodo: Date,
     fecha_presentacion: string,
     fecha_ult_mod: string,
     nro_factura: string,
@@ -90,6 +95,8 @@ export interface IFilterPref {
     estado: number,
     periodo: string,
     start: string,
+    cliente:number,
+    servicio: number,
     end: string,
     ubicacion:string,
     oculto: boolean

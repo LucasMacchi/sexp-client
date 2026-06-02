@@ -1,16 +1,16 @@
 {
     "meses": [
-        "Enero",
-        "Febrero",
-        "Marzo",
-        "Abril",
-        "Mayo",
-        "Junio",
-        "Julio",
-        "Agosto",
-        "Septiembre",
-        "Octubre",
-        "Noviembre",
-        "Diciembre"
+        {"nombre": "Enero","numeracion": "01-01"},
+        {"nombre": "Febrero","numeracion": "02-01"},
+        {"nombre": "Marzo","numeracion": "03-01"},
+        {"nombre": "Abril","numeracion": "04-01"},
+        {"nombre": "Mayo","numeracion": "05-01"},
+        {"nombre": "Junio","numeracion": "06-01"},
+        {"nombre": "Julio","numeracion": "07-01"},
+        {"nombre": "Agosto","numeracion": "08-01"},
+        {"nombre": "Septiembre","numeracion": "09-01"},
+        {"nombre": "Octubre","numeracion": "10-01"},
+        {"nombre": "Noviembre","numeracion": "11-01"},
+        {"nombre": "Diciembre","numeracion": "12-01"}
     ]
 }

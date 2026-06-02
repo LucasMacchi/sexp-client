@@ -1,12 +1,12 @@
 import axios from "axios";
 import mesesJSON from '../meses.json'
-import { IAddExp, ICliente, IConcepto, IEmpresas, IEstados, IExpediente, IProveedor, IServicio, ITicket, ITxtData, ITxtDto, IUser, IUserCreate } from "./interface";
+import { IAddExp, ICliente, IConcepto, IEmpresas, IEstados, IExpediente, IPeriodo, IProveedor, IServicio, ITicket, ITxtData, ITxtDto, IUser, IUserCreate } from "./interface";
 import authReturner from "./authReturner";
 import { jwtDecode } from "jwt-decode";
 import { deFormatterCurrency } from "./currencyFormater";
 const SERVER = import.meta.env.VITE_SERVER;
 
-export function getMeses () : string[] {
+export function getMeses () : IPeriodo[] {
     return mesesJSON.meses
 }
 

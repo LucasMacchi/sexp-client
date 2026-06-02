@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "./Header";
 import { IEmpresas, IEstados, IExpediente } from "../Utils/interface";
-import { editExpediente, empresaReturner, estadoReturner, getEmpresas, getEstados, getTipos, getUniqueExpediente } from "../Utils/getData";
+import { editExpediente, empresaReturner, estadoReturner, getEmpresas, getEstados, getUniqueExpediente } from "../Utils/getData";
 import { useParams } from "react-router-dom";
 import sessionCheck from "../Utils/sessionCheck";
 
@@ -12,7 +12,6 @@ export default function Expediente () {
     const [empresas, setEmpresas] = useState<IEmpresas[]>([])
     const [estados, setEstados] = useState<IEstados[]>([])
     const [categoria, setCategoria] = useState('')
-    const [tipos, setTipos] = useState<string[]>([])
     const [data, setData] = useState({
         prop: "",
         value: ""
@@ -22,7 +21,7 @@ export default function Expediente () {
         fontWeight: "normal",
         color: "#3399ff",
         margin: "5px",
-        textAlign: "left"
+        textAlign: "left",
     }
     const textAreaStyle: React.CSSProperties = {
         width: "350px", maxWidth: "300px", height: "120px", resize: "none", overflow: "scroll"
@@ -33,7 +32,6 @@ export default function Expediente () {
             getUniqueExpediente(parseInt(params.id)).then(e => setExp(e))
             getEmpresas().then(e => setEmpresas(e))
             getEstados().then(es => setEstados(es))
-            getTipos().then(tys => setTipos(tys))
         }
     },[])
 
@@ -66,6 +64,52 @@ export default function Expediente () {
             editExpediente(exp.exp_id,data.prop,data.value)
         }
         else alert("Faltan datos")
+    }
+
+    const parsedPeriodo = (periodo: Date) => {
+        const [year, month, _day] = periodo.toString().split("-")
+        let mes = ""
+        switch(month){
+            case "01":
+                mes = "Enero"
+                break;
+            case "02":
+                mes = "Febrero"
+                break;
+            case "03":
+                mes = "Marzo"
+                break;
+            case "04":
+                mes = "Abril"
+                break;
+            case "05":
+                mes = "Mayo"
+                break;
+            case "06":
+                mes = "Junio"
+                break;
+            case "07":
+                mes = "Julio"
+                break;
+            case "08":
+                mes = "Agosto"
+                break;
+            case "09":
+                mes = "Septiembre"
+                break;
+            case "10":
+                mes = "Octubre"
+                break;
+            case "11":
+                mes = "Noviembre"
+                break;
+            case "12":
+                mes = "Diciembre"
+                break;
+            default:
+                mes = "NaN"
+        }
+        return mes + " " + year
     }
 
     const displayMod = () => {
@@ -245,22 +289,6 @@ export default function Expediente () {
                         </button>
                     </div>
                 )
-            case "tipo":
-                return (
-                    <div>
-                        <h3 style={textStyle}>Valor previo: {exp?.tipo ? exp?.tipo : "NaN"}</h3>
-                        <select style={filterSelect} name="invitacion" onChange={(e) => setData({prop:"tipo",value: e.target.value})}>
-                            <option value={""}>---</option>
-                            {tipos.map((tp) => (
-                                <option value={tp}>{tp}</option>
-                            ))}
-                        </select>
-                        <p></p>
-                        <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}} onClick={() => editExp()}>
-                            Editar
-                        </button>
-                    </div>
-                )
             default:
                 return(<h4 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Ningun elemento seleccionado</h4>)
         }
@@ -320,12 +348,8 @@ export default function Expediente () {
                                 <th><h3 style={textStyle}>{ exp?.importe_2 ? "$"+exp.importe_2.toString() : "NaN"}</h3></th>
                             </tr>
                             <tr>
-                                <th><h3 style={textStyle}>Tipo:</h3></th>
-                                <th><h3 style={textStyle}>{exp?.tipo ? exp?.tipo : "NaN"}</h3></th>
-                            </tr>
-                            <tr>
                                 <th><h3 style={textStyle}>Periodo:</h3></th>
-                                <th><h3 style={textStyle}>{exp?.periodo ? exp?.periodo : "NaN"}</h3></th>
+                                <th><h3 style={textStyle}>{exp?.periodo ? parsedPeriodo(exp?.periodo) : "NaN"}</h3></th>
                             </tr>
                             <tr>
                                 <th><h3 style={textStyle}>Orden de compra:</h3></th>
@@ -364,7 +388,6 @@ export default function Expediente () {
                                 <option value="invitacion">Invitacion</option>
                                 <option value="ordencompra">Orden de Compra</option>
                                 <option value="descripcion">Descripcion</option>
-                                <option value="tipo">Tipo</option>
                                 <option value="ocult">Ocultado</option>
                             </select>
                             {displayMod()}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
-import { IAddExp, ICliente, IEmpresas, IEstados, IServicio, IUser } from "../Utils/interface";
-import {getClientes, getEmpresas, getEstados, getMeses, getServicios, getTipos, postExpediente } from "../Utils/getData";
+import { IAddExp, ICliente, IEmpresas, IEstados, IPeriodo, IServicio, IUser } from "../Utils/interface";
+import {getClientes, getEmpresas, getEstados, getMeses, getServicios, postExpediente } from "../Utils/getData";
 import sessionCheck from "../Utils/sessionCheck";
 import { jwtDecode } from "jwt-decode";
 
@@ -11,8 +11,8 @@ export default function CrearExpediente () {
     const [empresas, setEmpresas] = useState<IEmpresas[]>([])
     const [servicios, setServicios] = useState<IServicio[]>([])
     const [estados, setEstados] = useState<IEstados[]>([])
-    const [meses, setMeses] = useState<string[]>([])
-    const [tipos, setTipos] = useState<string[]>([])
+    const [meses, setMeses] = useState<IPeriodo[]>([])
+    const [year, setYear] = useState<string>("2026")
     const [clientes, setClientes] = useState<ICliente[]>([])
 
     useEffect(() => {
@@ -20,7 +20,6 @@ export default function CrearExpediente () {
         getEmpresas().then(e => setEmpresas(e))
         getEstados().then(es => setEstados(es))
         getServicios().then(se => setServicios(se))
-        getTipos().then(tps => setTipos(tps))
         getClientes().then(cl => setClientes(cl))
         setMeses(getMeses())
     },[])
@@ -52,20 +51,19 @@ export default function CrearExpediente () {
         descripcion: "",
         client_id: 0,
         user_id: 0,
-        tipo: ""
+        tipo: "NaN"
     })
 
 
     const createExpediente = async () => {
         const token = localStorage.getItem("jwToken");
-        // data.servicio_id = setEmpresaServicio(data.empresa_id)
         console.log(data)
-        if(data.servicio_id && data.numero_exp.length > 2 && data.concepto.length > 2 && data.periodo.length > 0 && data.empresa_id && data.estado_id && data.client_id 
-            && token && data.tipo.length > 0 && confirm("Quieres crear el nuevo expediente?")
-        ) {
+        if(data.servicio_id && data.concepto.length > 2 && data.periodo.length > 0 && data.empresa_id && data.estado_id && data.client_id 
+            && token && year.length > 0 && confirm("Quieres crear el nuevo expediente?")) {
             const user: IUser = jwtDecode(token);
+            if(data.numero_exp.length === 0) data.numero_exp = "N/A"
             data.user_id = user.user_id
-            console.log(data)
+            data.periodo = year + "-" + data.periodo
             await postExpediente(data)
             setData({
                 servicio_id: 0,
@@ -80,7 +78,7 @@ export default function CrearExpediente () {
                 importe: 0,
                 descripcion: "",
                 user_id: 0,
-                tipo: ""
+                tipo: "NaN"
             })
             alert("Expediente creado")
         }
@@ -88,6 +86,8 @@ export default function CrearExpediente () {
             alert("Faltan datos.")
         }
     }
+
+
 
     return (
         <div>
@@ -99,7 +99,7 @@ export default function CrearExpediente () {
                 </div>
                     <div style={{width: "50%"}}>
                         <h2 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Datos del Expediente</h2>
-                        <hr color='#3399ff'/> 
+                        <hr color='#3399ff'/>
                         <table>
                         <tbody>
                             <tr>
@@ -157,24 +157,29 @@ export default function CrearExpediente () {
                                 </th>
                             </tr>
                             <tr>
-                                <th><h3 style={textStyle}>Tipo:</h3></th>
-                                <th>
-                                    <select style={filterSelect} name="invitacion" value={data.tipo} onChange={(e) => setData({...data,tipo: e.target.value})}>
-                                        <option value={0}>---</option>
-                                        {tipos.map((tp) => (
-                                            <option value={tp}>{tp}</option>
-                                        ))}
-                                    </select>
-                                </th>
-                            </tr>
-                            <tr>
                                 <th><h3 style={textStyle}>Periodo:</h3></th>
                                 <th>
                                     <select style={filterSelect} name="invitacion" onChange={(e) => setData({...data,periodo: e.target.value})}>
                                         <option value={''}>---</option>
                                         {meses.map((m) => (
-                                            <option value={m}>{m}</option>
+                                            <option value={m.numeracion}>{m.nombre}</option>
                                         ))}
+                                    </select>
+                                </th>
+                                <th>
+                                    <select style={{...filterSelect, width: "auto"}} name="invitacion" value={year} 
+                                    onChange={(e) => setYear(e.target.value)}>
+                                        <option value={"2020"}>2020</option>
+                                        <option value={"2021"}>2021</option>
+                                        <option value={"2022"}>2022</option>
+                                        <option value={"2023"}>2023</option>
+                                        <option value={"2024"}>2024</option>
+                                        <option value={"2025"}>2025</option>
+                                        <option value={"2026"}>2026</option>
+                                        <option value={"2027"}>2027</option>
+                                        <option value={"2028"}>2028</option>
+                                        <option value={"2029"}>2029</option>
+                                        <option value={"2030"}>2030</option>
                                     </select>
                                 </th>
                             </tr>
