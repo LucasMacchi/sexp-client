@@ -72,7 +72,8 @@ export interface IUserCreate {
     first_name: string,
     last_name: string,
     email: string,
-    admin: boolean
+    admin: boolean,
+    password: string
 }
 export interface IServicio {
     servicio_id: number,

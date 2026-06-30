@@ -9,7 +9,7 @@ export default function Usuarios () {
 
     const [users, setUsers] = useState<IUser[]>([])
     const [register, setRegister] = useState<IUserCreate>({
-    last_name: "",first_name: "",email: "",admin: false})
+    last_name: "",first_name: "",email: "",admin: false,password:""})
     const [empresas, setEmpresas] = useState<IEmpresas[]>([])
     const [selectedUser, setSelectedUser] = useState(0)
     
@@ -25,7 +25,7 @@ export default function Usuarios () {
     }
 
     const registerAction = async () => {
-        if(register.last_name.length>0 && register.first_name.length>0 && register.email.length>0){
+        if(register.last_name.length>0 && register.first_name.length>0 && register.email.length>0 && register.password.length > 0){
             if(confirm("Quieres crear este nuevo usuario?")) await registerUser(register)
         }
         else alert("Faltan datos del usuario")
@@ -126,6 +126,11 @@ export default function Usuarios () {
                             <h3 style={textStyle}>Email</h3>
                             <input type="text" value={register.email} size={35} 
                             onChange={(e) => setRegister({...register,email:e.target.value})}/>
+                        </div>
+                        <div>
+                            <h3 style={textStyle}>Contaseña</h3>
+                            <input type="text" value={register.password} size={35} 
+                            onChange={(e) => setRegister({...register,password:e.target.value})}/>
                         </div>
                         <div>
                             <h3 style={textStyle}>Admin

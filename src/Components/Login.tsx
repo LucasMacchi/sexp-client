@@ -3,12 +3,13 @@ import LoginFn from "../Utils/LoginFn";
 export default function Login () {
 
     const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     const [save, setSave] = useState(false)
     const [load, setLoad] = useState(false)
 
     const loginAction = async () => {
         setLoad(true)
-        const res = await LoginFn(email)
+        const res = await LoginFn(email,password)
         setTimeout(() => {
             setLoad(true)
             if(res) window.location.href = "/"
@@ -38,12 +39,17 @@ export default function Login () {
                     <input type='text' id='username' size={40} value={email} onChange={e => setEmail(e.target.value)}
                     style={{fontSize:"x-large", color: "#3399ff"}}/>
                 </div>
+                <div style={{padding: "8px"}}>
+                    <h2 id='subtitle' style={{fontWeight: "normal", color: "#3399ff"}}>Contraseña</h2>
+                    <input type='password' id='username' size={40} value={password} onChange={e => setPassword(e.target.value)}
+                    style={{fontSize:"x-large", color: "#3399ff"}}/>
+                </div>
                 <div style={{padding: "7px"}}>
                     <h4 id='subtitle' style={{fontWeight: "normal", color: "#3399ff"}}>Recordar usuario
                     <input type="checkbox" id='remember' checked={save} onChange={e => setSave(e.target.checked)} style={{fontSize:"x-large", color: "#3399ff"}}/>
                     </h4>
                 </div>
-                <button id="bg-btn" style={{color: "white", backgroundColor: "#3399ff", fontSize: "x-large", width: "160px"}} disabled={load} 
+                <button id="bg-btn" style={{color: "white", backgroundColor: "#6da9e6", fontSize: "x-large", width: "160px"}} disabled={load} 
                 onClick={() => loginAction()}>{load ? "Ingresando...." : "Ingresar"}</button>
             </form>
         </div>
