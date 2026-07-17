@@ -55,9 +55,28 @@ export default function Mainpage () {
 
     const createExcel = () => {
         if(expedientesF.length > 0 && confirm("¿Quieres descargar un excel con los expedientes filtrados?")){
-            const worksheet = XLSX.utils.json_to_sheet(expedientesF)
+            const parsedExpedientes = expedientesF.map((ex) => {
+                return {
+                    ID: ex.exp_id,
+                    EXPEDIENTE: ex.numero_exp,
+                    SERVICIO: servicioReturner(ex.service_id),
+                    CLIENTE: clienteReturner(ex.client_id),
+                    EMPRESA: empresaReturner(ex.empresa_id, empresas),
+                    CONCEPTO: ex.concepto,
+                    PERIODO: parsedPeriodo(ex.periodo),
+                    FECHA_PRESENTACION: ex.fecha_presentacion,
+                    ULTIMA_MODIFICACION: ex.fecha_ult_mod,
+                    FACTURA: ex.nro_factura,
+                    ESTADO: estadoReturner(ex.estado_id, estados),
+                    IMPORTE: ex.importe,
+                    PENDIENTE: ex.importe_2,
+                    FECHA_FACTURACION: ex.fecha_facturacion,
+                    FECHA_TESORERIA: ex.fecha_tesoreria,
+                }
+            })
+            const worksheet = XLSX.utils.json_to_sheet(parsedExpedientes)
             const workbook = XLSX.utils.book_new()
-            XLSX.utils.book_append_sheet(workbook,worksheet,"INSUMOS")
+            XLSX.utils.book_append_sheet(workbook,worksheet,"EXPEDIENTES")
             XLSX.writeFile(workbook,'EXPEDIENTES.xlsx')
         }
     }
