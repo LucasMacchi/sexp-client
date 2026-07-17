@@ -142,19 +142,6 @@ export default function Expediente () {
                         </button>
                     </div>
                 )
-            case "ultmod":
-                const maxDate = new Date().toISOString().split("T")[0]
-                return (
-                    <div>
-                        <h3 style={textStyle}>Valor previo: {exp?.fecha_ult_mod ? exp?.fecha_ult_mod.split("T")[0] : "NaN"}</h3>
-                        <input type="date" value={data.value} max={maxDate}
-                        onChange={(e) => setData({prop:"fecha_ult_mod",value:e.target.value})}/>
-                        <p></p>
-                        <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}} onClick={() => editExp()}>
-                            Editar
-                        </button>
-                    </div>
-                )
             case "presf":
                 const minDate = new Date().toISOString().split("T")[0]
                 return (

@@ -256,14 +256,24 @@ export async function addService(service: string) {
     }
 }
 
-export async function addEmpresaServicioFn (empresa: string, servicio: number) {
+export async function addEmpresaServicioFn (empresa: string) {
     try {
-        await axios.post(SERVER+`/data/empresa/${empresa}/${servicio}`,{},authReturner())
+        await axios.post(SERVER+`/data/empresa/${empresa}`,{},authReturner())
         alert("Empresa agregada.")
         window.location.reload()
     } catch (error) {
         console.log(error)
         alert("Error al agregar empresa.")
+    }
+} 
+export async function addClienteFn (nombre: string,publico: boolean) {
+    try {
+        await axios.post(SERVER+`/data/cliente/${nombre}/${publico}`,{},authReturner())
+        alert("Cliente agregado.")
+        window.location.reload()
+    } catch (error) {
+        console.log(error)
+        alert("Error al agregar cliente.")
     }
 }  
 

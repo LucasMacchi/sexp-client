@@ -3,6 +3,7 @@ import sessionCheck from "../Utils/sessionCheck"
 import Header from "./Header"
 import { ICliente, IEmpresas, IEstados, IExpediente, IFilterPref, IServicio } from "../Utils/interface"
 import { empresaReturner, estadoReturner, getClientes, getEmpresas, getEstadoName, getEstados, getExpedientes,getServicios } from "../Utils/getData"
+import * as XLSX from 'xlsx';
 
 
 export default function Mainpage () {
@@ -51,6 +52,15 @@ export default function Mainpage () {
         })
         getClientes().then(c => setClientes(c))
     },[])
+
+    const createExcel = () => {
+        if(expedientesF.length > 0 && confirm("¿Quieres descargar un excel con los expedientes filtrados?")){
+            const worksheet = XLSX.utils.json_to_sheet(expedientesF)
+            const workbook = XLSX.utils.book_new()
+            XLSX.utils.book_append_sheet(workbook,worksheet,"INSUMOS")
+            XLSX.writeFile(workbook,'EXPEDIENTES.xlsx')
+        }
+    }
 
     const filterAction = () => {
         let arr: IExpediente[] = expedientes
@@ -222,6 +232,12 @@ export default function Mainpage () {
                     </button>
                 </div>
             </div>
+                <div style={divFilter}>
+                    <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}}
+                    onClick={() => createExcel()}>
+                        EXCEL
+                    </button>
+                </div>
             <div >
                 <table >
                     <tbody>
@@ -236,6 +252,7 @@ export default function Mainpage () {
                             <th style={thTable}>Fecha Modificacion</th>
                             <th style={thTable}>Estado</th>
                             <th style={thTable}>Nro Factura</th>
+                            <th style={thTable}>Pendiente a Cobrar</th>
                             <th style={thTable}>Importe</th>
                         </tr>
                         {expedientesF.map((ex) => (
@@ -250,6 +267,7 @@ export default function Mainpage () {
                                 <th style={thTable}>{ex.fecha_ult_mod.split("T")[0]}</th>
                                 <th style={thTable}>{getEstadoName(estados, ex.estado_id)}</th>
                                 <th style={thTable}>{ex.nro_factura ? ex.nro_factura : "-"}</th>
+                                <th style={thTable}>{ex.importe_2 ? "$"+ex.importe_2.toString() : "$"+0}</th>
                                 <th style={thTable}>{ex.importe ? "$"+ex.importe.toString() : "$"+0}</th>
                             </tr>
                         ))}
