@@ -8,7 +8,7 @@ export function currencyFormatter(value: string) {
         style: "currency",
         currency: "ARS",
         minimumFractionDigits: 2
-    }).format(parsed / 100)
+    }).format(parsed)
 }
 
 export function currencyFormatterInput(value: string) {

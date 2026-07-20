@@ -4,10 +4,12 @@ import Header from "./Header"
 import { ICliente, IEmpresas, IEstados, IExpediente, IFilterPref, IServicio } from "../Utils/interface"
 import { empresaReturner, estadoReturner, getClientes, getEmpresas, getEstadoName, getEstados, getExpedientes,getServicios } from "../Utils/getData"
 import * as XLSX from 'xlsx';
+import { currencyFormatter } from "../Utils/currencyFormater"
 
 
 export default function Mainpage () {
 
+    //const [selectedStates, setSelectedStates] = useState<number[]>([])
     const [empresas, setEmpresas] = useState<IEmpresas[]>([])
     const [estados, setEstados] = useState<IEstados[]>([])
     const [clientes, setClientes] = useState<ICliente[]>([])
@@ -33,7 +35,7 @@ export default function Mainpage () {
         border: "1px solid", width: "20%", fontSize: "small"
     }
 
-
+    
     const selectFilterBg: React.CSSProperties = {
         width: "auto"
     }
@@ -52,6 +54,7 @@ export default function Mainpage () {
         })
         getClientes().then(c => setClientes(c))
     },[])
+
 
     const createExcel = () => {
         if(expedientesF.length > 0 && confirm("¿Quieres descargar un excel con los expedientes filtrados?")){
@@ -182,7 +185,7 @@ export default function Mainpage () {
         })
         return cliente
     }
-
+    //setFilter({...filter, empresa: parseInt(e.target.value)})
     return(
         <div >
             <Header />
@@ -224,7 +227,7 @@ export default function Mainpage () {
                 </div>
                 <div style={divFilter}>
                     <h5 style={{fontWeight: "bold", color: "#3399ff"}}>Estado</h5>
-                    <select name="empresas" value={filter.estado} style={selectFilterBg}
+                    <select name="estados" value={filter.estado} style={selectFilterBg}
                     onChange={(e) => setFilter({...filter, estado: parseInt(e.target.value)})}>
                         <option value={0}>---</option>
                         {estados.map((e) => (
@@ -268,10 +271,10 @@ export default function Mainpage () {
                             <th style={thTable}>Cliente</th>
                             <th style={thTable}>Periodo</th>
                             <th style={thTable}>Fecha Presentacion</th>
-                            <th style={thTable}>Fecha Modificacion</th>
                             <th style={thTable}>Estado</th>
                             <th style={thTable}>Nro Factura</th>
                             <th style={thTable}>Pendiente a Cobrar</th>
+                            <th style={thTable}>Cobrado</th>
                             <th style={thTable}>Importe</th>
                         </tr>
                         {expedientesF.map((ex) => (
@@ -283,11 +286,11 @@ export default function Mainpage () {
                                 <th style={thTable}>{clienteReturner(ex.client_id)}</th>
                                 <th style={thTable}>{parsedPeriodo(ex.periodo)}</th>
                                 <th style={thTable}>{ex.fecha_presentacion.split("T")[0]}</th>
-                                <th style={thTable}>{ex.fecha_ult_mod.split("T")[0]}</th>
                                 <th style={thTable}>{getEstadoName(estados, ex.estado_id)}</th>
                                 <th style={thTable}>{ex.nro_factura ? ex.nro_factura : "-"}</th>
-                                <th style={thTable}>{ex.importe_2 ? "$"+ex.importe_2.toString() : "$"+0}</th>
-                                <th style={thTable}>{ex.importe ? "$"+ex.importe.toString() : "$"+0}</th>
+                                <th style={thTable}>{ex.importe_2 ? currencyFormatter((ex.importe - ex.importe_2).toString()) : "$"+0}</th>
+                                <th style={thTable}>{ex.importe_2 ? currencyFormatter((ex.importe_2).toString()) : "$"+0}</th>
+                                <th style={thTable}>{ex.importe ? currencyFormatter(ex.importe.toString()) : "$"+0}</th>
                             </tr>
                         ))}
                     </tbody>

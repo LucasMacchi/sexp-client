@@ -4,6 +4,7 @@ import { IEmpresas, IEstados, IExpediente } from "../Utils/interface";
 import { editExpediente, empresaReturner, estadoReturner, getEmpresas, getEstados, getUniqueExpediente } from "../Utils/getData";
 import { useParams } from "react-router-dom";
 import sessionCheck from "../Utils/sessionCheck";
+import { currencyFormatter } from "../Utils/currencyFormater";
 
 export default function Expediente () {
 
@@ -304,7 +305,7 @@ export default function Expediente () {
                             </tr>
                             <tr>
                                 <th><h3 style={textStyle}>Fecha de ultima modificacion:</h3></th>
-                                <th><h3 style={textStyle}>{exp?.fecha_ult_mod.split("T")[0]}</h3></th>
+                                <th><h3 style={textStyle}>{exp?.last_mod ? exp.last_mod.split("T")[0] : "NaN"}</h3></th>
                             </tr>
                             <tr>
                                 <th><h3 style={textStyle}>Fecha de facturacion:</h3></th>
@@ -328,11 +329,15 @@ export default function Expediente () {
                             </tr>
                             <tr>
                                 <th><h3 style={textStyle}>Importe facturado:</h3></th>
-                                <th><h3 style={textStyle}>{ exp?.importe ? "$"+exp.importe.toString() : "NaN"}</h3></th>
+                                <th><h3 style={textStyle}>{ exp?.importe ? currencyFormatter(exp.importe.toString()) : "NaN"}</h3></th>
+                            </tr>
+                            <tr>
+                                <th><h3 style={textStyle}>Importe cobrado:</h3></th>
+                                <th><h3 style={textStyle}>{ exp?.importe_2 ? currencyFormatter((exp.importe_2).toString()) : "NaN"}</h3></th>
                             </tr>
                             <tr>
                                 <th><h3 style={textStyle}>Importe pendiente a cobrar:</h3></th>
-                                <th><h3 style={textStyle}>{ exp?.importe_2 ? "$"+exp.importe_2.toString() : "NaN"}</h3></th>
+                                <th><h3 style={textStyle}>{ exp?.importe_2 ? currencyFormatter((exp.importe - exp.importe_2).toString()) : "NaN"}</h3></th>
                             </tr>
                             <tr>
                                 <th><h3 style={textStyle}>Periodo:</h3></th>
