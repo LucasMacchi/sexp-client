@@ -68,13 +68,12 @@ export default function Mainpage () {
                     CONCEPTO: ex.concepto,
                     PERIODO: parsedPeriodo(ex.periodo),
                     FECHA_PRESENTACION: ex.fecha_presentacion,
-                    ULTIMA_MODIFICACION: ex.fecha_ult_mod,
+                    ULTIMA_MODIFICACION: ex.last_mod,
                     FACTURA: ex.nro_factura,
                     ESTADO: estadoReturner(ex.estado_id, estados),
                     IMPORTE: ex.importe,
-                    PENDIENTE: ex.importe_2,
-                    FECHA_FACTURACION: ex.fecha_facturacion,
-                    FECHA_TESORERIA: ex.fecha_tesoreria,
+                    COBRADO: ex.importe_2 ? ex.importe_2 : 0,
+                    PENDIENTE: ex.importe_2 ? ex.importe - ex.importe_2 : ex.importe
                 }
             })
             const worksheet = XLSX.utils.json_to_sheet(parsedExpedientes)
