@@ -288,7 +288,7 @@ export default function Mainpage () {
                                 <th style={thTable}>{ex.fecha_presentacion.split("T")[0]}</th>
                                 <th style={thTable}>{getEstadoName(estados, ex.estado_id)}</th>
                                 <th style={thTable}>{ex.nro_factura ? ex.nro_factura : "-"}</th>
-                                <th style={thTable}>{ex.importe_2 ? currencyFormatter((ex.importe - ex.importe_2).toString()) : "$"+0}</th>
+                                <th style={thTable}>{ex.importe_2 ? currencyFormatter((ex.importe - ex.importe_2).toString()) : currencyFormatter(ex.importe.toString())}</th>
                                 <th style={thTable}>{ex.importe_2 ? currencyFormatter((ex.importe_2).toString()) : "$"+0}</th>
                                 <th style={thTable}>{ex.importe ? currencyFormatter(ex.importe.toString()) : "$"+0}</th>
                             </tr>
