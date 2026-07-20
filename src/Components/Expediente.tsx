@@ -376,7 +376,7 @@ export default function Expediente () {
                                 <option value="facdate">Fecha de facturacion</option>
                                 <option value="nrofac">Numero de factura</option>
                                 <option value="importe">Importe Facturado</option>
-                                <option value="importe_2">Importe pendiente a cobrar</option>
+                                <option value="importe_2">Importe cobrado</option>
                                 <option value="invitacion">Invitacion</option>
                                 <option value="ordencompra">Orden de Compra</option>
                                 <option value="descripcion">Descripcion</option>
