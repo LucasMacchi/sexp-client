@@ -9,7 +9,7 @@ import { currencyFormatter } from "../Utils/currencyFormater"
 
 export default function Mainpage () {
 
-    //const [selectedStates, setSelectedStates] = useState<number[]>([])
+    const [selectedStates, setSelectedStates] = useState<number[]>([])
     const [empresas, setEmpresas] = useState<IEmpresas[]>([])
     const [estados, setEstados] = useState<IEstados[]>([])
     const [clientes, setClientes] = useState<ICliente[]>([])
@@ -88,8 +88,16 @@ export default function Mainpage () {
         if(filter.empresa){
             arr = arr.filter((e) => e.empresa_id === filter.empresa)
         }
-        if(filter.estado){
-            arr = arr.filter((e) => e.estado_id === filter.estado)
+        if(selectedStates.length > 0 ){
+            let filteredStates: IExpediente[][] = []
+            selectedStates.forEach(es => {
+                const auxArr = arr
+                filteredStates.push(auxArr.filter((e) => e.estado_id === es))
+            });
+            arr = []
+            filteredStates.forEach(fe => {
+                arr = arr.concat(fe)
+            });
         }
         if(filter.servicio){
             arr = arr.filter((e) => e.service_id === filter.servicio)
@@ -184,7 +192,17 @@ export default function Mainpage () {
         })
         return cliente
     }
-    //setFilter({...filter, empresa: parseInt(e.target.value)})
+
+    const handleStates = (e: number) => {
+        if(!selectedStates.find( s => s === e)){
+            setSelectedStates([...selectedStates,e])
+        }
+    }
+    
+    const handelDeleteStates = (e: number) => {
+        setSelectedStates(selectedStates.filter(s => s !== e))
+    }
+
     return(
         <div >
             <Header />
@@ -193,7 +211,7 @@ export default function Mainpage () {
                 <h1 id="titulo" style={{fontWeight: "bold", color: "#3399ff"}}>Expedientes</h1>
                 <hr color='#3399ff'/>
             </div>
-            <div style={{display: "flex", marginBottom: "50px", alignItems: "flex-end"}}>
+            <div style={{display: "flex", marginBottom: "20px", alignItems: "flex-end"}}>
                 <div style={divFilter}>
                     <h5 style={{fontWeight: "bold", color: "#3399ff"}}>Empresa</h5>
                     <select name="empresas" value={filter.empresa} style={selectFilterBg}
@@ -227,7 +245,7 @@ export default function Mainpage () {
                 <div style={divFilter}>
                     <h5 style={{fontWeight: "bold", color: "#3399ff"}}>Estado</h5>
                     <select name="estados" value={filter.estado} style={selectFilterBg}
-                    onChange={(e) => setFilter({...filter, estado: parseInt(e.target.value)})}>
+                    onChange={(e) => handleStates(parseInt(e.target.value))}>
                         <option value={0}>---</option>
                         {estados.map((e) => (
                             <option value={e.estado_id}>{estadoReturner(e.estado_id, estados)}</option>
@@ -253,12 +271,20 @@ export default function Mainpage () {
                     </button>
                 </div>
             </div>
-                <div style={divFilter}>
-                    <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}}
-                    onClick={() => createExcel()}>
-                        EXCEL
-                    </button>
-                </div>
+            {selectedStates.length > 0 && <h5 style={{fontWeight: "bold", color: "#3399ff", margin: 6}}>Estados filtrados:</h5>}
+            <div style={{display: "flex",flexDirection: "row"}}>
+                {selectedStates.map((e) => (
+                    <div style={{margin: 3, cursor: "pointer"}} onClick={() => handelDeleteStates(e)}>
+                        <h5 style={{fontWeight: "bold", color: "#3399ff", borderWidth: 1, borderStyle: "dotted", borderRadius: 4,padding: 2}}>{estadoReturner(e,estados)}</h5>
+                    </div>
+                ))}
+            </div>        
+            <div style={divFilter}>
+                <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}}
+                onClick={() => createExcel()}>
+                    EXCEL
+                </button>
+            </div>
             <div >
                 <table >
                     <tbody>
