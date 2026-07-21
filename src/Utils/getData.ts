@@ -154,7 +154,9 @@ export function estadoReturner (id: number, estados: IEstados[]):string {
 
 export async function editExpediente (id: number, prop: string, value: string) {
     try {
-        const data = {prop,value}
+        const token = localStorage.getItem('jwToken')
+        const userData:IUser = jwtDecode(token ? token : '')
+        const data = {prop,value,userId:userData.user_id}
         if(data.prop === "importe") {
             data.value = deFormatterCurrency(data.value).toString()
         }
