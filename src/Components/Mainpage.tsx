@@ -120,7 +120,8 @@ export default function Mainpage () {
             })
         }
         if(!filter.oculto) arr = arr.filter((ex) => ex.ocultado === false)
-        setExpedienteF(arr)
+        console.log(arr)
+        arr.length > 0 ? setExpedienteF(arr) : alert("No existen expedientes que cumplan el filtro.")
     }
 
     const colorChangeCheck = (exp: IExpediente) => {
