@@ -393,6 +393,7 @@ export default function Expediente () {
                                 <option value="ordencompra">Orden de Compra</option>
                                 <option value="descripcion">Descripcion</option>
                                 <option value="ocult">Ocultado</option>
+                                <option value="periodo">Periodo</option>
                             </select>
                             {displayMod()}
                        </div>
