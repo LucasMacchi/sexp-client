@@ -127,6 +127,18 @@ export default function Expediente () {
                         </button>
                     </div>
                 )
+            case "concepto":
+                return (
+                    <div>
+                        <h3 style={textStyle}>Valor previo: {exp?.numero_exp}</h3>
+                        <input type="text" value={data.value} 
+                        onChange={(e) => setData({prop:"concepto",value:e.target.value})}/>
+                        <p></p>
+                        <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}} onClick={() => editExp()}>
+                            Editar
+                        </button>
+                    </div>
+                )
             case "estado":
                 return (
                     <div>
@@ -381,6 +393,7 @@ export default function Expediente () {
                             <select name="edit" style={filterSelect} onChange={(e) => setCategoria(e.target.value)}>
                                 <option value="">---</option>
                                 <option value="expediente">Numero de expediente</option>
+                                <option value="concepto">Concepto</option>
                                 <option value="estado">Estado</option>
                                 <option value="presf">Fecha de presentacion</option>
                                 <option value="ultmod">Fecha de ultima modificacion</option>
