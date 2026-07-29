@@ -36,7 +36,7 @@ export default function Header () {
                     }}>
                         <div style={{padding: "10px"}}>
                             <Link style={linkStyle} to={'/'}>Pagina Principal</Link>
-                            <Link style={linkStyle} to={'/Search'}>Buscar</Link>
+                            <Link style={linkStyle} to={'/Search'}>Buscar/Modificados</Link>
                             <Link style={linkStyle} to={'/Crear'}>Crear Expediente</Link>
                             <Link style={linkStyle} to={'/Datos'}>Datos</Link>
                             <Link style={linkStyle} to={'/Tickets'}>Tickets</Link>

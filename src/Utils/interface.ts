@@ -16,6 +16,34 @@ export interface IPeriodo {
     nombre:string,
     numeracion:string
 }
+
+export interface IExpHistorial {
+    log_id: number,
+    exp_id: number,
+    col: string,
+    des: string,
+    fecha: string,
+    user_id: string,
+    first_name: string,
+    last_name: string
+    prev?:string
+}
+
+export interface IExpHistorialLast {
+    log_id: number,
+    exp_id: number,
+    col: string,
+    des: string,
+    fecha: string,
+    user_id: string,
+    first_name: string,
+    last_name: string,
+    numero_exp: string,
+    concepto: string,
+    prev?:string
+}
+
+
 export interface IExpediente {
     exp_id: number,
     service_id: number,
@@ -38,7 +66,8 @@ export interface IExpediente {
     fecha_tesoreria: string,
     ocultado: boolean,
     last_saw?: string,
-    last_mod?: string
+    last_mod?: string,
+    historial?:IExpHistorial[]
 }
 export interface IAddExp {
     servicio_id: number,

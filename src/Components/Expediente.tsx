@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "./Header";
-import { IEmpresas, IEstados, IExpediente } from "../Utils/interface";
+import { IEmpresas, IEstados, IExpediente, IExpHistorial } from "../Utils/interface";
 import { editExpediente, empresaReturner, estadoReturner, getEmpresas, getEstados, getUniqueExpediente } from "../Utils/getData";
 import { useParams } from "react-router-dom";
 import sessionCheck from "../Utils/sessionCheck";
@@ -10,13 +10,12 @@ export default function Expediente () {
 
     const params = useParams();
     const [exp, setExp] = useState<IExpediente | null>(null)
+    const [historialF, setHistorialF] = useState<IExpHistorial[]>([])
+    const [selectH, setSelectH] = useState("")
     const [empresas, setEmpresas] = useState<IEmpresas[]>([])
     const [estados, setEstados] = useState<IEstados[]>([])
     const [categoria, setCategoria] = useState('')
-    const [data, setData] = useState({
-        prop: "",
-        value: ""
-    })
+    const [data, setData] = useState({prop: "",value: ""})
 
     const textStyle: React.CSSProperties = {
         fontWeight: "normal",
@@ -25,7 +24,7 @@ export default function Expediente () {
         textAlign: "left",
     }
     const textAreaStyle: React.CSSProperties = {
-        width: "350px", maxWidth: "300px", height: "120px", resize: "none", overflow: "scroll"
+        width: "350px", maxWidth: "350px", height: "120px", resize: "none", overflow: "scroll"
     }
     useEffect(() => {
         sessionCheck()
@@ -37,11 +36,74 @@ export default function Expediente () {
     },[])
 
     useEffect(() => {
+        if(exp && exp.historial) {
+            let arr = exp.historial
+            if(selectH.length > 0){
+                arr = arr.filter((h) => h.col === categoryReturner(selectH))
+            }
+            setHistorialF(arr)
+        }
+    },[selectH])
+
+    useEffect(() => {
+        if(exp && exp.historial) {
+            let hisF = exp.historial.map((h) => {
+                if(h.col === "estado_id") h.des = estadoReturner(parseInt(h.des),estados)
+                h.col = categoryReturner(h.col)
+                return h
+            })
+            setHistorialF(hisF)
+        }
+    },[exp?.historial])
+
+    const categoryReturner = (col: string): string => {
+        switch(col){
+            case "expediente":
+                return "EXPEDIENTE"
+            case "concepto":
+                return "CONCEPTO"
+            case "estado_id":
+                return "ESTADO"
+            case "presf":
+                return "FECHA DE PRESENTACION"
+            case "tesodate":
+                return "FECHA DE TESORERIA"
+            case "facdate":
+                return "FECHA DE FACTURA"
+            case "periodo":
+                return "PERIODO"
+            case "nrofac":
+                return "NUMERO DE FACTURA"
+            case "importe":
+                return "IMPORTE"
+            case "importe_2":
+                return "COBRADO"
+            case "invitacion":
+                return "INVITACION"
+            case "ordencompra":
+                return "ORDEN DE COMPRA"
+            case "ocult":
+                return "OCULTADO"
+            case "descripcion":
+                return "DESCRIPCION"
+            case "SEGUIMIENTO":
+                return "SEGUIMIENTO"
+            default:
+                return "OTRO"
+        }
+    }
+
+    useEffect(() => {
         setData({prop: '', value: ''})
     },[categoria])
 
     const filterSelect: React.CSSProperties = {
         fontSize: "large", width: "350px",border: "1px solid"
+    }
+
+    const rowStyle: React.CSSProperties = {
+        border: "1px solid",
+        width: "20%"
     }
 
     const filterSelectSm: React.CSSProperties = {
@@ -130,7 +192,7 @@ export default function Expediente () {
             case "concepto":
                 return (
                     <div>
-                        <h3 style={textStyle}>Valor previo: {exp?.numero_exp}</h3>
+                        <h3 style={textStyle}>Valor previo: {exp?.concepto}</h3>
                         <input type="text" value={data.value} 
                         onChange={(e) => setData({prop:"concepto",value:e.target.value})}/>
                         <p></p>
@@ -301,8 +363,19 @@ export default function Expediente () {
                         </button>
                     </div>
                 )
-            default:
-                return(<h4 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Ningun elemento seleccionado</h4>)
+            case "seguimiento":
+                return (
+                    <div>
+                        <h3 style={textStyle}>Agregar seguimiento:</h3>
+                        <h3 style={textStyle}>Descripcion:</h3>
+                        <textarea style={textAreaStyle} 
+                        onChange={(e) => setData({prop: "seguimiento", value:e.target.value})}/>
+                        <p></p>
+                        <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}} onClick={() => editExp()}>
+                            AGREGAR
+                        </button>
+                    </div>
+                )
         }
 
     }
@@ -314,10 +387,10 @@ export default function Expediente () {
                 <h1 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Expediente - {exp?.numero_exp}</h1>
                 <hr color='#3399ff'/>
                 <div style={{display: "flex", justifyContent: "space-evenly"}}>
-                    <div style={{width: "50%"}}>
+                    <div style={{width: "33%",borderRightColor: "#3399ff",borderRight: "1px solid"}}>
                        <h2 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Datos del Expediente</h2>
                        <hr color='#3399ff'/> 
-                       <table style={{borderRight: "1px solid"}}>
+                       <table>
                         <tbody>
                             <tr>
                                 <th><h3 style={textStyle}>Concepto:</h3></th>
@@ -386,15 +459,42 @@ export default function Expediente () {
                         </tbody>
                        </table>
                     </div>
-                    <div style={{width: "50%"}}>
-                        <h2 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Modificar expediente</h2>
+                    <div style={{width: "33%",borderRightColor: "#3399ff",borderRight: "1px solid"}}>
+                        <h2 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Acciones</h2>
                        <hr color='#3399ff'/>
                        <div>
                             <select name="edit" style={filterSelect} onChange={(e) => setCategoria(e.target.value)}>
                                 <option value="">---</option>
+                                <option value="expediente">Modificar - Numero de expediente</option>
+                                <option value="concepto">Modificar - Concepto</option>
+                                <option value="estado">Modificar - Estado</option>
+                                <option value="presf">Modificar - Fecha de presentacion</option>
+                                <option value="ultmod">Modificar - Fecha de ultima modificacion</option>
+                                <option value="tesodate">Modificar - Fecha de tesoreria</option>
+                                <option value="facdate">Modificar - Fecha de facturacion</option>
+                                <option value="nrofac">Modificar - Numero de factura</option>
+                                <option value="importe">Modificar - Importe Facturado</option>
+                                <option value="importe_2">Modificar - Importe cobrado</option>
+                                <option value="invitacion">Modificar - Invitacion</option>
+                                <option value="ordencompra">Modificar - Orden de Compra</option>
+                                <option value="descripcion">Modificar - Descripcion</option>
+                                <option value="ocult">Modificar - Ocultado</option>
+                                <option value="periodo">Modificar - Periodo</option>
+                                <option value="seguimiento">Agregar - Seguimiento</option>
+                            </select>
+                            {displayMod()}
+                       </div>
+                    </div>
+                    <div style={{width: "33%"}}>
+                        <h2 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Historial</h2>
+                       <hr color='#3399ff'/>
+                       <h3 style={textStyle}>FILTRO</h3>
+                       <div>
+                            <select name="edit" style={filterSelect} value={selectH}  onChange={(e) => setSelectH(e.target.value)}>
+                                <option value="">---</option>
                                 <option value="expediente">Numero de expediente</option>
                                 <option value="concepto">Concepto</option>
-                                <option value="estado">Estado</option>
+                                <option value="estado_id">Estado</option>
                                 <option value="presf">Fecha de presentacion</option>
                                 <option value="ultmod">Fecha de ultima modificacion</option>
                                 <option value="tesodate">Fecha de tesoreria</option>
@@ -407,9 +507,29 @@ export default function Expediente () {
                                 <option value="descripcion">Descripcion</option>
                                 <option value="ocult">Ocultado</option>
                                 <option value="periodo">Periodo</option>
+                                <option value="seguimiento">Seguimiento</option>
                             </select>
-                            {displayMod()}
                        </div>
+                       <div style={{maxWidth: 550,maxHeight: 700, marginTop: 50 , overflowY: "scroll"}}>
+                            {historialF.map((h) => (
+                            <div style={{marginBottom: 40}}>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <th style={{...rowStyle,backgroundColor: "gray"}}>{h.fecha.split("T")[0]} - {h.col} - {h.first_name + " " + h.last_name}</th>                                            
+                                        </tr>
+                                        <tr>
+                                            <th style={rowStyle}>CAMBIADO A: </th>
+                                        </tr>
+                                        <tr>
+                                            <th style={rowStyle}>{h.des}</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            ))}
+                       </div>
+
                     </div>
                 </div>
             </div>

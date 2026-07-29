@@ -1,6 +1,6 @@
 import axios from "axios";
 import mesesJSON from '../meses.json'
-import { IAddExp, ICliente, IConcepto, IEmpresas, IEstados, IExpediente, IPeriodo, IProveedor, IServicio, ITicket, ITxtData, ITxtDto, IUser, IUserCreate } from "./interface";
+import { IAddExp, ICliente, IConcepto, IEmpresas, IEstados, IExpediente, IExpHistorialLast, IPeriodo, IProveedor, IServicio, ITicket, ITxtData, ITxtDto, IUser, IUserCreate } from "./interface";
 import authReturner from "./authReturner";
 import { jwtDecode } from "jwt-decode";
 import { deFormatterCurrency } from "./currencyFormater";
@@ -17,6 +17,18 @@ export async function postExpediente (data: IAddExp) {
     } catch (error) {
         console.log(error)
         alert("Error al crear el expediente")
+    }
+}
+
+export async function getLastModified () : Promise<IExpHistorialLast[]> {
+    try {
+        const res:IExpHistorialLast[] = (await axios.get(SERVER+"/expediente/historial", authReturner())).data
+        console.log(res)
+        return res
+    } catch (error) {
+        console.log(error)
+        alert("Error al traer expediente modificados")
+        return []
     }
 }
 
