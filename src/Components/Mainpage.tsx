@@ -4,7 +4,7 @@ import Header from "./Header"
 import { ICliente, IEmpresas, IEstados, IExpediente, IFilterPref, IServicio } from "../Utils/interface"
 import { empresaReturner, estadoReturner, getClientes, getEmpresas, getEstadoName, getEstados, getExpedientes,getServicios } from "../Utils/getData"
 import * as XLSX from 'xlsx';
-import { currencyFormatter } from "../Utils/currencyFormater"
+import { currencyFormatterNum } from "../Utils/currencyFormater"
 
 
 export default function Mainpage () {
@@ -315,9 +315,9 @@ export default function Mainpage () {
                                 <th style={thTable}>{ex.fecha_presentacion.split("T")[0]}</th>
                                 <th style={thTable}>{getEstadoName(estados, ex.estado_id)}</th>
                                 <th style={thTable}>{ex.nro_factura ? ex.nro_factura : "-"}</th>
-                                <th style={thTable}>{ex.importe_2 ? currencyFormatter((ex.importe - ex.importe_2).toString()) : currencyFormatter(ex.importe.toString())}</th>
-                                <th style={thTable}>{ex.importe_2 ? currencyFormatter((ex.importe_2).toString()) : "$"+0}</th>
-                                <th style={thTable}>{ex.importe ? currencyFormatter(ex.importe.toString()) : "$"+0}</th>
+                                <th style={thTable}>{ex.importe_2 ? currencyFormatterNum((ex.importe - ex.importe_2)) : currencyFormatterNum(ex.importe)}</th>
+                                <th style={thTable}>{ex.importe_2 ? currencyFormatterNum(ex.importe_2) : "$"+0}</th>
+                                <th style={thTable}>{ex.importe ? currencyFormatterNum(ex.importe) : "$"+0}</th>
                             </tr>
                         ))}
                     </tbody>

@@ -4,11 +4,22 @@ export function currencyFormatter(value: string) {
     if (!value) return '';
     const parsed = parseFloat(value.replace(/[^\d]/g, ''));
     if (isNaN(parsed)) return '';
+    console.log(value)
     return new Intl.NumberFormat('es-AR',{
         style: "currency",
         currency: "ARS",
         minimumFractionDigits: 2
     }).format(parsed / 100)
+}
+
+export function currencyFormatterNum(value: number) {
+    if (!value) return '';
+    console.log(value)
+    return new Intl.NumberFormat('es-AR',{
+        style: "currency",
+        currency: "ARS",
+        minimumFractionDigits: 2
+    }).format(value)
 }
 
 export function currencyFormatterInput(value: string) {

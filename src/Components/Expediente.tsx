@@ -4,7 +4,7 @@ import { IEmpresas, IEstados, IExpediente, IExpHistorial } from "../Utils/interf
 import { editExpediente, empresaReturner, estadoReturner, getEmpresas, getEstados, getUniqueExpediente } from "../Utils/getData";
 import { useParams } from "react-router-dom";
 import sessionCheck from "../Utils/sessionCheck";
-import { currencyFormatter } from "../Utils/currencyFormater";
+import { currencyFormatterNum } from "../Utils/currencyFormater";
 
 export default function Expediente () {
 
@@ -426,15 +426,15 @@ export default function Expediente () {
                             </tr>
                             <tr>
                                 <th><h3 style={textStyle}>Importe facturado:</h3></th>
-                                <th><h3 style={textStyle}>{ exp?.importe ? currencyFormatter(exp.importe.toString()) : "NaN"}</h3></th>
+                                <th><h3 style={textStyle}>{ exp?.importe ? currencyFormatterNum(exp.importe) : "NaN"}</h3></th>
                             </tr>
                             <tr>
                                 <th><h3 style={textStyle}>Importe cobrado:</h3></th>
-                                <th><h3 style={textStyle}>{ exp?.importe_2 ? currencyFormatter((exp.importe_2).toString()) : "NaN"}</h3></th>
+                                <th><h3 style={textStyle}>{ exp?.importe_2 ? currencyFormatterNum(exp.importe_2) : "NaN"}</h3></th>
                             </tr>
                             <tr>
                                 <th><h3 style={textStyle}>Importe pendiente a cobrar:</h3></th>
-                                <th><h3 style={textStyle}>{ exp?.importe_2 ? currencyFormatter((exp.importe - exp.importe_2).toString()) : "NaN"}</h3></th>
+                                <th><h3 style={textStyle}>{ exp?.importe_2 ? currencyFormatterNum((exp.importe - exp.importe_2)) : "NaN"}</h3></th>
                             </tr>
                             <tr>
                                 <th><h3 style={textStyle}>Periodo:</h3></th>
@@ -469,7 +469,6 @@ export default function Expediente () {
                                 <option value="concepto">Modificar - Concepto</option>
                                 <option value="estado">Modificar - Estado</option>
                                 <option value="presf">Modificar - Fecha de presentacion</option>
-                                <option value="ultmod">Modificar - Fecha de ultima modificacion</option>
                                 <option value="tesodate">Modificar - Fecha de tesoreria</option>
                                 <option value="facdate">Modificar - Fecha de facturacion</option>
                                 <option value="nrofac">Modificar - Numero de factura</option>
@@ -496,7 +495,6 @@ export default function Expediente () {
                                 <option value="concepto">Concepto</option>
                                 <option value="estado_id">Estado</option>
                                 <option value="presf">Fecha de presentacion</option>
-                                <option value="ultmod">Fecha de ultima modificacion</option>
                                 <option value="tesodate">Fecha de tesoreria</option>
                                 <option value="facdate">Fecha de facturacion</option>
                                 <option value="nrofac">Numero de factura</option>
