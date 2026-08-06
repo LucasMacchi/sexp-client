@@ -81,6 +81,7 @@ export interface IAddExp {
     importe: number,
     descripcion: string,
     client_id: number,
+    ocultado: boolean,
     user_id: number,
     tipo: string
 }

@@ -51,6 +51,7 @@ export default function CrearExpediente () {
         descripcion: "",
         client_id: 0,
         user_id: 0,
+        ocultado: false,
         tipo: "NaN"
     })
 
@@ -77,10 +78,12 @@ export default function CrearExpediente () {
                 estado_id: 0,
                 importe: 0,
                 descripcion: "",
+                ocultado: false,
                 user_id: 0,
                 tipo: "NaN"
             })
             alert("Expediente creado")
+            window.location.reload()
         }
         else {
             alert("Faltan datos.")
@@ -195,6 +198,13 @@ export default function CrearExpediente () {
                                 <th>
                                     <input type="date" style={{width:"100%"}} value={data.fecha_presentacion} 
                                     onChange={(e) => setData({...data,fecha_presentacion:e.target.value})}/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th><h3 style={textStyle}>Ocultar:</h3></th>
+                                <th>
+                                    <input type="checkbox" style={{width:"100%"}} checked={data.ocultado} 
+                                    onChange={(e) => setData({...data,ocultado:e.target.checked})}/>
                                 </th>
                             </tr>
                             <tr>
