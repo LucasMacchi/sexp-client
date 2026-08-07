@@ -42,20 +42,14 @@ export default function Expediente () {
                 arr = arr.filter((h) => h.col === categoryReturner(selectH))
             }
             setHistorialF(arr)
+            
         }
     },[selectH])
-
     useEffect(() => {
         if(exp && exp.historial) {
-            let hisF = exp.historial.map((h) => {
-                if(h.col === "estado_id") h.des = estadoReturner(parseInt(h.des),estados)
-                h.col = categoryReturner(h.col)
-                return h
-            })
-            setHistorialF(hisF)
+            setHistorialF(exp.historial)
         }
     },[exp?.historial])
-
     const categoryReturner = (col: string): string => {
         switch(col){
             case "expediente":
@@ -510,7 +504,7 @@ export default function Expediente () {
                        </div>
                        <div style={{maxWidth: 550,maxHeight: 700, marginTop: 50 , overflowY: "scroll"}}>
                             {historialF.map((h) => (
-                            <div style={{marginBottom: 40}}>
+                            <div style={{marginBottom: 40}} key={h.log_id}>
                                 <table>
                                     <tbody>
                                         <tr>

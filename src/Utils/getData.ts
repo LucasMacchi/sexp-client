@@ -8,7 +8,42 @@ const SERVER = import.meta.env.VITE_SERVER;
 export function getMeses () : IPeriodo[] {
     return mesesJSON.meses
 }
-
+    const categoryReturner = (col: string): string => {
+        switch(col){
+            case "expediente":
+                return "EXPEDIENTE"
+            case "concepto":
+                return "CONCEPTO"
+            case "estado_id":
+                return "ESTADO"
+            case "presf":
+                return "FECHA DE PRESENTACION"
+            case "tesodate":
+                return "FECHA DE TESORERIA"
+            case "facdate":
+                return "FECHA DE FACTURA"
+            case "periodo":
+                return "PERIODO"
+            case "nrofac":
+                return "NUMERO DE FACTURA"
+            case "importe":
+                return "IMPORTE"
+            case "importe_2":
+                return "COBRADO"
+            case "invitacion":
+                return "INVITACION"
+            case "ordencompra":
+                return "ORDEN DE COMPRA"
+            case "ocult":
+                return "OCULTADO"
+            case "descripcion":
+                return "DESCRIPCION"
+            case "SEGUIMIENTO":
+                return "SEGUIMIENTO"
+            default:
+                return "OTRO"
+        }
+    }
 export async function postExpediente (data: IAddExp) {
     try {
         await axios.post(SERVER+"/expediente/add",data, authReturner())
@@ -104,7 +139,15 @@ export async function getExpedientes(): Promise<IExpediente[]> {
 export async function getUniqueExpediente(id:number): Promise<IExpediente | null> {
     try {
         const expediente: IExpediente = await (await axios.get(SERVER+'/expediente/uniq/'+id, authReturner())).data
+        const estados: IEstados[] = (await axios.get(SERVER+"/data/estados", authReturner())).data
         console.log(expediente)
+        if(expediente.historial){
+            expediente.historial.forEach(h => {
+                if(h.col === "estado_id") h.des = estadoReturner(parseInt(h.des),estados)
+                h.col = categoryReturner(h.col)
+                return h
+            });
+        }
         return expediente
     } catch (error) {
         console.log(error)
