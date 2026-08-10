@@ -103,7 +103,7 @@ export default function Expediente () {
     const filterSelectSm: React.CSSProperties = {
         fontSize: "large", width: "50px",border: "1px solid"
     }
-    const editExp = () => {
+    const editExp = async () => {
         if(data.value.length > 0 && exp && exp.exp_id) {
             if(data.prop === "invitacion" || data.prop === "orden_compra" || data.prop === "ocultado"){
                 const bool = data.value === "true" ? true : false
@@ -118,7 +118,7 @@ export default function Expediente () {
             else {
                 setExp({...exp, [data.prop]:data.value})
             }
-            editExpediente(exp.exp_id,data.prop,data.value)
+            await editExpediente(exp.exp_id,data.prop,data.value)
             window.location.reload()
         }
         else alert("Faltan datos")
