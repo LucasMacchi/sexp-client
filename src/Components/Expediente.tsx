@@ -119,6 +119,7 @@ export default function Expediente () {
                 setExp({...exp, [data.prop]:data.value})
             }
             editExpediente(exp.exp_id,data.prop,data.value)
+            window.location.reload()
         }
         else alert("Faltan datos")
     }
