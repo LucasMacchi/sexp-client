@@ -165,6 +165,51 @@ export async function getAllUsers(): Promise<IUser[]> {
     }
 }
 
+export async function getExpedienteContaduriaAPI(nro: string): Promise<string> {
+    try {
+        const res:string = (await axios.get(`https://nportal.cgpc.gob.ar/documentos/apiweb/Consultas-Web/consulta?expediente=%27${nro}%27`)).data
+        return res
+    } catch (error) {
+        console.log(error)
+        return "NO SE PUDO CONECTAR A LA API"
+    }
+}
+
+export async function getExpedienteMinSaludAPI(nro: string): Promise<string> {
+    try {
+        
+        const res = (await axios.get(SERVER+"/expediente/salud/"+nro,authReturner())).data
+        return res
+    } catch (error) {
+        console.log(error)
+        return "NO SE PUDO CONECTAR A LA API"
+    }
+}
+
+export async function getExpedienteMinEduAPI(nro: string): Promise<string> {
+    try {
+        
+        const res = (await axios.get(SERVER+"/expediente/educacion/"+nro,authReturner())).data
+        console.log(res)
+        return res
+    } catch (error) {
+        console.log(error)
+        return "NO SE PUDO CONECTAR A LA API"
+    }
+}
+
+export async function getExpedienteChacoAPI(nro: string): Promise<string[] | null> {
+    try {
+        
+        const res = (await axios.get(SERVER+"/expediente/chaco/"+nro,authReturner())).data
+        console.log(res)
+        return res
+    } catch (error) {
+        console.log(error)
+        return null
+    }
+}
+
 export function getEstadoName (estados: IEstados[], id: number): string {
     let name = ''
     estados.forEach(es => {

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import Header from "./Header";
 import { IEmpresas, IEstados, IExpediente, IExpHistorial } from "../Utils/interface";
-import { editExpediente, empresaReturner, estadoReturner, getEmpresas, getEstados, getUniqueExpediente } from "../Utils/getData";
+import { editExpediente, empresaReturner, estadoReturner, getEmpresas, getEstados, getExpedienteChacoAPI, getExpedienteContaduriaAPI, getExpedienteMinEduAPI, getExpedienteMinSaludAPI, getUniqueExpediente } from "../Utils/getData";
 import { useParams } from "react-router-dom";
 import sessionCheck from "../Utils/sessionCheck";
 import { currencyFormatterNum } from "../Utils/currencyFormater";
+
 
 export default function Expediente () {
 
@@ -16,6 +17,10 @@ export default function Expediente () {
     const [estados, setEstados] = useState<IEstados[]>([])
     const [categoria, setCategoria] = useState('')
     const [data, setData] = useState({prop: "",value: ""})
+    const [contGral, setContGral] = useState("")
+    const [minSaludCtes, setMinSaludCtes] = useState("")
+    const [minEduCtes, setMinEduCtes] = useState("")
+    const [minChaco, setMinChaco] = useState<string[] | null>(null)
 
     const textStyle: React.CSSProperties = {
         fontWeight: "normal",
@@ -50,6 +55,13 @@ export default function Expediente () {
             setHistorialF(exp.historial)
         }
     },[exp?.historial])
+    useEffect(() => {
+        if(exp && exp.numero_exp.length > 4) {
+            exp.numero_exp.includes("-") ? getExpedienteChacoAPI(exp.numero_exp).then(e => setMinChaco(e)) : getExpedienteContaduriaAPI(exp.numero_exp).then(e => setContGral(e))
+            {exp.numero_exp.slice(0,3) === "310" && getExpedienteMinSaludAPI(exp.numero_exp).then(e => setMinSaludCtes(e))}
+            {exp.numero_exp.slice(0,3) === "320" && getExpedienteMinEduAPI(exp.numero_exp).then(e => setMinEduCtes(e))}
+        }
+    },[exp?.numero_exp])
     const categoryReturner = (col: string): string => {
         switch(col){
             case "expediente":
@@ -381,6 +393,30 @@ export default function Expediente () {
             <div>
                 <h1 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Expediente - {exp?.numero_exp}</h1>
                 <hr color='#3399ff'/>
+                {contGral && (
+                <div style={{maxWidth: 1000}}>
+                    <h2 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Contaduria General Ultima Actualizacion</h2>
+                    <h3 style={textStyle}>{contGral}</h3>
+                </div>
+                )}
+                {minChaco && (
+                <div style={{maxWidth: 1000}}>
+                    {minChaco && <h2 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Consulta Publica Chaco Ultima Actualizacion</h2>}
+                    {minChaco.map((m) => (<h4 style={{...textStyle,marginTop:15}}>{m}</h4>))}
+                </div>
+                )}
+                {minSaludCtes && (
+                <div style={{maxWidth: 1000}}>
+                    <h2 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Ministerio de Salud Ultima Actualizacion</h2>
+                    <h3 style={textStyle}>{minSaludCtes}</h3>
+                </div>
+                )}
+                {minEduCtes && (
+                <div style={{maxWidth: 1000}}>
+                    <h2 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Ministerio de Educacion Ultima Actualizacion</h2>
+                    <h3 style={textStyle}>{minEduCtes}</h3>
+                </div>
+                )}
                 <div style={{display: "flex", justifyContent: "space-evenly"}}>
                     <div style={{width: "33%",borderRightColor: "#3399ff",borderRight: "1px solid"}}>
                        <h2 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Datos del Expediente</h2>
