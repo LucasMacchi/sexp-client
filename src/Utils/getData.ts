@@ -167,7 +167,7 @@ export async function getAllUsers(): Promise<IUser[]> {
 export async function getExpedienteContaduriaAPI(nro: string): Promise<string> {
     try {
         console.log("Consultando contaduria general...")
-        const res:string = (await axios.get(SERVER+"/expediente/cntGral/"+nro,authReturner())).data
+        const res:string = (await axios.get(`https://nportal.cgpc.gob.ar/documentos/apiweb/Consultas-Web/consulta?expediente=%27${nro}%27`,authReturner())).data
         return res
     } catch (error) {
         console.log(error)
