@@ -7,7 +7,6 @@ export default function () {
     if(token) {
         if(tokenExpireCheck()) window.location.href = "/login"
         const data: IUser = jwtDecode(token);
-        console.log(data)
         if(data.admin) localStorage.setItem('admin',data.email)
         if(window.location.pathname === "/login"){
             window.location.href = "/"

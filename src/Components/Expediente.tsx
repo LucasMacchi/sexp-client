@@ -62,6 +62,8 @@ export default function Expediente () {
             {exp.numero_exp.slice(0,3) === "320" && getExpedienteMinEduAPI(exp.numero_exp).then(e => setMinEduCtes(e))}
         }
     },[exp?.numero_exp])
+
+
     const categoryReturner = (col: string): string => {
         switch(col){
             case "expediente":

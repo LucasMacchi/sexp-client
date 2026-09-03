@@ -140,7 +140,6 @@ export async function getUniqueExpediente(id:number): Promise<IExpediente | null
     try {
         const expediente: IExpediente = await (await axios.get(SERVER+'/expediente/uniq/'+id, authReturner())).data
         const estados: IEstados[] = (await axios.get(SERVER+"/data/estados", authReturner())).data
-        console.log(expediente)
         if(expediente.historial){
             expediente.historial.forEach(h => {
                 if(h.col === "estado_id") h.des = estadoReturner(parseInt(h.des),estados)
@@ -167,7 +166,7 @@ export async function getAllUsers(): Promise<IUser[]> {
 
 export async function getExpedienteContaduriaAPI(nro: string): Promise<string> {
     try {
-        const res:string = (await axios.get(`https://nportal.cgpc.gob.ar/documentos/apiweb/Consultas-Web/consulta?expediente=%27${nro}%27`)).data
+        const res:string = (await axios.get(SERVER+"/expediente/cntGral/"+nro,authReturner())).data
         return res
     } catch (error) {
         console.log(error)
