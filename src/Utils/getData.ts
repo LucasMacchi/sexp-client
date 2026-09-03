@@ -166,6 +166,7 @@ export async function getAllUsers(): Promise<IUser[]> {
 
 export async function getExpedienteContaduriaAPI(nro: string): Promise<string> {
     try {
+        console.log("Consultando contaduria general...")
         const res:string = (await axios.get(SERVER+"/expediente/cntGral/"+nro,authReturner())).data
         return res
     } catch (error) {
