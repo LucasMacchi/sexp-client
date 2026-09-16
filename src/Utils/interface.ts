@@ -4,6 +4,7 @@ export interface IUser {
     email: string,
     activated: boolean,
     admin: boolean,
+    moderador: boolean,
     user_id: number,
     credentials: ICredential[]
 }
@@ -65,6 +66,7 @@ export interface IExpediente {
     fecha_facturacion: string,
     fecha_tesoreria: string,
     ocultado: boolean,
+    deleted: boolean,
     last_saw?: string,
     last_mod?: string,
     historial?:IExpHistorial[]
@@ -103,7 +105,8 @@ export interface IUserCreate {
     last_name: string,
     email: string,
     admin: boolean,
-    password: string
+    password: string,
+    moderador: boolean
 }
 export interface IServicio {
     servicio_id: number,

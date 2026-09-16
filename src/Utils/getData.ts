@@ -40,6 +40,8 @@ export function getMeses () : IPeriodo[] {
                 return "DESCRIPCION"
             case "SEGUIMIENTO":
                 return "SEGUIMIENTO"
+            case "Eliminado":
+                return "ELIMINADO"
             default:
                 return "OTRO"
         }
@@ -161,6 +163,18 @@ export async function getAllUsers(): Promise<IUser[]> {
     } catch (error) {
         console.log(error)
         return []
+    }
+}
+
+export async function deleteExpediente(id:number): Promise<string> {
+    try {
+        const token = localStorage.getItem('jwToken')
+        const userData:IUser = jwtDecode(token ? token : '')
+        const res = await (await axios.delete(SERVER+'/expediente/delete/'+id+'/'+userData.user_id, authReturner())).data
+        return res
+    } catch (error) {
+        console.log(error)
+        return "NO SE ELIMINAR EL EXPEDIENTE"
     }
 }
 

@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import Header from "./Header";
-import { IEmpresas, IEstados, IExpediente, IExpHistorial } from "../Utils/interface";
-import { editExpediente, empresaReturner, estadoReturner, getEmpresas, getEstados, getExpedienteChacoAPI, getExpedienteContaduriaAPI, getExpedienteMinEduAPI, getExpedienteMinSaludAPI, getUniqueExpediente } from "../Utils/getData";
+import { IEmpresas, IEstados, IExpediente, IExpHistorial, IUser } from "../Utils/interface";
+import { editExpediente, empresaReturner, estadoReturner, getEmpresas, getEstados, getExpedienteChacoAPI, 
+    getExpedienteContaduriaAPI, getExpedienteMinEduAPI, getExpedienteMinSaludAPI, getUniqueExpediente,
+    deleteExpediente } from "../Utils/getData";
 import { useParams } from "react-router-dom";
 import sessionCheck from "../Utils/sessionCheck";
 import { currencyFormatterNum } from "../Utils/currencyFormater";
+import { jwtDecode } from "jwt-decode";
 
 
 export default function Expediente () {
 
     const params = useParams();
+
     const [exp, setExp] = useState<IExpediente | null>(null)
     const [historialF, setHistorialF] = useState<IExpHistorial[]>([])
     const [selectH, setSelectH] = useState("")
@@ -17,6 +21,7 @@ export default function Expediente () {
     const [estados, setEstados] = useState<IEstados[]>([])
     const [categoria, setCategoria] = useState('')
     const [data, setData] = useState({prop: "",value: ""})
+    const [userAdm,setUserAdm] = useState(false)
     const [contGral, setContGral] = useState("")
     const [minSaludCtes, setMinSaludCtes] = useState("")
     const [minEduCtes, setMinEduCtes] = useState("")
@@ -33,6 +38,16 @@ export default function Expediente () {
     }
     useEffect(() => {
         sessionCheck()
+        const token = localStorage.getItem('jwToken')
+        if(token) {
+            const data: IUser = jwtDecode(token);
+            console.log(data.admin,data.moderador)
+            if(data) {
+                setUserAdm(data.admin)
+                setUserAdm(data.moderador)
+            }
+        }
+
         if(params.id){
             getUniqueExpediente(parseInt(params.id)).then(e => setExp(e))
             getEmpresas().then(e => setEmpresas(e))
@@ -96,6 +111,8 @@ export default function Expediente () {
                 return "DESCRIPCION"
             case "SEGUIMIENTO":
                 return "SEGUIMIENTO"
+            case "Eliminado":
+                return "ELIMINADO"
             default:
                 return "OTRO"
         }
@@ -389,11 +406,31 @@ export default function Expediente () {
 
     }
 
+    const deleteExp = async () => {
+        if(confirm("¿Quieres eliminar este expediente de forma permanente?") && exp) {
+            const res = await deleteExpediente(exp.exp_id)
+            alert("Expediente eliminado")
+            console.log(res)
+            window.location.reload()
+        }
+        else {
+            alert("Eliminación cancelada")
+        }
+    }
+
     return(
         <div>
             <Header />
             <div>
-                <h1 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Expediente - {exp?.numero_exp}</h1>
+                <div style={{display: "flex"}}>
+                    <h1 style={{fontWeight: "bold", color:"#3399ff", margin: "10px"}}>Expediente - {exp?.numero_exp}</h1>
+                    {(userAdm && exp && !exp.deleted) && (
+                    <button style={{color: "white", backgroundColor: "#ff3333", fontSize: "large", width: "200px"}} 
+                    onClick={() => deleteExp()}>
+                        ELIMINAR EXPEDIENTE
+                    </button>
+                    )}
+                </div>
                 <hr color='#3399ff'/>
                 {contGral && (
                 <div style={{maxWidth: 1000}}>

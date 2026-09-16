@@ -9,7 +9,7 @@ export default function Usuarios () {
 
     const [users, setUsers] = useState<IUser[]>([])
     const [register, setRegister] = useState<IUserCreate>({
-    last_name: "",first_name: "",email: "",admin: false,password:""})
+    last_name: "",first_name: "",email: "",admin: false,password:"",moderador:false})
     const [empresas, setEmpresas] = useState<IEmpresas[]>([])
     const [selectedUser, setSelectedUser] = useState(0)
     
@@ -33,7 +33,7 @@ export default function Usuarios () {
 
     const userCred = (): ICredential[] => {
         if(selectedUser) {
-            let user:IUser = {first_name:"",last_name:"",email:"",admin:false,credentials:[],user_id:0,activated:false}
+            let user:IUser = {first_name:"",last_name:"",email:"",admin:false,moderador:false,credentials:[],user_id:0,activated:false}
             users.forEach(us => {
                 if(us.user_id === selectedUser) user = us
             });
@@ -94,6 +94,7 @@ export default function Usuarios () {
                                 <th style={rowStyle}>Apellido</th>
                                 <th style={rowStyle}>Email</th>
                                 <th style={rowStyle}>Admin</th>
+                                <th style={rowStyle}>Moderador</th>
                                 <th style={rowStyle}>Activado</th>
                             </tr>
                             {users.map((u) => (
@@ -102,6 +103,7 @@ export default function Usuarios () {
                                     <th style={rowStyle}>{u.last_name}</th>
                                     <th style={rowStyle}>{u.email}</th>
                                     <th style={rowStyle}>{u.admin ? "Si" : "No"}</th>
+                                    <th style={rowStyle}>{u.moderador ? "Si" : "No"}</th>
                                     <th style={rowStyle}>{u.activated ? "Si" : "No"}</th>
                                 </tr>
                             ))}
@@ -136,6 +138,12 @@ export default function Usuarios () {
                             <h3 style={textStyle}>Admin
                                 <input type="checkbox" checked={register.admin} 
                                 onChange={(e) => setRegister({...register,admin:e.target.checked})}/>
+                            </h3>
+                        </div>
+                        <div>
+                            <h3 style={textStyle}>Moderador
+                                <input type="checkbox" checked={register.moderador} 
+                                onChange={(e) => setRegister({...register,moderador:e.target.checked})}/>
                             </h3>
                         </div>
                         <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px", marginTop: "30px"}} onClick={() => registerAction()}>
