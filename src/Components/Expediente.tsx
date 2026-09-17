@@ -43,8 +43,7 @@ export default function Expediente () {
             const data: IUser = jwtDecode(token);
             console.log(data.admin,data.moderador)
             if(data) {
-                setUserAdm(data.admin)
-                setUserAdm(data.moderador)
+                if(data.admin || data.moderador) setUserAdm(true)
             }
         }
 
