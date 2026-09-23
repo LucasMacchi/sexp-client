@@ -67,6 +67,7 @@ export interface IExpediente {
     fecha_tesoreria: string,
     ocultado: boolean,
     deleted: boolean,
+    track: true,
     last_saw?: string,
     last_mod?: string,
     historial?:IExpHistorial[]

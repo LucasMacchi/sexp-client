@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import sessionCheck from "../Utils/sessionCheck"
 import Header from "./Header"
 import { ICliente, IEmpresas, IEstados, IExpediente, IFilterPref, IServicio } from "../Utils/interface"
-import { empresaReturner, estadoReturner, getClientes, getEmpresas, getEstadoName, getEstados, getExpedientes,getServicios } from "../Utils/getData"
+import { empresaReturner, estadoReturner, getClientes, getEmpresas, getEstadoName, getEstados, getExpedientes,getServicios, updateTracker } from "../Utils/getData"
 import * as XLSX from 'xlsx';
 import { currencyFormatterNum } from "../Utils/currencyFormater"
 
@@ -53,6 +53,7 @@ export default function Mainpage () {
             setExpedienteF(ex.filter((exp) => !exp.ocultado))
         })
         getClientes().then(c => setClientes(c))
+        updateTracker()
     },[])
 
 

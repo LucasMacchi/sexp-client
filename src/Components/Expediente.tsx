@@ -372,6 +372,21 @@ export default function Expediente () {
                         </button>
                     </div>
                 )
+            case "track":
+                return (
+                    <div>
+                        <h3 style={textStyle}>Valor previo: {exp?.track ? "Si":"No"}</h3>
+                        <select style={filterSelectSm} name="invitacion" onChange={(e) => setData({prop:"track",value: e.target.value})}>
+                            <option value="">---</option>
+                            <option value="true">Si</option>
+                            <option value="false">No</option>
+                        </select>
+                        <p></p>
+                        <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}} onClick={() => editExp()}>
+                            Editar
+                        </button>
+                    </div>
+                )
             case "descripcion":
                 return (
                     <div>
@@ -548,6 +563,7 @@ export default function Expediente () {
                                 <option value="descripcion">Modificar - Descripcion</option>
                                 <option value="ocult">Modificar - Ocultado</option>
                                 <option value="periodo">Modificar - Periodo</option>
+                                <option value="track">Modificar - Rastrear</option>
                                 <option value="seguimiento">Agregar - Seguimiento</option>
                             </select>
                             {displayMod()}

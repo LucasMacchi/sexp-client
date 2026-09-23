@@ -313,6 +313,45 @@ export async function deactivateUser (id: number) {
     }
 }
 
+export async function updateTracker () {
+    try {
+        const expedientes: IExpediente[] = await (await axios.get(SERVER+'/expediente/all/tracked', authReturner())).data
+        for (const ex of expedientes) {
+            if(ex && ex.numero_exp.length > 4) {
+                let api1 = ""
+                let api2 = ""
+                if(ex.numero_exp.includes("-")) {
+                    const res = await getExpedienteChacoAPI(ex.numero_exp)
+                    api1 = res ? res[0] : "NO SE PUDO CONECTAR A LA API" 
+                }
+                else {
+                    const res = await getExpedienteContaduriaAPI(ex.numero_exp)
+                    console.log(res)
+                    api1 = res ? res : "NO SE PUDO CONECTAR A LA API"
+                }
+                if(ex.numero_exp.slice(0,3) === "310") {
+                    const res = await getExpedienteMinSaludAPI(ex.numero_exp)
+                    api2 = res ? res : "NO SE PUDO CONECTAR A LA API"
+                }
+                else if(ex.numero_exp.slice(0,3) === "320") {
+                    const res = await getExpedienteMinEduAPI(ex.numero_exp)
+                    api2 = res ? res : "NO SE PUDO CONECTAR A LA API"
+                }
+                if(api1.length > 0) {
+                    await editExpediente(ex.exp_id,"api1",api1)
+                }
+                if(api2.length > 0) {
+                    await editExpediente(ex.exp_id,"api2",api2)
+                }
+            }
+        }
+
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+}
+
 export async function registerUser(data:IUserCreate) {
     try {
         await axios.post(SERVER+"/user/register",data,authReturner())
