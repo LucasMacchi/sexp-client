@@ -181,7 +181,7 @@ export async function deleteExpediente(id:number): Promise<string> {
 export async function getExpedienteContaduriaAPI(nro: string): Promise<string> {
     try {
         console.log("Consultando contaduria general...")
-        const res:string = (await axios.get(`https://nportal.cgpc.gob.ar/documentos/apiweb/Consultas-Web/consulta?expediente=%27${nro}%27`,authReturner())).data
+        const res:string = (await axios.get(SERVER+"/expediente/cntGral/"+nro,authReturner())).data
         return res
     } catch (error) {
         console.log(error)
@@ -204,7 +204,6 @@ export async function getExpedienteMinEduAPI(nro: string): Promise<string> {
     try {
         
         const res = (await axios.get(SERVER+"/expediente/educacion/"+nro,authReturner())).data
-        console.log(res)
         return res
     } catch (error) {
         console.log(error)
@@ -214,9 +213,7 @@ export async function getExpedienteMinEduAPI(nro: string): Promise<string> {
 
 export async function getExpedienteChacoAPI(nro: string): Promise<string[] | null> {
     try {
-        
         const res = (await axios.get(SERVER+"/expediente/chaco/"+nro,authReturner())).data
-        console.log(res)
         return res
     } catch (error) {
         console.log(error)
@@ -318,31 +315,36 @@ export async function updateTracker () {
         const expedientes: IExpediente[] = await (await axios.get(SERVER+'/expediente/all/tracked', authReturner())).data
         for (const ex of expedientes) {
             if(ex && ex.numero_exp.length > 4) {
-                let api1 = ""
-                let api2 = ""
-                if(ex.numero_exp.includes("-")) {
-                    const res = await getExpedienteChacoAPI(ex.numero_exp)
-                    api1 = res ? res[0] : "NO SE PUDO CONECTAR A LA API" 
+                try {
+                    console.log("Actualizando expediente: "+ex.numero_exp)
+                    let api1 = ""
+                    let api2 = ""
+                    if(ex.numero_exp.includes("-")) {
+                        const res = await getExpedienteChacoAPI(ex.numero_exp)
+                        api1 = res ? res[0] : "NO SE PUDO CONECTAR A LA API" 
+                    }
+                    else {
+                        const res = await getExpedienteContaduriaAPI(ex.numero_exp)
+                        api1 = res ? res : "NO SE PUDO CONECTAR A LA API"
+                    }
+                    if(ex.numero_exp.slice(0,3) === "310") {
+                        const res = await getExpedienteMinSaludAPI(ex.numero_exp)
+                        api2 = res ? res : "NO SE PUDO CONECTAR A LA API"
+                    }
+                    else if(ex.numero_exp.slice(0,3) === "320") {
+                        const res = await getExpedienteMinEduAPI(ex.numero_exp)
+                        api2 = res ? res : "NO SE PUDO CONECTAR A LA API"
+                    }
+                    if(api1.length > 0) {
+                        await editExpediente(ex.exp_id,"api1",api1)
+                    }
+                    if(api2.length > 0) {
+                        await editExpediente(ex.exp_id,"api2",api2)
+                    }
+                } catch (error) {
+                    console.log(error)
                 }
-                else {
-                    const res = await getExpedienteContaduriaAPI(ex.numero_exp)
-                    console.log(res)
-                    api1 = res ? res : "NO SE PUDO CONECTAR A LA API"
-                }
-                if(ex.numero_exp.slice(0,3) === "310") {
-                    const res = await getExpedienteMinSaludAPI(ex.numero_exp)
-                    api2 = res ? res : "NO SE PUDO CONECTAR A LA API"
-                }
-                else if(ex.numero_exp.slice(0,3) === "320") {
-                    const res = await getExpedienteMinEduAPI(ex.numero_exp)
-                    api2 = res ? res : "NO SE PUDO CONECTAR A LA API"
-                }
-                if(api1.length > 0) {
-                    await editExpediente(ex.exp_id,"api1",api1)
-                }
-                if(api2.length > 0) {
-                    await editExpediente(ex.exp_id,"api2",api2)
-                }
+
             }
         }
 
