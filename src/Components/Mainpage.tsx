@@ -74,7 +74,8 @@ export default function Mainpage () {
                     ESTADO: estadoReturner(ex.estado_id, estados),
                     IMPORTE: ex.importe,
                     COBRADO: ex.importe_2 ? ex.importe_2 : 0,
-                    PENDIENTE: ex.importe_2 ? ex.importe - ex.importe_2 : ex.importe
+                    PENDIENTE: ex.importe_2 ? ex.importe - ex.importe_2 : ex.importe,
+                    DIAS_MOVIMIENTO: ex.dias_diff
                 }
             })
             const worksheet = XLSX.utils.json_to_sheet(parsedExpedientes)
@@ -132,6 +133,13 @@ export default function Mainpage () {
         if(exp.ocultado) return "FireBrick"
         else if(lastmod && lastmod === now) return "LimeGreen"
         else if(lastsaw && lastsaw === now) return "LightSkyBlue"
+    }
+
+    const colorChangeDiasCheck = (d: number)  => {
+        if(d > 30) return "FireBrick"
+        else if(d > 15) return "Orange"
+        else if(d > 7) return "Yellow"
+        else return "white"
     }
 
     const parsedPeriodo = (periodo: Date) => {
@@ -304,6 +312,7 @@ export default function Mainpage () {
                             <th style={thTable}>Pendiente a Cobrar</th>
                             <th style={thTable}>Cobrado</th>
                             <th style={thTable}>Importe</th>
+                            <th style={thTable}>Dias</th>
                         </tr>
                         {expedientesF.map((ex) => (
                             <tr key={ex.exp_id} onClick={() => window.location.href = "/expediente/"+ex.exp_id} style={{backgroundColor: colorChangeCheck(ex)}}>
@@ -319,6 +328,7 @@ export default function Mainpage () {
                                 <th style={thTable}>{ex.importe_2 ? currencyFormatterNum((ex.importe - ex.importe_2)) : currencyFormatterNum(ex.importe)}</th>
                                 <th style={thTable}>{ex.importe_2 ? currencyFormatterNum(ex.importe_2) : "$"+0}</th>
                                 <th style={thTable}>{ex.importe ? currencyFormatterNum(ex.importe) : "$"+0}</th>
+                                <th style={{...thTable, backgroundColor: colorChangeDiasCheck(ex.dias_diff)}}>{ex.dias_diff}</th>
                             </tr>
                         ))}
                     </tbody>

@@ -68,9 +68,10 @@ export interface IExpediente {
     ocultado: boolean,
     deleted: boolean,
     track: true,
+    dias_diff: number,
     last_saw?: string,
     last_mod?: string,
-    historial?:IExpHistorial[]
+    historial?:IExpHistorial[],
 }
 export interface IAddExp {
     servicio_id: number,
