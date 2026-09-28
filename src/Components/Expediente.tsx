@@ -307,7 +307,7 @@ export default function Expediente () {
                 return (
                     <div>
                         <h3 style={textStyle}>Valor previo: {exp?.importe ? "$"+exp.importe.toString() : "NaN"}</h3>
-                        $<input type="text" value={data.value} 
+                        $<input type="number" value={data.value} 
                         onChange={(e) => setData({prop:"importe",value:e.target.value})} placeholder="$0,00"/>
                         <p></p>
                         <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}} onClick={() => editExp()}>
@@ -319,7 +319,7 @@ export default function Expediente () {
                 return (
                     <div>
                         <h3 style={textStyle}>Valor previo: {exp?.importe_2 ? "$"+exp.importe_2.toString() : "NaN"}</h3>
-                        $<input type="text" value={data.value} 
+                        $<input type="number" value={data.value} 
                         onChange={(e) => setData({prop:"importe_2",value:e.target.value})} placeholder="$0,00"/>
                         <p></p>
                         <button style={{color: "white", backgroundColor: "#3399ff", fontSize: "large", width: "130px"}} onClick={() => editExp()}>
