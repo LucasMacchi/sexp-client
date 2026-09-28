@@ -432,8 +432,8 @@ export default function Expediente () {
         }
     }
 
-    const transformDataHistorial = (h: string) => {
-        if(parseFloat(h)) return currencyFormatterNum(parseFloat(h)) ? currencyFormatterNum(parseFloat(h)) : parseFloat(h)
+    const transformDataHistorial = (h: string,col:string) => {
+        if(parseFloat(h) && (col === "IMPORTE" || col === "COBRADO")) return currencyFormatterNum(parseFloat(h))
         else return h
     }
 
@@ -610,7 +610,7 @@ export default function Expediente () {
                                             <th style={rowStyle}>CAMBIADO A: </th>
                                         </tr>
                                         <tr>
-                                            <th style={rowStyle}>{transformDataHistorial(h.des)}</th>
+                                            <th style={rowStyle}>{transformDataHistorial(h.des,h.col)}</th>
                                         </tr>
                                     </tbody>
                                 </table>
