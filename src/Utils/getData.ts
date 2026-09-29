@@ -10,7 +10,7 @@ export function getMeses () : IPeriodo[] {
 }
     const categoryReturner = (col: string): string => {
         switch(col){
-            case "expediente":
+            case "numero_exp":
                 return "EXPEDIENTE"
             case "concepto":
                 return "CONCEPTO"

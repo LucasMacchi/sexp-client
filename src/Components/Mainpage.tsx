@@ -16,6 +16,9 @@ export default function Mainpage () {
     const [servicios, setServicios] = useState<IServicio[]>([])
     const [expedientes, setExpedientes] = useState<IExpediente[]>([])
     const [expedientesF, setExpedienteF] = useState<IExpediente[]>([])
+    const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
+    const [sortCol, setSortCol] = useState<keyof IExpediente | null>(null)
+
     const [filter, setFilter] = useState<IFilterPref>({
         empresa: 0,
         estado: 0,
@@ -126,6 +129,20 @@ export default function Mainpage () {
         arr.length > 0 ? setExpedienteF(arr) : alert("No existen expedientes que cumplan el filtro.")
     }
 
+    const fitlerCol = (col: keyof IExpediente) => {
+        const dir = sortCol === col && sortDir === 'asc' ? 'desc' : 'asc'
+
+        const arr = [...expedientesF].sort((a, b) => {
+            const va = String(a[col] ?? '')
+            const vb = String(b[col] ?? '')
+            const res = va.localeCompare(vb, undefined, { numeric: true })
+            return dir === 'asc' ? res : -res
+        })
+
+        setSortCol(col)
+        setSortDir(dir)
+        setExpedienteF(arr)
+    }
     const colorChangeCheck = (exp: IExpediente) => {
         const lastmod = exp.last_mod ? exp.last_mod.split("T")[0] : null
         const lastsaw = exp.last_saw ? exp.last_saw.split("T")[0] : null
@@ -300,19 +317,19 @@ export default function Mainpage () {
                 <table >
                     <tbody>
                         <tr>
-                            <th style={thTable}>Nro Expediente</th>
+                            <th style={{...thTable,cursor: "pointer"}} onClick={() => fitlerCol("numero_exp")}>Nro Expediente {sortCol === 'numero_exp' && (sortDir === 'asc' ? '▲' : '▼')}</th>
                             <th style={thTableBg}>Concepto</th>
                             <th style={thTable}>Empresa</th>
-                            <th style={thTable}>Servicio</th>
-                            <th style={thTable}>Cliente</th>
-                            <th style={thTable}>Periodo</th>
-                            <th style={thTable}>Fecha Presentacion</th>
-                            <th style={thTable}>Estado</th>
+                            <th style={{...thTable,cursor: "pointer"}} onClick={() => fitlerCol("service_id")}>Servicio {sortCol === 'service_id' && (sortDir === 'asc' ? '▲' : '▼')}</th>
+                            <th style={{...thTable,cursor: "pointer"}} onClick={() => fitlerCol("client_id")}>Cliente {sortCol === 'client_id' && (sortDir === 'asc' ? '▲' : '▼')}</th>
+                            <th style={{...thTable,cursor: "pointer"}} onClick={() => fitlerCol("periodo")}>Periodo {sortCol === 'periodo' && (sortDir === 'asc' ? '▲' : '▼')}</th>
+                            <th style={{...thTable,cursor: "pointer"}} onClick={() => fitlerCol("fecha_presentacion")}>Fecha Presentacion {sortCol === 'fecha_presentacion' && (sortDir === 'asc' ? '▲' : '▼')}</th>
+                            <th style={{...thTable,cursor: "pointer"}} onClick={() => fitlerCol("estado_id")}>Estado {sortCol === 'estado_id' && (sortDir === 'asc' ? '▲' : '▼')}</th>
                             <th style={thTable}>Nro Factura</th>
                             <th style={thTable}>Pendiente a Cobrar</th>
-                            <th style={thTable}>Cobrado</th>
-                            <th style={thTable}>Importe</th>
-                            <th style={thTable}>Dias</th>
+                            <th style={{...thTable,cursor: "pointer"}} onClick={() => fitlerCol("importe_2")}>Cobrado {sortCol === 'importe_2' && (sortDir === 'asc' ? '▲' : '▼')}</th>
+                            <th style={{...thTable,cursor: "pointer"}} onClick={() => fitlerCol("importe")}>Importe {sortCol === 'importe' && (sortDir === 'asc' ? '▲' : '▼')}</th>
+                            <th style={{...thTable,cursor: "pointer"}} onClick={() => fitlerCol("dias_diff")}>Dias {sortCol === 'dias_diff' && (sortDir === 'asc' ? '▲' : '▼')}</th>
                         </tr>
                         {expedientesF.map((ex) => (
                             <tr key={ex.exp_id} onClick={() => window.location.href = "/expediente/"+ex.exp_id} style={{backgroundColor: colorChangeCheck(ex)}}>

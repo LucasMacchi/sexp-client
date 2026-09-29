@@ -79,8 +79,9 @@ export default function Expediente () {
 
 
     const categoryReturner = (col: string): string => {
+        console.log(col)
         switch(col){
-            case "expediente":
+            case "numero_exp":
                 return "EXPEDIENTE"
             case "concepto":
                 return "CONCEPTO"
