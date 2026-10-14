@@ -28,6 +28,7 @@ export default function Mainpage () {
         start: '',
         end: '',
         ubicacion: '',
+        tracked: 0,
         oculto: false
     })
 
@@ -109,6 +110,12 @@ export default function Mainpage () {
         }
         if(filter.cliente){
             arr = arr.filter((e) => e.client_id === filter.cliente)
+        }
+        if(filter.tracked === 1) {
+            arr = arr.filter((e) => !e.track)
+        }
+        if(filter.tracked === 2) {
+            arr = arr.filter((e) => e.track)
         }
         if(filter.start){
             const startD = new Date(filter.start)
@@ -278,6 +285,15 @@ export default function Mainpage () {
                         {estados.map((e) => (
                             <option value={e.estado_id}>{estadoReturner(e.estado_id, estados)}</option>
                         ))}
+                    </select>
+                </div>
+                <div style={divFilter}>
+                    <h5 style={{fontWeight: "bold", color: "#3399ff"}}>Rastreados</h5>
+                    <select name="estados" value={filter.tracked} style={selectFilterBg}
+                    onChange={(e) => setFilter({...filter, tracked: parseInt(e.target.value)})}>
+                        <option value={0}>---</option>
+                        <option value={1}>NO</option>
+                        <option value={2}>SI</option>
                     </select>
                 </div>
                 <div style={divFilter}>

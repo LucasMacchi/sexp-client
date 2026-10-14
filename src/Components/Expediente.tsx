@@ -543,6 +543,10 @@ export default function Expediente () {
                                 <th><h3 style={textStyle}>{exp?.ocultado ? "Si" : "No"}</h3></th>
                             </tr>
                             <tr>
+                                <th><h3 style={textStyle}>Rastreado:</h3></th>
+                                <th><h3 style={textStyle}>{exp?.track ? "Si" : "No"}</h3></th>
+                            </tr>
+                            <tr>
                                 <th><h3 style={textStyle}>Descripcion:</h3></th>
                                 <th><h3 style={textStyle}>{exp?.descripcion && exp?.descripcion}</h3></th>
                             </tr>
