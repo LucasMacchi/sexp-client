@@ -44,6 +44,94 @@ export interface IExpHistorialLast {
     prev?:string
 }
 
+export interface IAddContrato {
+    concepto: string,
+    direccion: string,
+    fecha_inicio: string,
+    fecha_final: string,
+    fecha_prorroga: string,
+    tipo_id: number,
+    estado_id: number,
+    descripcion: string,
+    empresa_id: number,
+    precio: number,
+    p_periodo: string,
+    ajuste_periodo: string,
+    ajuste_indice: string,
+    ajuste_extraordinario: string,
+    user_id: number,
+    ocultado: boolean,
+    deleted: boolean,
+    auto_prorroga: boolean,
+    existe: boolean
+    servicios?: IAddCcoToContract[]
+}
+
+export interface IAddCcoToContract {
+    cco_id: number
+    porcentaje: number
+    servicio_id: number
+}
+
+export interface IContrato {
+    contract_id: number,
+    concepto: string,
+    direccion: string,
+    fecha_inicio: Date,
+    fecha_final: Date,
+    fecha_prorroga?: Date,
+    tipo_id: number,
+    estado_id: number,
+    descripcion: string,
+    empresa_id: number,
+    precio: number,
+    p_periodo: string,
+    ajuste_periodo: string,
+    ajuste_indice: string,
+    ajuste_extraordinario: null,
+    user_id: number,
+    created: string,
+    ocultado: boolean,
+    deleted: boolean,
+    auto_prorroga: boolean,
+    estado: string,
+    tipo: string,
+    nombre: string,
+    prestaciones?: string[],
+    clientes?:string[],
+    servicios?: IContratoService[]
+}
+
+export interface IContratoTipo {
+    tipo_id: number,
+    tipo:string
+}
+
+export interface ICco {
+    cco_id:number,
+    codigo:number,
+    des: string,
+    cliente: string,
+    empresa_id:number
+}
+
+export interface IContratoEstado {
+    estado_id: number,
+    estado:string
+}
+
+export interface IContratoService {
+    const_serv_id:number,
+    contract_id:number,
+    cco_id:number,
+    porcentaje:number,
+    service_id:number,
+    codigo: number,
+    des:string,
+    cliente:string,
+    empresa_id:number,
+    nombre:string    
+}
 
 export interface IExpediente {
     exp_id: number,
@@ -135,7 +223,8 @@ export interface IFilterPref {
     servicio: number,
     end: string,
     ubicacion:string,
-    oculto: boolean
+    oculto: boolean,
+    tracked: number
 }
 export interface ITicket {
     fecha: string,
