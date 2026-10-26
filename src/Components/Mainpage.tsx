@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import sessionCheck from "../Utils/sessionCheck"
 import Header from "./Header"
 import { ICliente, IEmpresas, IEstados, IExpediente, IFilterPref, IServicio } from "../Utils/interface"
-import { empresaReturner, estadoReturner, getClientes, getEmpresas, getEstadoName, getEstados, getExpedientes,getServicios, updateTracker } from "../Utils/getData"
+import { empresaReturner, estadoReturner, getClientes, getEmpresas, getEstadoName, getEstados, getExpedientes,getServicios } from "../Utils/getData"
 import * as XLSX from 'xlsx';
 import { currencyFormatterNum } from "../Utils/currencyFormater"
 
@@ -25,11 +25,10 @@ export default function Mainpage () {
         periodo: '',
         servicio: 0,
         cliente: 0,
-        start: '',
-        end: '',
         ubicacion: '',
         tracked: 0,
-        oculto: false
+        oculto: false,
+        upd: false
     })
 
     const thTable: React.CSSProperties = {
@@ -57,7 +56,6 @@ export default function Mainpage () {
             setExpedienteF(ex.filter((exp) => !exp.ocultado))
         })
         getClientes().then(c => setClientes(c))
-        updateTracker()
     },[])
 
 
@@ -117,19 +115,8 @@ export default function Mainpage () {
         if(filter.tracked === 2) {
             arr = arr.filter((e) => e.track)
         }
-        if(filter.start){
-            const startD = new Date(filter.start)
-            arr = arr.filter((e) => {
-                const date = new Date(e.fecha_presentacion)
-                if(date >= startD) return e
-            })
-        }
-        if(filter.end){
-            const endD = new Date(filter.end)
-            arr = arr.filter((e) => {
-                const date = new Date(e.fecha_presentacion)
-                if(date <= endD) return e
-            })
+        if(filter.upd) {
+            arr = arr.filter((e) => e.diff)
         }
         if(!filter.oculto) arr = arr.filter((ex) => ex.ocultado === false)
         console.log(arr)
@@ -297,12 +284,8 @@ export default function Mainpage () {
                     </select>
                 </div>
                 <div style={divFilter}>
-                    <h5 style={{fontWeight: "bold", color: "#3399ff"}}>Fecha Inicio</h5>
-                    <input type="date" value={filter.start} onChange={(e) => setFilter({...filter, start: e.target.value})}/>
-                </div>
-                <div style={divFilter}>
-                    <h5 style={{fontWeight: "bold", color: "#3399ff"}}>Fecha Final</h5>
-                    <input type="date" value={filter.end} onChange={(e) => setFilter({...filter, end: e.target.value})}/>
+                    <h5 style={{fontWeight: "bold", color: "#3399ff"}}>Mostrar Actualizados</h5>
+                    <input type="checkbox" checked={filter.upd} onChange={(e) => setFilter({...filter, upd: e.target.checked})}/>
                 </div>
                 <div style={divFilter}>
                     <h5 style={{fontWeight: "bold", color: "#3399ff"}}>Mostrar Ocultos</h5>
@@ -329,7 +312,7 @@ export default function Mainpage () {
                     EXCEL
                 </button>
             </div>
-            <div >
+            <div style={{width: "95%",maxHeight: 750,height: 750,overflow: "scroll"}}>
                 <table >
                     <tbody>
                         <tr>
@@ -368,7 +351,6 @@ export default function Mainpage () {
                 </table>
             </div>
             </div>
-
         </div>
     )
 }

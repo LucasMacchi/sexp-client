@@ -157,6 +157,7 @@ export interface IExpediente {
     deleted: boolean,
     track: true,
     dias_diff: number,
+    diff:boolean,
     last_saw?: string,
     last_mod?: string,
     historial?:IExpHistorial[],
@@ -214,17 +215,27 @@ export interface IEstados {
     estado_id: number,
     concepto: string
 }
+export interface ICotizacionData {
+    item: string,
+    unid: number,
+    cant?:number,
+    total?:number,
+    comment?: string
+}
+
+export interface ICotizacion {
+    items: ICotizacionData[]
+}
 export interface IFilterPref {
     empresa: number,
     estado: number,
     periodo: string,
-    start: string,
     cliente:number,
     servicio: number,
-    end: string,
     ubicacion:string,
     oculto: boolean,
-    tracked: number
+    tracked: number,
+    upd: boolean
 }
 export interface ITicket {
     fecha: string,

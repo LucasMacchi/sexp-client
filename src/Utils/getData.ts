@@ -1,6 +1,6 @@
 import axios from "axios";
 import mesesJSON from '../meses.json'
-import { IAddExp, ICliente, IConcepto, IEmpresas, IEstados, IExpediente, IExpHistorialLast, IPeriodo, IProveedor, IServicio, ITicket, ITxtData, ITxtDto, IUser, IUserCreate } from "./interface";
+import { IAddExp, ICco, ICliente, IConcepto, IContrato, IContratoEstado, IContratoTipo, ICotizacionData, IEmpresas, IEstados, IExpediente, IExpHistorialLast, IPeriodo, IProveedor, IServicio, ITicket, ITxtData, ITxtDto, IUser, IUserCreate } from "./interface";
 import authReturner from "./authReturner";
 import { jwtDecode } from "jwt-decode";
 const SERVER = import.meta.env.VITE_SERVER;
@@ -78,9 +78,86 @@ export async function getTipos () : Promise<string[]> {
     }
 }
 
+export async function getContratos ()  : Promise<IContrato[]> {
+    try {
+        const res:IContrato[] = (await axios.get(SERVER+"/contrataciones/all", authReturner())).data
+        res.forEach(c => {
+            c.fecha_final = new Date(c.fecha_final)
+            c.fecha_inicio = new Date(c.fecha_inicio)
+        });
+        return res
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+}
+
+export async function addServicioContrato (cco:number,por:number,cont:number)  : Promise<string> {
+    try {
+        const res:string = (await axios.get(`${SERVER}/contrataciones/add/servicio/${cco}/${por}/${cont}`, authReturner())).data
+        return res
+    } catch (error) {
+        console.log(error)
+        return "ERROR AL AGREGAR SERVICIO"
+    }
+}
+
+export async function getContratoUniq (id:number)  : Promise<IContrato | null> {
+    try {
+        const res:IContrato = (await axios.get(`${SERVER}/contrataciones/uniq/${id}`, authReturner())).data
+        res.fecha_final = new Date(res.fecha_final)
+        res.fecha_inicio = new Date(res.fecha_inicio)
+        res.fecha_prorroga = res.fecha_prorroga ? new Date(res.fecha_prorroga) : undefined
+        return res
+    } catch (error) {
+        console.log(error)
+        return null
+    }
+}
+
+export async function getContratosCcos(empresaId: number): Promise<ICco[]> {
+    try {
+        const res: ICco[] = (await axios.get(`${SERVER}/contrataciones/all/ccos/${empresaId}`, authReturner())).data
+        return res
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+}
+
 export async function getEmpresas(): Promise<IEmpresas[]> {
     try {
         const res: IEmpresas[] = (await axios.get(SERVER+"/data/empresas", authReturner())).data
+        return res
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+}
+
+export async function getClientesContratos(): Promise<string[]> {
+    try {
+        const res: string[] = (await axios.get(SERVER+"/contrataciones/all/clientes", authReturner())).data
+        return res
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+}
+
+export async function getTiposContratos(): Promise<IContratoTipo[]> {
+    try {
+        const res: IContratoTipo[] = (await axios.get(SERVER+"/contrataciones/all/tipos", authReturner())).data
+        return res
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+}
+
+export async function getEstadosContratos(): Promise<IContratoEstado[]> {
+    try {
+        const res: IContratoEstado[] = (await axios.get(SERVER+"/contrataciones/all/estados", authReturner())).data
         return res
     } catch (error) {
         console.log(error)
@@ -481,5 +558,15 @@ export async function getTicketsTxtFn(data: ITxtDto): Promise<ITxtData> {
         console.log(error)
         alert("Error al generar los datos para exportar.")
         return {cabecera: [], items: [], medpago: [], cco: []}
+    }
+}
+
+export async function getCotizadorData(): Promise<ICotizacionData[]> {
+    try {
+        const res:ICotizacionData[] = (await axios.get(SERVER+"/data/cotizacion/parametros", authReturner())).data
+        return res
+    } catch (error) {
+        console.log(error)
+        return []
     }
 }
